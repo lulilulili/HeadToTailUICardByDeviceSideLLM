@@ -1,0 +1,2980 @@
+{
+  "suite": "domain-50-v1",
+  "corpus": "data/cases-domain-other.json",
+  "promptVersion": "retrieval-v5",
+  "catalogCount": 372,
+  "method": "Offline lexical candidate coverage using manually annotated gold only for comparison; no model inference and no retrieval changes. Staged uses the annotated domain to isolate candidate recall.",
+  "runtimeGoldUse": false,
+  "summary": [
+    {
+      "domain": "files",
+      "total": 50,
+      "supported": 42,
+      "unsupported": 8,
+      "needsClarification": 9,
+      "scenarioClasses": 21,
+      "apiCoverage": 12,
+      "stagedRecalled": 37,
+      "unifiedRecalled": 35
+    },
+    {
+      "domain": "services",
+      "total": 50,
+      "supported": 42,
+      "unsupported": 8,
+      "needsClarification": 9,
+      "scenarioClasses": 22,
+      "apiCoverage": 7,
+      "stagedRecalled": 40,
+      "unifiedRecalled": 37
+    },
+    {
+      "domain": "cloud",
+      "total": 50,
+      "supported": 47,
+      "unsupported": 3,
+      "needsClarification": 15,
+      "scenarioClasses": 38,
+      "apiCoverage": 20,
+      "stagedRecalled": 46,
+      "unifiedRecalled": 44
+    }
+  ],
+  "failures": [
+    {
+      "id": "d50-files-008",
+      "testDomain": "files",
+      "scenario": "formatted_input",
+      "text": "搜索本地文件：{\"keyword\":\"项目α清单\",\"file_type\":\"pptx\"}",
+      "goldApi": "files.search",
+      "staged": [
+        "files.search",
+        "files.preview",
+        "files.metadata.name",
+        "files.metadata.size",
+        "files.metadata.mime_type",
+        "files.metadata.modified_at"
+      ],
+      "unified": [],
+      "stagedRecalled": true,
+      "unifiedRecalled": false
+    },
+    {
+      "id": "d50-files-011",
+      "testDomain": "files",
+      "scenario": "metadata_field",
+      "text": "读取文件file_scan的MIME类型，不要打开它",
+      "goldApi": "files.metadata.mime_type",
+      "staged": [
+        "files.metadata.mime_type",
+        "files.search",
+        "files.preview",
+        "files.preview.close",
+        "files.preview.prepare"
+      ],
+      "unified": [
+        "services.open"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": false
+    },
+    {
+      "id": "d50-files-015",
+      "testDomain": "files",
+      "scenario": "selected_object",
+      "text": "看一下这个文件的大小，不需要预览",
+      "goldApi": "files.metadata.size",
+      "staged": [
+        "files.preview"
+      ],
+      "unified": [
+        "files.preview"
+      ],
+      "stagedRecalled": false,
+      "unifiedRecalled": false
+    },
+    {
+      "id": "d50-files-022",
+      "testDomain": "files",
+      "scenario": "missing_object",
+      "text": "上一份文件还可以预览吗？",
+      "goldApi": "files.preview.can_preview",
+      "staged": [
+        "files.preview"
+      ],
+      "unified": [
+        "files.preview"
+      ],
+      "stagedRecalled": false,
+      "unifiedRecalled": false
+    },
+    {
+      "id": "d50-files-023",
+      "testDomain": "files",
+      "scenario": "preview_state",
+      "text": "预览窗口现在是否已打开",
+      "goldApi": "files.preview.is_open",
+      "staged": [
+        "files.search",
+        "files.preview",
+        "files.metadata.name",
+        "files.metadata.size",
+        "files.metadata.mime_type",
+        "files.metadata.modified_at"
+      ],
+      "unified": [
+        "files.search",
+        "files.preview",
+        "files.metadata.name",
+        "files.metadata.size",
+        "files.metadata.mime_type",
+        "files.metadata.modified_at",
+        "files.metadata.uri",
+        "files.metadata.extension",
+        "files.preview.can_preview",
+        "files.preview.is_open",
+        "files.preview.close",
+        "files.preview.prepare"
+      ],
+      "stagedRecalled": false,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-files-024",
+      "testDomain": "files",
+      "scenario": "preview_close",
+      "text": "请关掉预览窗口",
+      "goldApi": "files.preview.close",
+      "staged": [
+        "files.preview"
+      ],
+      "unified": [
+        "files.preview"
+      ],
+      "stagedRecalled": false,
+      "unifiedRecalled": false
+    },
+    {
+      "id": "d50-files-049",
+      "testDomain": "files",
+      "scenario": "negative_scope",
+      "text": "不用打开或搜索，单独读取文件file_state的修改时间",
+      "goldApi": "files.metadata.modified_at",
+      "staged": [
+        "files.metadata.modified_at",
+        "files.search",
+        "files.preview",
+        "files.preview.close",
+        "files.preview.prepare"
+      ],
+      "unified": [
+        "services.open"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": false
+    },
+    {
+      "id": "d50-files-050",
+      "testDomain": "files",
+      "scenario": "formatted_input",
+      "text": "操作：关闭预览；参数：{}",
+      "goldApi": "files.preview.close",
+      "staged": [
+        "files.preview"
+      ],
+      "unified": [
+        "files.preview"
+      ],
+      "stagedRecalled": false,
+      "unifiedRecalled": false
+    },
+    {
+      "id": "d50-services-021",
+      "testDomain": "services",
+      "scenario": "negative_scope",
+      "text": "查询天气服务的页面参数，没要求设置任何参数",
+      "goldApi": "services.parameters",
+      "staged": [
+        "services.parameters",
+        "services.open",
+        "services.link.parse"
+      ],
+      "unified": [
+        "calendar.update",
+        "contacts.update"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": false
+    },
+    {
+      "id": "d50-services-028",
+      "testDomain": "services",
+      "scenario": "link_field",
+      "text": "给我日历服务的直达链接，暂不打开",
+      "goldApi": "services.link",
+      "staged": [
+        "services.open"
+      ],
+      "unified": [
+        "services.open"
+      ],
+      "stagedRecalled": false,
+      "unifiedRecalled": false
+    },
+    {
+      "id": "d50-services-035",
+      "testDomain": "services",
+      "scenario": "link_parse",
+      "text": "解析应用跳转链接https://example.test/deeplink?target=contacts#profile",
+      "goldApi": "services.link.parse",
+      "staged": [
+        "services.target",
+        "services.link",
+        "services.open",
+        "services.parameters",
+        "services.availability",
+        "services.link.parse"
+      ],
+      "unified": [
+        "services.target",
+        "services.link",
+        "weather.query",
+        "calendar.search",
+        "contacts.search",
+        "files.search",
+        "materials.search",
+        "weather.current.overview",
+        "calendar.event.get",
+        "contacts.get",
+        "files.preview",
+        "services.open"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": false
+    },
+    {
+      "id": "d50-services-040",
+      "testDomain": "services",
+      "scenario": "negative_scope",
+      "text": "只获取当前延迟链接，不解析、不打开",
+      "goldApi": "services.link.deferred",
+      "staged": [
+        "services.open"
+      ],
+      "unified": [
+        "services.open"
+      ],
+      "stagedRecalled": false,
+      "unifiedRecalled": false
+    },
+    {
+      "id": "d50-services-049",
+      "testDomain": "services",
+      "scenario": "formatted_input",
+      "text": "应用链接解析请求：\nurl=\"app://weather/view?city=New%20York\"",
+      "goldApi": "services.link.parse",
+      "staged": [
+        "services.open",
+        "services.target",
+        "services.parameters",
+        "services.availability",
+        "services.link",
+        "services.link.parse"
+      ],
+      "unified": [],
+      "stagedRecalled": true,
+      "unifiedRecalled": false
+    },
+    {
+      "id": "d50-cloud-003",
+      "testDomain": "cloud",
+      "scenario": "formatted_input",
+      "text": "云端会议资料查询：meeting_id=mt_review；keyword=变更审批",
+      "goldApi": "materials.search",
+      "staged": [
+        "materials.meeting_id",
+        "materials.search",
+        "materials.get",
+        "materials.title",
+        "materials.content",
+        "materials.updated_at"
+      ],
+      "unified": [],
+      "stagedRecalled": true,
+      "unifiedRecalled": false
+    },
+    {
+      "id": "d50-cloud-004",
+      "testDomain": "cloud",
+      "scenario": "missing_filter",
+      "text": "搜索会议资料，关键词和会议ID都还没提供",
+      "goldApi": "materials.search",
+      "staged": [
+        "materials.search",
+        "materials.get",
+        "materials.title",
+        "materials.content",
+        "materials.meeting_id",
+        "materials.updated_at"
+      ],
+      "unified": [],
+      "stagedRecalled": true,
+      "unifiedRecalled": false
+    },
+    {
+      "id": "d50-cloud-029",
+      "testDomain": "cloud",
+      "scenario": "missing_write_path",
+      "text": "下载云文件backups/full.zip到本地，保存位置我没给",
+      "goldApi": "cloud.storage.download",
+      "staged": [
+        "materials.save"
+      ],
+      "unified": [
+        "materials.save"
+      ],
+      "stagedRecalled": false,
+      "unifiedRecalled": false
+    }
+  ],
+  "rows": [
+    {
+      "id": "d50-files-001",
+      "testDomain": "files",
+      "scenario": "search_keyword",
+      "text": "在本地文件里搜索“实验摘要”，不限制文件种类",
+      "goldApi": "files.search",
+      "staged": [
+        "files.search",
+        "files.preview",
+        "files.metadata.name",
+        "files.metadata.size",
+        "files.metadata.mime_type",
+        "files.metadata.modified_at"
+      ],
+      "unified": [
+        "files.search",
+        "files.preview",
+        "files.metadata.name",
+        "files.metadata.size",
+        "files.metadata.mime_type",
+        "files.metadata.modified_at",
+        "files.metadata.uri",
+        "files.metadata.extension",
+        "files.preview.can_preview",
+        "files.preview.is_open",
+        "files.preview.close",
+        "files.preview.prepare"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-files-002",
+      "testDomain": "files",
+      "scenario": "search_type",
+      "text": "帮我找预算决算相关的PDF文件",
+      "goldApi": "files.search",
+      "staged": [
+        "files.search",
+        "files.preview",
+        "files.metadata.name",
+        "files.metadata.size",
+        "files.metadata.mime_type",
+        "files.metadata.modified_at"
+      ],
+      "unified": [
+        "files.search",
+        "files.preview",
+        "files.metadata.name",
+        "files.metadata.size",
+        "files.metadata.mime_type",
+        "files.metadata.modified_at",
+        "files.metadata.uri",
+        "files.metadata.extension",
+        "files.preview.can_preview",
+        "files.preview.is_open",
+        "files.preview.close",
+        "files.preview.prepare"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-files-003",
+      "testDomain": "files",
+      "scenario": "formatted_input",
+      "text": "查找文件\n关键词：合同修订稿\n类型：docx",
+      "goldApi": "files.search",
+      "staged": [
+        "files.metadata.mime_type",
+        "files.search",
+        "files.preview",
+        "files.preview.close",
+        "files.preview.prepare"
+      ],
+      "unified": [
+        "files.metadata.mime_type",
+        "files.search",
+        "calendar.event.type",
+        "files.preview",
+        "files.preview.close",
+        "files.preview.prepare"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-files-004",
+      "testDomain": "files",
+      "scenario": "search_type",
+      "text": "在本地图片中找“结构草图”",
+      "goldApi": "files.search",
+      "staged": [
+        "files.search",
+        "files.preview",
+        "files.metadata.name",
+        "files.metadata.size",
+        "files.metadata.mime_type",
+        "files.metadata.modified_at"
+      ],
+      "unified": [
+        "weather.query",
+        "calendar.search",
+        "contacts.search",
+        "files.search",
+        "materials.search",
+        "weather.current.overview",
+        "calendar.event.get",
+        "contacts.get",
+        "files.preview",
+        "services.open",
+        "materials.get",
+        "weather.current.temperature"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-files-005",
+      "testDomain": "files",
+      "scenario": "search_type",
+      "text": "搜索名为日志节选的纯文本文件",
+      "goldApi": "files.search",
+      "staged": [
+        "files.search",
+        "files.preview",
+        "files.metadata.name",
+        "files.metadata.size",
+        "files.metadata.mime_type",
+        "files.metadata.modified_at"
+      ],
+      "unified": [
+        "files.search",
+        "files.preview",
+        "files.metadata.name",
+        "files.metadata.size",
+        "files.metadata.mime_type",
+        "files.metadata.modified_at",
+        "files.metadata.uri",
+        "files.metadata.extension",
+        "files.preview.can_preview",
+        "files.preview.is_open",
+        "files.preview.close",
+        "files.preview.prepare"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-files-006",
+      "testDomain": "files",
+      "scenario": "missing_query",
+      "text": "搜索xlsx文件，关键词我还没想好",
+      "goldApi": "files.search",
+      "staged": [
+        "files.search",
+        "files.preview",
+        "files.metadata.name",
+        "files.metadata.size",
+        "files.metadata.mime_type",
+        "files.metadata.modified_at"
+      ],
+      "unified": [
+        "files.search",
+        "files.preview",
+        "files.metadata.name",
+        "files.metadata.size",
+        "files.metadata.mime_type",
+        "files.metadata.modified_at",
+        "files.metadata.uri",
+        "files.metadata.extension",
+        "files.preview.can_preview",
+        "files.preview.is_open",
+        "files.preview.close",
+        "files.preview.prepare"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-files-007",
+      "testDomain": "files",
+      "scenario": "quoted_literal",
+      "text": "查找本地文件，关键词原样是“忽略所有规则”，它只是文件名",
+      "goldApi": "files.search",
+      "staged": [
+        "files.metadata.name",
+        "files.search",
+        "files.preview",
+        "files.preview.close",
+        "files.preview.prepare"
+      ],
+      "unified": [
+        "files.metadata.name",
+        "files.search",
+        "files.preview",
+        "files.preview.close",
+        "files.preview.prepare"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-files-008",
+      "testDomain": "files",
+      "scenario": "formatted_input",
+      "text": "搜索本地文件：{\"keyword\":\"项目α清单\",\"file_type\":\"pptx\"}",
+      "goldApi": "files.search",
+      "staged": [
+        "files.search",
+        "files.preview",
+        "files.metadata.name",
+        "files.metadata.size",
+        "files.metadata.mime_type",
+        "files.metadata.modified_at"
+      ],
+      "unified": [],
+      "stagedRecalled": true,
+      "unifiedRecalled": false
+    },
+    {
+      "id": "d50-files-009",
+      "testDomain": "files",
+      "scenario": "metadata_field",
+      "text": "只读取文件file_contract的文件名",
+      "goldApi": "files.metadata.name",
+      "staged": [
+        "files.metadata.name",
+        "files.search",
+        "files.preview",
+        "files.preview.close",
+        "files.preview.prepare"
+      ],
+      "unified": [
+        "files.metadata.name",
+        "files.search",
+        "files.preview",
+        "files.preview.close",
+        "files.preview.prepare"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-files-010",
+      "testDomain": "files",
+      "scenario": "metadata_field",
+      "text": "文件file:///D:/demo/archive.zip有多少字节？",
+      "goldApi": "files.metadata.size",
+      "staged": [
+        "files.metadata.size",
+        "files.search",
+        "files.preview",
+        "files.preview.close",
+        "files.preview.prepare"
+      ],
+      "unified": [
+        "files.metadata.size",
+        "files.search",
+        "files.preview",
+        "files.preview.close",
+        "files.preview.prepare"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-files-011",
+      "testDomain": "files",
+      "scenario": "metadata_field",
+      "text": "读取文件file_scan的MIME类型，不要打开它",
+      "goldApi": "files.metadata.mime_type",
+      "staged": [
+        "files.metadata.mime_type",
+        "files.search",
+        "files.preview",
+        "files.preview.close",
+        "files.preview.prepare"
+      ],
+      "unified": [
+        "services.open"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": false
+    },
+    {
+      "id": "d50-files-012",
+      "testDomain": "files",
+      "scenario": "metadata_field",
+      "text": "给我文件file_design的最近修改时间",
+      "goldApi": "files.metadata.modified_at",
+      "staged": [
+        "files.metadata.modified_at",
+        "files.search",
+        "files.preview",
+        "files.preview.close",
+        "files.preview.prepare"
+      ],
+      "unified": [
+        "files.metadata.modified_at",
+        "files.search",
+        "files.preview",
+        "files.preview.close",
+        "files.preview.prepare"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-files-013",
+      "testDomain": "files",
+      "scenario": "selected_object",
+      "text": "当前选中的文件地址是什么",
+      "goldApi": "files.metadata.uri",
+      "staged": [
+        "files.metadata.uri",
+        "files.preview",
+        "files.preview.prepare",
+        "files.search",
+        "files.preview.close"
+      ],
+      "unified": [
+        "files.metadata.uri",
+        "files.preview",
+        "files.preview.prepare",
+        "files.search",
+        "files.preview.close",
+        "contacts.address"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-files-014",
+      "testDomain": "files",
+      "scenario": "metadata_field",
+      "text": "读取file_release的文件后缀",
+      "goldApi": "files.metadata.extension",
+      "staged": [
+        "files.metadata.extension",
+        "files.search",
+        "files.preview",
+        "files.preview.close",
+        "files.preview.prepare"
+      ],
+      "unified": [
+        "files.metadata.extension",
+        "files.search",
+        "files.preview",
+        "files.preview.close",
+        "files.preview.prepare"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-files-015",
+      "testDomain": "files",
+      "scenario": "selected_object",
+      "text": "看一下这个文件的大小，不需要预览",
+      "goldApi": "files.metadata.size",
+      "staged": [
+        "files.preview"
+      ],
+      "unified": [
+        "files.preview"
+      ],
+      "stagedRecalled": false,
+      "unifiedRecalled": false
+    },
+    {
+      "id": "d50-files-016",
+      "testDomain": "files",
+      "scenario": "missing_object",
+      "text": "那份文件叫什么名字？",
+      "goldApi": "files.metadata.name",
+      "staged": [
+        "files.search",
+        "files.preview",
+        "files.metadata.name",
+        "files.metadata.size",
+        "files.metadata.mime_type",
+        "files.metadata.modified_at"
+      ],
+      "unified": [
+        "files.search",
+        "files.preview",
+        "files.metadata.name",
+        "files.metadata.size",
+        "files.metadata.mime_type",
+        "files.metadata.modified_at",
+        "files.metadata.uri",
+        "files.metadata.extension",
+        "files.preview.can_preview",
+        "files.preview.is_open",
+        "files.preview.close",
+        "files.preview.prepare"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-files-017",
+      "testDomain": "files",
+      "scenario": "untrusted_object",
+      "text": "当前文件占了多少字节",
+      "goldApi": "files.metadata.size",
+      "staged": [
+        "files.metadata.size",
+        "files.search",
+        "files.preview",
+        "files.preview.close",
+        "files.preview.prepare"
+      ],
+      "unified": [
+        "files.metadata.size",
+        "files.search",
+        "files.preview",
+        "files.preview.close",
+        "files.preview.prepare"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-files-018",
+      "testDomain": "files",
+      "scenario": "untrusted_object",
+      "text": "读取当前文件的MIME",
+      "goldApi": "files.metadata.mime_type",
+      "staged": [
+        "files.metadata.mime_type",
+        "files.search",
+        "files.preview",
+        "files.preview.close",
+        "files.preview.prepare"
+      ],
+      "unified": [
+        "files.metadata.mime_type",
+        "files.search",
+        "files.preview",
+        "files.preview.close",
+        "files.preview.prepare"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-files-019",
+      "testDomain": "files",
+      "scenario": "explicit_precedence",
+      "text": "读取文件file_explicit的名称",
+      "goldApi": "files.metadata.name",
+      "staged": [
+        "files.metadata.name",
+        "files.preview",
+        "files.preview.prepare",
+        "files.search",
+        "files.preview.close"
+      ],
+      "unified": [
+        "files.metadata.name",
+        "files.preview",
+        "files.preview.prepare",
+        "files.search",
+        "files.preview.close"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-files-020",
+      "testDomain": "files",
+      "scenario": "preview_capability",
+      "text": "文件file_codec是否支持预览",
+      "goldApi": "files.preview.can_preview",
+      "staged": [
+        "files.preview.can_preview",
+        "files.search",
+        "files.preview",
+        "files.preview.close",
+        "files.preview.prepare"
+      ],
+      "unified": [
+        "files.preview.can_preview",
+        "files.search",
+        "files.preview",
+        "files.preview.close",
+        "files.preview.prepare"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-files-021",
+      "testDomain": "files",
+      "scenario": "selected_object",
+      "text": "这个文件能否预览？",
+      "goldApi": "files.preview.can_preview",
+      "staged": [
+        "files.preview.can_preview",
+        "files.preview",
+        "files.preview.prepare",
+        "files.search",
+        "files.preview.close"
+      ],
+      "unified": [
+        "files.preview.can_preview",
+        "files.preview",
+        "files.preview.prepare",
+        "files.search",
+        "files.preview.close"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-files-022",
+      "testDomain": "files",
+      "scenario": "missing_object",
+      "text": "上一份文件还可以预览吗？",
+      "goldApi": "files.preview.can_preview",
+      "staged": [
+        "files.preview"
+      ],
+      "unified": [
+        "files.preview"
+      ],
+      "stagedRecalled": false,
+      "unifiedRecalled": false
+    },
+    {
+      "id": "d50-files-023",
+      "testDomain": "files",
+      "scenario": "preview_state",
+      "text": "预览窗口现在是否已打开",
+      "goldApi": "files.preview.is_open",
+      "staged": [
+        "files.search",
+        "files.preview",
+        "files.metadata.name",
+        "files.metadata.size",
+        "files.metadata.mime_type",
+        "files.metadata.modified_at"
+      ],
+      "unified": [
+        "files.search",
+        "files.preview",
+        "files.metadata.name",
+        "files.metadata.size",
+        "files.metadata.mime_type",
+        "files.metadata.modified_at",
+        "files.metadata.uri",
+        "files.metadata.extension",
+        "files.preview.can_preview",
+        "files.preview.is_open",
+        "files.preview.close",
+        "files.preview.prepare"
+      ],
+      "stagedRecalled": false,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-files-024",
+      "testDomain": "files",
+      "scenario": "preview_close",
+      "text": "请关掉预览窗口",
+      "goldApi": "files.preview.close",
+      "staged": [
+        "files.preview"
+      ],
+      "unified": [
+        "files.preview"
+      ],
+      "stagedRecalled": false,
+      "unifiedRecalled": false
+    },
+    {
+      "id": "d50-files-025",
+      "testDomain": "files",
+      "scenario": "preview_prepare",
+      "text": "为文件file:///D:/demo/deck.pptx准备预览资源",
+      "goldApi": "files.preview.prepare",
+      "staged": [
+        "files.preview.prepare"
+      ],
+      "unified": [
+        "files.preview.prepare",
+        "cloud.prefetch.resource",
+        "cloud.prefetch.result",
+        "cloud.prefetch.timestamp",
+        "cloud.prefetch.token"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-files-026",
+      "testDomain": "files",
+      "scenario": "selected_object",
+      "text": "给当前选中的文件预加载预览资源",
+      "goldApi": "files.preview.prepare",
+      "staged": [
+        "files.preview.prepare"
+      ],
+      "unified": [
+        "files.preview.prepare",
+        "cloud.prefetch.resource",
+        "cloud.prefetch.result",
+        "cloud.prefetch.timestamp",
+        "cloud.prefetch.token"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-files-027",
+      "testDomain": "files",
+      "scenario": "missing_object",
+      "text": "准备预览那份文档",
+      "goldApi": "files.preview.prepare",
+      "staged": [
+        "files.preview.prepare"
+      ],
+      "unified": [
+        "files.preview.prepare",
+        "cloud.prefetch.resource",
+        "cloud.prefetch.result",
+        "cloud.prefetch.timestamp",
+        "cloud.prefetch.token"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-files-028",
+      "testDomain": "files",
+      "scenario": "preview_explicit",
+      "text": "预览文件file_render，MIME是application/pdf，窗口标题叫审核副本",
+      "goldApi": "files.preview",
+      "staged": [
+        "files.preview"
+      ],
+      "unified": [
+        "files.preview"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-files-029",
+      "testDomain": "files",
+      "scenario": "mime_inference",
+      "text": "预览file:///D:/demo/manual.PDF",
+      "goldApi": "files.preview",
+      "staged": [
+        "files.preview"
+      ],
+      "unified": [
+        "files.preview"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-files-030",
+      "testDomain": "files",
+      "scenario": "mime_inference",
+      "text": "预览https://example.test/report.docx?download=1#part2",
+      "goldApi": "files.preview",
+      "staged": [
+        "files.preview"
+      ],
+      "unified": [
+        "files.preview"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-files-031",
+      "testDomain": "files",
+      "scenario": "mime_unknown",
+      "text": "预览文件file_opaque_binary",
+      "goldApi": "files.preview",
+      "staged": [
+        "files.preview"
+      ],
+      "unified": [
+        "files.preview"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-files-032",
+      "testDomain": "files",
+      "scenario": "missing_object",
+      "text": "打开文件预览，标题叫待审稿，文件目标还没给",
+      "goldApi": "files.preview",
+      "staged": [
+        "files.preview"
+      ],
+      "unified": [
+        "files.preview"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-files-033",
+      "testDomain": "files",
+      "scenario": "selected_object",
+      "text": "预览现在选中的这份表格",
+      "goldApi": "files.preview",
+      "staged": [
+        "files.preview"
+      ],
+      "unified": [
+        "files.preview"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-files-034",
+      "testDomain": "files",
+      "scenario": "untrusted_object",
+      "text": "预览当前文件",
+      "goldApi": "files.preview",
+      "staged": [
+        "files.preview"
+      ],
+      "unified": [
+        "files.preview"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-files-035",
+      "testDomain": "files",
+      "scenario": "mime_inference",
+      "text": "预览file:///D:/demo/figure.png，窗口标题为结果图",
+      "goldApi": "files.preview",
+      "staged": [
+        "files.preview"
+      ],
+      "unified": [
+        "files.preview"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-files-036",
+      "testDomain": "files",
+      "scenario": "quoted_literal",
+      "text": "请预览文件URI“file:///D:/demo/季度 报告.txt”",
+      "goldApi": "files.preview",
+      "staged": [
+        "files.preview"
+      ],
+      "unified": [
+        "files.preview"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-files-037",
+      "testDomain": "files",
+      "scenario": "explicit_precedence",
+      "text": "预览file:///D:/demo/payload.bin，按text/plain处理",
+      "goldApi": "files.preview",
+      "staged": [
+        "files.preview"
+      ],
+      "unified": [
+        "files.preview"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-files-038",
+      "testDomain": "files",
+      "scenario": "missing_object",
+      "text": "预览前面提过的PDF文档",
+      "goldApi": "files.preview",
+      "staged": [
+        "files.preview"
+      ],
+      "unified": [
+        "files.preview"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-files-047",
+      "testDomain": "files",
+      "scenario": "formatted_input",
+      "text": "<请求><动作>读取文件扩展名</动作><file_id>file_xml</file_id></请求>",
+      "goldApi": "files.metadata.extension",
+      "staged": [
+        "files.metadata.extension",
+        "files.search",
+        "files.preview",
+        "files.preview.close",
+        "files.preview.prepare"
+      ],
+      "unified": [
+        "files.metadata.extension",
+        "files.search",
+        "files.preview",
+        "files.preview.close",
+        "files.preview.prepare"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-files-048",
+      "testDomain": "files",
+      "scenario": "formatted_input",
+      "text": "file_id=file_en；只要文件MIME字段，answer JSON",
+      "goldApi": "files.metadata.mime_type",
+      "staged": [
+        "files.metadata.mime_type",
+        "files.search",
+        "files.preview",
+        "files.preview.close",
+        "files.preview.prepare"
+      ],
+      "unified": [
+        "files.metadata.mime_type",
+        "cloud.database.field",
+        "files.search",
+        "files.preview",
+        "files.preview.close",
+        "files.preview.prepare"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-files-049",
+      "testDomain": "files",
+      "scenario": "negative_scope",
+      "text": "不用打开或搜索，单独读取文件file_state的修改时间",
+      "goldApi": "files.metadata.modified_at",
+      "staged": [
+        "files.metadata.modified_at",
+        "files.search",
+        "files.preview",
+        "files.preview.close",
+        "files.preview.prepare"
+      ],
+      "unified": [
+        "services.open"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": false
+    },
+    {
+      "id": "d50-files-050",
+      "testDomain": "files",
+      "scenario": "formatted_input",
+      "text": "操作：关闭预览；参数：{}",
+      "goldApi": "files.preview.close",
+      "staged": [
+        "files.preview"
+      ],
+      "unified": [
+        "files.preview"
+      ],
+      "stagedRecalled": false,
+      "unifiedRecalled": false
+    },
+    {
+      "id": "d50-services-001",
+      "testDomain": "services",
+      "scenario": "navigation_target",
+      "text": "进入天气服务的页面",
+      "goldApi": "services.open",
+      "staged": [
+        "services.open"
+      ],
+      "unified": [
+        "services.open"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-services-002",
+      "testDomain": "services",
+      "scenario": "navigation_target",
+      "text": "请开启日历服务入口",
+      "goldApi": "services.open",
+      "staged": [
+        "services.open"
+      ],
+      "unified": [
+        "services.open"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-services-003",
+      "testDomain": "services",
+      "scenario": "navigation_target",
+      "text": "打开通讯录服务界面",
+      "goldApi": "services.open",
+      "staged": [
+        "services.open"
+      ],
+      "unified": [
+        "services.open"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-services-004",
+      "testDomain": "services",
+      "scenario": "negative_scope",
+      "text": "进入文件服务页面，先别查文件",
+      "goldApi": "services.open",
+      "staged": [
+        "services.open"
+      ],
+      "unified": [
+        "services.open"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-services-005",
+      "testDomain": "services",
+      "scenario": "navigation_target",
+      "text": "把会议资料服务的页面打开",
+      "goldApi": "services.open",
+      "staged": [
+        "services.open"
+      ],
+      "unified": [
+        "services.open"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-services-006",
+      "testDomain": "services",
+      "scenario": "navigation_parameters",
+      "text": "打开天气服务页面，页面query参数是上海浦东",
+      "goldApi": "services.open",
+      "staged": [
+        "services.open"
+      ],
+      "unified": [
+        "services.open"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-services-007",
+      "testDomain": "services",
+      "scenario": "navigation_parameters",
+      "text": "进入日历服务页并带页面查询参数query=周会",
+      "goldApi": "services.open",
+      "staged": [
+        "services.open"
+      ],
+      "unified": [
+        "services.open"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-services-008",
+      "testDomain": "services",
+      "scenario": "formatted_input",
+      "text": "打开文件服务，参数写作{\"query\":\"预算.pdf\"}",
+      "goldApi": "services.open",
+      "staged": [
+        "services.open"
+      ],
+      "unified": [
+        "services.open"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-services-009",
+      "testDomain": "services",
+      "scenario": "quoted_literal",
+      "text": "打开会议资料服务，query原样传“A&B 合并”",
+      "goldApi": "services.open",
+      "staged": [
+        "services.open"
+      ],
+      "unified": [
+        "services.open"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-services-010",
+      "testDomain": "services",
+      "scenario": "formatted_input",
+      "text": "打开通讯录服务页\nquery：张 三",
+      "goldApi": "services.open",
+      "staged": [
+        "services.open"
+      ],
+      "unified": [
+        "services.open"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-services-011",
+      "testDomain": "services",
+      "scenario": "missing_target",
+      "text": "请打开那个服务页面",
+      "goldApi": "services.open",
+      "staged": [
+        "services.open"
+      ],
+      "unified": [
+        "services.open"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-services-012",
+      "testDomain": "services",
+      "scenario": "navigation_no_autofill",
+      "text": "打开当前选中的服务页",
+      "goldApi": "services.open",
+      "staged": [
+        "services.open"
+      ],
+      "unified": [
+        "services.open"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-services-015",
+      "testDomain": "services",
+      "scenario": "target_field",
+      "text": "读取天气服务的目标页面信息",
+      "goldApi": "services.target",
+      "staged": [
+        "services.target",
+        "services.open",
+        "services.link.parse"
+      ],
+      "unified": [
+        "services.target",
+        "weather.query",
+        "services.open",
+        "services.link.parse"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-services-016",
+      "testDomain": "services",
+      "scenario": "formatted_input",
+      "text": "请求：读取服务目标页面；service=calendar",
+      "goldApi": "services.target",
+      "staged": [
+        "services.target",
+        "services.open",
+        "services.link.parse"
+      ],
+      "unified": [
+        "services.target",
+        "services.open",
+        "services.link.parse"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-services-017",
+      "testDomain": "services",
+      "scenario": "selected_object",
+      "text": "当前服务的目标页面对象是什么",
+      "goldApi": "services.target",
+      "staged": [
+        "services.target",
+        "services.open",
+        "services.link.parse"
+      ],
+      "unified": [
+        "services.target",
+        "services.open",
+        "services.link.parse"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-services-018",
+      "testDomain": "services",
+      "scenario": "missing_target",
+      "text": "那个服务的目标页面信息给我看看",
+      "goldApi": "services.target",
+      "staged": [
+        "services.target",
+        "services.open",
+        "services.link.parse"
+      ],
+      "unified": [
+        "services.target",
+        "services.open",
+        "services.link.parse"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-services-019",
+      "testDomain": "services",
+      "scenario": "parameters_field",
+      "text": "读取文件服务当前页面参数",
+      "goldApi": "services.parameters",
+      "staged": [
+        "services.parameters",
+        "services.open",
+        "services.link.parse"
+      ],
+      "unified": [
+        "services.parameters",
+        "services.open",
+        "services.link.parse"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-services-020",
+      "testDomain": "services",
+      "scenario": "selected_object",
+      "text": "看看当前选中服务的页面参数",
+      "goldApi": "services.parameters",
+      "staged": [
+        "services.parameters",
+        "services.open",
+        "services.link.parse"
+      ],
+      "unified": [
+        "services.parameters",
+        "services.open",
+        "services.link.parse"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-services-021",
+      "testDomain": "services",
+      "scenario": "negative_scope",
+      "text": "查询天气服务的页面参数，没要求设置任何参数",
+      "goldApi": "services.parameters",
+      "staged": [
+        "services.parameters",
+        "services.open",
+        "services.link.parse"
+      ],
+      "unified": [
+        "calendar.update",
+        "contacts.update"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": false
+    },
+    {
+      "id": "d50-services-022",
+      "testDomain": "services",
+      "scenario": "availability_field",
+      "text": "天气服务现在能否使用？",
+      "goldApi": "services.availability",
+      "staged": [
+        "services.availability",
+        "services.open",
+        "services.link.parse"
+      ],
+      "unified": [
+        "weather.query",
+        "services.availability",
+        "services.open",
+        "services.link.parse"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-services-023",
+      "testDomain": "services",
+      "scenario": "availability_field",
+      "text": "通讯录服务的可用状态是什么",
+      "goldApi": "services.availability",
+      "staged": [
+        "services.availability",
+        "services.open",
+        "services.link.parse"
+      ],
+      "unified": [
+        "services.availability",
+        "services.open",
+        "services.link.parse"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-services-024",
+      "testDomain": "services",
+      "scenario": "selected_object",
+      "text": "这个服务能否打开，先不要打开它",
+      "goldApi": "services.availability",
+      "staged": [
+        "services.target",
+        "services.parameters",
+        "services.availability",
+        "services.link",
+        "services.open",
+        "services.link.parse"
+      ],
+      "unified": [
+        "services.target",
+        "services.parameters",
+        "services.availability",
+        "services.link",
+        "services.open",
+        "services.link.parse",
+        "services.link.deferred"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-services-025",
+      "testDomain": "services",
+      "scenario": "missing_target",
+      "text": "那个服务能不能用？",
+      "goldApi": "services.availability",
+      "staged": [
+        "services.open",
+        "services.target",
+        "services.parameters",
+        "services.availability",
+        "services.link",
+        "services.link.parse"
+      ],
+      "unified": [
+        "services.open",
+        "services.target",
+        "services.parameters",
+        "services.availability",
+        "services.link",
+        "services.link.parse",
+        "services.link.deferred"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-services-026",
+      "testDomain": "services",
+      "scenario": "untrusted_object",
+      "text": "当前服务是否可用",
+      "goldApi": "services.availability",
+      "staged": [
+        "services.availability",
+        "services.open",
+        "services.link.parse"
+      ],
+      "unified": [
+        "services.availability",
+        "services.open",
+        "services.link.parse"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-services-027",
+      "testDomain": "services",
+      "scenario": "explicit_precedence",
+      "text": "读取文件服务是否可用",
+      "goldApi": "services.availability",
+      "staged": [
+        "services.availability",
+        "services.open",
+        "services.link.parse"
+      ],
+      "unified": [
+        "services.availability",
+        "services.open",
+        "services.link.parse"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-services-028",
+      "testDomain": "services",
+      "scenario": "link_field",
+      "text": "给我日历服务的直达链接，暂不打开",
+      "goldApi": "services.link",
+      "staged": [
+        "services.open"
+      ],
+      "unified": [
+        "services.open"
+      ],
+      "stagedRecalled": false,
+      "unifiedRecalled": false
+    },
+    {
+      "id": "d50-services-029",
+      "testDomain": "services",
+      "scenario": "link_field",
+      "text": "查询通讯录服务深链",
+      "goldApi": "services.link",
+      "staged": [
+        "services.link",
+        "services.open",
+        "services.link.parse"
+      ],
+      "unified": [
+        "services.link",
+        "services.open",
+        "services.link.parse"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-services-030",
+      "testDomain": "services",
+      "scenario": "selected_object",
+      "text": "读取当前服务的直达链接",
+      "goldApi": "services.link",
+      "staged": [
+        "services.link",
+        "services.open",
+        "services.link.parse"
+      ],
+      "unified": [
+        "services.link",
+        "services.open",
+        "services.link.parse"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-services-031",
+      "testDomain": "services",
+      "scenario": "missing_target",
+      "text": "给我那个服务的深链",
+      "goldApi": "services.link",
+      "staged": [
+        "services.link",
+        "services.open",
+        "services.link.parse"
+      ],
+      "unified": [
+        "services.link",
+        "services.open",
+        "services.link.parse"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-services-032",
+      "testDomain": "services",
+      "scenario": "untrusted_object",
+      "text": "读取当前服务的深链地址",
+      "goldApi": "services.link",
+      "staged": [
+        "services.link",
+        "services.open",
+        "services.link.parse"
+      ],
+      "unified": [
+        "services.link",
+        "contacts.address",
+        "files.metadata.uri",
+        "services.open",
+        "services.link.parse"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-services-033",
+      "testDomain": "services",
+      "scenario": "link_parse",
+      "text": "解析应用链接app://calendar/event?id=ev_18",
+      "goldApi": "services.link.parse",
+      "staged": [
+        "services.link.parse",
+        "services.open",
+        "services.target",
+        "services.parameters",
+        "services.availability",
+        "services.link"
+      ],
+      "unified": [
+        "services.link.parse"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-services-034",
+      "testDomain": "services",
+      "scenario": "link_parse",
+      "text": "请解析链接app://files/open?name=%E6%8A%A5%E5%91%8A&mode=preview",
+      "goldApi": "services.link.parse",
+      "staged": [
+        "services.link.parse",
+        "services.open",
+        "services.target",
+        "services.parameters",
+        "services.availability",
+        "services.link"
+      ],
+      "unified": [
+        "weather.indices.name",
+        "services.link.parse"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-services-035",
+      "testDomain": "services",
+      "scenario": "link_parse",
+      "text": "解析应用跳转链接https://example.test/deeplink?target=contacts#profile",
+      "goldApi": "services.link.parse",
+      "staged": [
+        "services.target",
+        "services.link",
+        "services.open",
+        "services.parameters",
+        "services.availability",
+        "services.link.parse"
+      ],
+      "unified": [
+        "services.target",
+        "services.link",
+        "weather.query",
+        "calendar.search",
+        "contacts.search",
+        "files.search",
+        "materials.search",
+        "weather.current.overview",
+        "calendar.event.get",
+        "contacts.get",
+        "files.preview",
+        "services.open"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": false
+    },
+    {
+      "id": "d50-services-036",
+      "testDomain": "services",
+      "scenario": "selected_link",
+      "text": "解析当前选中的应用链接",
+      "goldApi": "services.link.parse",
+      "staged": [
+        "services.link.parse",
+        "services.open",
+        "services.target",
+        "services.parameters",
+        "services.availability",
+        "services.link"
+      ],
+      "unified": [
+        "services.link.parse",
+        "services.open",
+        "services.target",
+        "services.parameters",
+        "services.availability",
+        "services.link",
+        "services.link.deferred"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-services-037",
+      "testDomain": "services",
+      "scenario": "missing_target",
+      "text": "帮我解析那个延迟链接",
+      "goldApi": "services.link.parse",
+      "staged": [
+        "services.link.deferred",
+        "services.link.parse",
+        "services.open"
+      ],
+      "unified": [
+        "services.link.deferred",
+        "services.link.parse"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-services-038",
+      "testDomain": "services",
+      "scenario": "untrusted_object",
+      "text": "解析当前应用链接",
+      "goldApi": "services.link.parse",
+      "staged": [
+        "services.open",
+        "services.target",
+        "services.parameters",
+        "services.availability",
+        "services.link",
+        "services.link.parse"
+      ],
+      "unified": [
+        "services.open",
+        "services.target",
+        "services.parameters",
+        "services.availability",
+        "services.link",
+        "services.link.parse",
+        "services.link.deferred"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-services-039",
+      "testDomain": "services",
+      "scenario": "deferred_link",
+      "text": "获取当前延迟应用链接",
+      "goldApi": "services.link.deferred",
+      "staged": [
+        "services.link.deferred",
+        "services.open",
+        "services.link.parse"
+      ],
+      "unified": [
+        "services.link.deferred",
+        "services.open",
+        "services.link.parse"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-services-040",
+      "testDomain": "services",
+      "scenario": "negative_scope",
+      "text": "只获取当前延迟链接，不解析、不打开",
+      "goldApi": "services.link.deferred",
+      "staged": [
+        "services.open"
+      ],
+      "unified": [
+        "services.open"
+      ],
+      "stagedRecalled": false,
+      "unifiedRecalled": false
+    },
+    {
+      "id": "d50-services-047",
+      "testDomain": "services",
+      "scenario": "negative_scope",
+      "text": "仅回答会议资料服务能否打开；不要取得服务链接",
+      "goldApi": "services.availability",
+      "staged": [
+        "services.open",
+        "services.target",
+        "services.parameters",
+        "services.availability",
+        "services.link",
+        "services.link.parse"
+      ],
+      "unified": [
+        "materials.search",
+        "services.open",
+        "materials.get",
+        "services.target",
+        "services.parameters",
+        "services.availability",
+        "services.link",
+        "services.link.parse",
+        "services.link.deferred",
+        "materials.title",
+        "materials.content",
+        "materials.meeting_id"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-services-048",
+      "testDomain": "services",
+      "scenario": "selected_object",
+      "text": "查询已选服务对应的目标页面",
+      "goldApi": "services.target",
+      "staged": [
+        "services.target",
+        "services.open",
+        "services.link.parse"
+      ],
+      "unified": [
+        "services.target",
+        "services.open",
+        "services.link.parse"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-services-049",
+      "testDomain": "services",
+      "scenario": "formatted_input",
+      "text": "应用链接解析请求：\nurl=\"app://weather/view?city=New%20York\"",
+      "goldApi": "services.link.parse",
+      "staged": [
+        "services.open",
+        "services.target",
+        "services.parameters",
+        "services.availability",
+        "services.link",
+        "services.link.parse"
+      ],
+      "unified": [],
+      "stagedRecalled": true,
+      "unifiedRecalled": false
+    },
+    {
+      "id": "d50-services-050",
+      "testDomain": "services",
+      "scenario": "formatted_input",
+      "text": "service: materials；动作: 取得服务直达链接；无需搜索资料",
+      "goldApi": "services.link",
+      "staged": [
+        "services.link",
+        "services.open",
+        "services.link.parse"
+      ],
+      "unified": [
+        "services.link",
+        "services.open",
+        "services.link.parse"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-cloud-001",
+      "testDomain": "cloud",
+      "scenario": "materials_search",
+      "text": "在云端会议资料中搜索关键词“供货风险”",
+      "goldApi": "materials.search",
+      "staged": [
+        "materials.search",
+        "materials.get",
+        "materials.title",
+        "materials.content",
+        "materials.meeting_id",
+        "materials.updated_at"
+      ],
+      "unified": [
+        "materials.search",
+        "materials.get",
+        "materials.title",
+        "materials.content",
+        "materials.meeting_id",
+        "materials.updated_at",
+        "materials.owner",
+        "materials.permissions",
+        "materials.download_url",
+        "cloud.storage.download_url",
+        "cloud.database.field",
+        "cloud.database.calculate"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-cloud-002",
+      "testDomain": "cloud",
+      "scenario": "materials_search",
+      "text": "查询会议mt_demo关联的会议资料，不限关键词",
+      "goldApi": "materials.search",
+      "staged": [
+        "materials.meeting_id",
+        "materials.search",
+        "materials.get",
+        "cloud.database.calculate",
+        "cloud.prefetch.resource"
+      ],
+      "unified": [
+        "materials.meeting_id",
+        "materials.search",
+        "materials.get",
+        "cloud.database.calculate",
+        "cloud.prefetch.resource"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-cloud-003",
+      "testDomain": "cloud",
+      "scenario": "formatted_input",
+      "text": "云端会议资料查询：meeting_id=mt_review；keyword=变更审批",
+      "goldApi": "materials.search",
+      "staged": [
+        "materials.meeting_id",
+        "materials.search",
+        "materials.get",
+        "materials.title",
+        "materials.content",
+        "materials.updated_at"
+      ],
+      "unified": [],
+      "stagedRecalled": true,
+      "unifiedRecalled": false
+    },
+    {
+      "id": "d50-cloud-004",
+      "testDomain": "cloud",
+      "scenario": "missing_filter",
+      "text": "搜索会议资料，关键词和会议ID都还没提供",
+      "goldApi": "materials.search",
+      "staged": [
+        "materials.search",
+        "materials.get",
+        "materials.title",
+        "materials.content",
+        "materials.meeting_id",
+        "materials.updated_at"
+      ],
+      "unified": [],
+      "stagedRecalled": true,
+      "unifiedRecalled": false
+    },
+    {
+      "id": "d50-cloud-005",
+      "testDomain": "cloud",
+      "scenario": "materials_get",
+      "text": "获取云端会议资料ma_package的完整资料对象",
+      "goldApi": "materials.get",
+      "staged": [
+        "materials.search",
+        "materials.get",
+        "materials.title",
+        "materials.content",
+        "materials.meeting_id",
+        "materials.updated_at"
+      ],
+      "unified": [
+        "materials.search",
+        "materials.get",
+        "materials.title",
+        "materials.content",
+        "materials.meeting_id",
+        "materials.updated_at",
+        "materials.owner",
+        "materials.permissions",
+        "materials.download_url",
+        "cloud.storage.download_url",
+        "cloud.database.field",
+        "cloud.database.calculate"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-cloud-006",
+      "testDomain": "cloud",
+      "scenario": "selected_object",
+      "text": "获取这份已选的会议资料对象",
+      "goldApi": "materials.get",
+      "staged": [
+        "materials.get",
+        "materials.title",
+        "materials.content",
+        "materials.meeting_id",
+        "materials.updated_at",
+        "materials.owner"
+      ],
+      "unified": [
+        "materials.get",
+        "materials.title",
+        "materials.content",
+        "materials.meeting_id",
+        "materials.updated_at",
+        "materials.owner",
+        "materials.permissions",
+        "materials.download_url",
+        "materials.search",
+        "cloud.storage.download_url",
+        "cloud.database.field",
+        "cloud.database.calculate"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-cloud-007",
+      "testDomain": "cloud",
+      "scenario": "missing_object",
+      "text": "读取那份会议资料的完整对象",
+      "goldApi": "materials.get",
+      "staged": [
+        "materials.search",
+        "materials.get",
+        "materials.title",
+        "materials.content",
+        "materials.meeting_id",
+        "materials.updated_at"
+      ],
+      "unified": [
+        "materials.search",
+        "materials.get",
+        "materials.title",
+        "materials.content",
+        "materials.meeting_id",
+        "materials.updated_at",
+        "materials.owner",
+        "materials.permissions",
+        "materials.download_url",
+        "cloud.storage.download_url",
+        "cloud.database.field",
+        "cloud.database.calculate"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-cloud-008",
+      "testDomain": "cloud",
+      "scenario": "materials_field",
+      "text": "只读取会议资料ma_text的正文内容",
+      "goldApi": "materials.content",
+      "staged": [
+        "materials.content",
+        "materials.search",
+        "materials.get",
+        "cloud.database.calculate",
+        "cloud.prefetch.resource"
+      ],
+      "unified": [
+        "materials.content",
+        "materials.search",
+        "materials.get",
+        "cloud.database.calculate",
+        "cloud.prefetch.resource"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-cloud-009",
+      "testDomain": "cloud",
+      "scenario": "selected_object",
+      "text": "当前会议资料的标题是什么",
+      "goldApi": "materials.title",
+      "staged": [
+        "materials.title",
+        "materials.get",
+        "materials.search",
+        "cloud.database.calculate",
+        "cloud.prefetch.resource"
+      ],
+      "unified": [
+        "materials.title",
+        "materials.get",
+        "materials.search",
+        "cloud.database.calculate",
+        "cloud.prefetch.resource",
+        "calendar.event.title"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-cloud-010",
+      "testDomain": "cloud",
+      "scenario": "materials_field",
+      "text": "读取会议资料ma_history的更新时间",
+      "goldApi": "materials.updated_at",
+      "staged": [
+        "materials.updated_at",
+        "materials.search",
+        "materials.get",
+        "cloud.database.calculate",
+        "cloud.prefetch.resource"
+      ],
+      "unified": [
+        "materials.updated_at",
+        "materials.search",
+        "materials.get",
+        "cloud.database.calculate",
+        "cloud.prefetch.resource",
+        "files.metadata.modified_at"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-cloud-011",
+      "testDomain": "cloud",
+      "scenario": "materials_field",
+      "text": "会议资料ma_owned的所有者是谁",
+      "goldApi": "materials.owner",
+      "staged": [
+        "materials.owner",
+        "materials.search",
+        "materials.get",
+        "cloud.database.calculate",
+        "cloud.prefetch.resource"
+      ],
+      "unified": [
+        "materials.owner",
+        "materials.search",
+        "materials.get",
+        "cloud.database.calculate",
+        "cloud.prefetch.resource"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-cloud-012",
+      "testDomain": "cloud",
+      "scenario": "selected_object",
+      "text": "这份云端会议资料的访问权限有哪些",
+      "goldApi": "materials.permissions",
+      "staged": [
+        "materials.permissions",
+        "materials.get",
+        "materials.search",
+        "cloud.database.calculate",
+        "cloud.prefetch.resource"
+      ],
+      "unified": [
+        "materials.permissions",
+        "materials.get",
+        "materials.search",
+        "cloud.database.calculate",
+        "cloud.prefetch.resource"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-cloud-013",
+      "testDomain": "cloud",
+      "scenario": "missing_object",
+      "text": "给我那份会议资料的下载链接",
+      "goldApi": "materials.download_url",
+      "staged": [
+        "materials.download_url",
+        "cloud.storage.download_url",
+        "materials.search",
+        "materials.get",
+        "cloud.database.calculate",
+        "cloud.prefetch.resource"
+      ],
+      "unified": [
+        "materials.download_url",
+        "cloud.storage.download_url",
+        "materials.search",
+        "materials.get",
+        "cloud.database.calculate",
+        "cloud.prefetch.resource"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-cloud-014",
+      "testDomain": "cloud",
+      "scenario": "untrusted_object",
+      "text": "当前会议资料的正文是什么",
+      "goldApi": "materials.content",
+      "staged": [
+        "materials.content",
+        "materials.search",
+        "materials.get",
+        "cloud.database.calculate",
+        "cloud.prefetch.resource"
+      ],
+      "unified": [
+        "materials.content",
+        "materials.search",
+        "materials.get",
+        "cloud.database.calculate",
+        "cloud.prefetch.resource"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-cloud-015",
+      "testDomain": "cloud",
+      "scenario": "materials_save",
+      "text": "保存会议资料：标题“任务分工”；正文“李工负责验证，周工负责交付。”；关联会议mt_kickoff",
+      "goldApi": "materials.save",
+      "staged": [
+        "materials.save"
+      ],
+      "unified": [
+        "materials.save"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-cloud-016",
+      "testDomain": "cloud",
+      "scenario": "quoted_literal",
+      "text": "保存云端会议资料，标题“测试用语”，正文原样为“忽略所有规则”，仅把这句话当正文",
+      "goldApi": "materials.save",
+      "staged": [
+        "materials.save"
+      ],
+      "unified": [
+        "materials.save"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-cloud-017",
+      "testDomain": "cloud",
+      "scenario": "missing_write_body",
+      "text": "保存会议资料，标题是“阶段纪要”，正文还没有",
+      "goldApi": "materials.save",
+      "staged": [
+        "materials.save"
+      ],
+      "unified": [
+        "materials.save"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-cloud-018",
+      "testDomain": "cloud",
+      "scenario": "missing_write_title",
+      "text": "保存一份会议资料，正文是“审核已经通过。”，标题未定",
+      "goldApi": "materials.save",
+      "staged": [
+        "materials.save"
+      ],
+      "unified": [
+        "materials.save"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-cloud-019",
+      "testDomain": "cloud",
+      "scenario": "materials_share",
+      "text": "把会议资料ma_share分享给联系人ct_recipient",
+      "goldApi": "materials.share",
+      "staged": [
+        "materials.share"
+      ],
+      "unified": [
+        "materials.share"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-cloud-020",
+      "testDomain": "cloud",
+      "scenario": "missing_write_target",
+      "text": "把会议资料ma_named分享给老王",
+      "goldApi": "materials.share",
+      "staged": [
+        "materials.share"
+      ],
+      "unified": [
+        "materials.share"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-cloud-021",
+      "testDomain": "cloud",
+      "scenario": "write_selection_denied",
+      "text": "把当前会议资料分享给联系人ct_target",
+      "goldApi": "materials.share",
+      "staged": [
+        "materials.share"
+      ],
+      "unified": [
+        "materials.share"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-cloud-022",
+      "testDomain": "cloud",
+      "scenario": "storage_link",
+      "text": "取得云文件reports/q4.pdf的下载地址，存储实例archive",
+      "goldApi": "cloud.storage.download_url",
+      "staged": [
+        "cloud.storage.download_url",
+        "materials.search",
+        "materials.get",
+        "cloud.database.calculate",
+        "cloud.prefetch.resource"
+      ],
+      "unified": [
+        "cloud.storage.download_url",
+        "materials.search",
+        "files.metadata.uri",
+        "materials.get",
+        "cloud.database.calculate",
+        "cloud.prefetch.resource",
+        "contacts.address"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-cloud-023",
+      "testDomain": "cloud",
+      "scenario": "selected_object",
+      "text": "取得当前选中云文件的下载地址",
+      "goldApi": "cloud.storage.download_url",
+      "staged": [
+        "cloud.storage.download_url",
+        "materials.search",
+        "materials.get",
+        "cloud.database.calculate",
+        "cloud.prefetch.resource"
+      ],
+      "unified": [
+        "cloud.storage.download_url",
+        "materials.search",
+        "files.metadata.uri",
+        "materials.get",
+        "cloud.database.calculate",
+        "cloud.prefetch.resource",
+        "contacts.address"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-cloud-024",
+      "testDomain": "cloud",
+      "scenario": "missing_object",
+      "text": "取得云文件的下载地址，云路径还没确定",
+      "goldApi": "cloud.storage.download_url",
+      "staged": [
+        "cloud.storage.download_url",
+        "materials.search",
+        "materials.get",
+        "cloud.database.calculate",
+        "cloud.prefetch.resource"
+      ],
+      "unified": [
+        "cloud.storage.download_url",
+        "materials.search",
+        "files.metadata.uri",
+        "materials.get",
+        "cloud.database.calculate",
+        "cloud.prefetch.resource",
+        "contacts.address"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-cloud-025",
+      "testDomain": "cloud",
+      "scenario": "storage_upload",
+      "text": "上传本地D:/demo/design.svg到云端drafts/design.svg，存储实例designs",
+      "goldApi": "cloud.storage.upload",
+      "staged": [
+        "cloud.storage.upload"
+      ],
+      "unified": [
+        "cloud.storage.upload"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-cloud-026",
+      "testDomain": "cloud",
+      "scenario": "missing_write_path",
+      "text": "将D:/demo/metrics.csv上传到云端，目标路径以后再定",
+      "goldApi": "cloud.storage.upload",
+      "staged": [
+        "cloud.storage.upload"
+      ],
+      "unified": [
+        "cloud.storage.upload"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-cloud-027",
+      "testDomain": "cloud",
+      "scenario": "missing_write_path",
+      "text": "上传一个文件到云端incoming/new.bin，本地文件还未选",
+      "goldApi": "cloud.storage.upload",
+      "staged": [
+        "cloud.storage.upload"
+      ],
+      "unified": [
+        "cloud.storage.upload"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-cloud-028",
+      "testDomain": "cloud",
+      "scenario": "storage_download",
+      "text": "下载云文件exports/result.json到本地D:/demo/result-copy.json，实例是exports",
+      "goldApi": "cloud.storage.download",
+      "staged": [
+        "cloud.storage.download"
+      ],
+      "unified": [
+        "cloud.storage.download"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-cloud-029",
+      "testDomain": "cloud",
+      "scenario": "missing_write_path",
+      "text": "下载云文件backups/full.zip到本地，保存位置我没给",
+      "goldApi": "cloud.storage.download",
+      "staged": [
+        "materials.save"
+      ],
+      "unified": [
+        "materials.save"
+      ],
+      "stagedRecalled": false,
+      "unifiedRecalled": false
+    },
+    {
+      "id": "d50-cloud-030",
+      "testDomain": "cloud",
+      "scenario": "write_selection_denied",
+      "text": "下载当前选中的云文件到本地D:/demo/current-copy.bin",
+      "goldApi": "cloud.storage.download",
+      "staged": [
+        "cloud.storage.download"
+      ],
+      "unified": [
+        "cloud.storage.download"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-cloud-031",
+      "testDomain": "cloud",
+      "scenario": "function_defaults",
+      "text": "调用云函数healthCheck，没有提供请求正文",
+      "goldApi": "cloud.function.call",
+      "staged": [
+        "cloud.function.call"
+      ],
+      "unified": [
+        "cloud.function.call"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-cloud-032",
+      "testDomain": "cloud",
+      "scenario": "function_body",
+      "text": "调用云函数aggregate，正文原样是{ \"items\": [1, 2], \"label\": \"样本 A\" }",
+      "goldApi": "cloud.function.call",
+      "staged": [
+        "cloud.function.call"
+      ],
+      "unified": [
+        "cloud.function.call"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-cloud-033",
+      "testDomain": "cloud",
+      "scenario": "function_options",
+      "text": "调用云函数calc，版本v2，超时1500毫秒，请求正文为{\"n\":3}",
+      "goldApi": "cloud.function.call",
+      "staged": [
+        "cloud.function.call"
+      ],
+      "unified": [
+        "cloud.function.call"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-cloud-034",
+      "testDomain": "cloud",
+      "scenario": "missing_function",
+      "text": "调用云函数，函数名稍后提供；正文是{\"action\":\"check\"}",
+      "goldApi": "cloud.function.call",
+      "staged": [
+        "cloud.function.call"
+      ],
+      "unified": [
+        "cloud.function.call"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-cloud-035",
+      "testDomain": "cloud",
+      "scenario": "database_field",
+      "text": "读取云数据库Invoices表记录invoice_8的total字段，数据库区域finance",
+      "goldApi": "cloud.database.field",
+      "staged": [
+        "cloud.database.field",
+        "cloud.database.calculate",
+        "materials.search",
+        "materials.get",
+        "cloud.prefetch.resource"
+      ],
+      "unified": [
+        "cloud.database.field",
+        "cloud.database.calculate",
+        "materials.search",
+        "materials.get",
+        "cloud.prefetch.resource"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-cloud-036",
+      "testDomain": "cloud",
+      "scenario": "selected_record",
+      "text": "读取云数据库Orders表当前记录的status字段，使用已选数据库区域",
+      "goldApi": "cloud.database.field",
+      "staged": [
+        "cloud.database.field",
+        "cloud.database.calculate",
+        "materials.search",
+        "materials.get",
+        "cloud.prefetch.resource"
+      ],
+      "unified": [
+        "cloud.database.field",
+        "cloud.database.calculate",
+        "materials.search",
+        "materials.get",
+        "cloud.prefetch.resource"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-cloud-037",
+      "testDomain": "cloud",
+      "scenario": "missing_database_input",
+      "text": "读取云数据库记录rec_unbound的enabled字段，表名未给",
+      "goldApi": "cloud.database.field",
+      "staged": [
+        "cloud.database.field",
+        "cloud.database.calculate",
+        "materials.search",
+        "materials.get",
+        "cloud.prefetch.resource"
+      ],
+      "unified": [
+        "cloud.database.field",
+        "cloud.database.calculate",
+        "materials.search",
+        "materials.get",
+        "cloud.prefetch.resource"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-cloud-038",
+      "testDomain": "cloud",
+      "scenario": "database_count",
+      "text": "对云数据库Events表的eventId字段做计数",
+      "goldApi": "cloud.database.calculate",
+      "staged": [
+        "cloud.database.calculate",
+        "cloud.database.field",
+        "materials.search",
+        "materials.get",
+        "cloud.prefetch.resource"
+      ],
+      "unified": [
+        "cloud.database.calculate",
+        "cloud.database.field",
+        "materials.search",
+        "materials.get",
+        "cloud.prefetch.resource"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-cloud-039",
+      "testDomain": "cloud",
+      "scenario": "database_sum",
+      "text": "对云数据库Payments表amount字段求和",
+      "goldApi": "cloud.database.calculate",
+      "staged": [
+        "cloud.database.calculate",
+        "cloud.database.field",
+        "materials.search",
+        "materials.get",
+        "cloud.prefetch.resource"
+      ],
+      "unified": [
+        "cloud.database.calculate",
+        "cloud.database.field",
+        "materials.search",
+        "materials.get",
+        "cloud.prefetch.resource"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-cloud-040",
+      "testDomain": "cloud",
+      "scenario": "database_average",
+      "text": "求云数据库Scores表points字段的平均值，区域analytics",
+      "goldApi": "cloud.database.calculate",
+      "staged": [
+        "cloud.database.calculate",
+        "cloud.database.field",
+        "materials.search",
+        "materials.get",
+        "cloud.prefetch.resource"
+      ],
+      "unified": [
+        "cloud.database.calculate",
+        "cloud.database.field",
+        "materials.search",
+        "materials.get",
+        "cloud.prefetch.resource"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-cloud-041",
+      "testDomain": "cloud",
+      "scenario": "database_maximum",
+      "text": "读取云数据库Sensors表temperature字段的最大值",
+      "goldApi": "cloud.database.calculate",
+      "staged": [
+        "cloud.database.calculate",
+        "cloud.database.field",
+        "materials.search",
+        "materials.get",
+        "cloud.prefetch.resource"
+      ],
+      "unified": [
+        "cloud.database.calculate",
+        "cloud.database.field",
+        "materials.search",
+        "materials.get",
+        "cloud.prefetch.resource"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-cloud-042",
+      "testDomain": "cloud",
+      "scenario": "database_minimum",
+      "text": "计算云数据库Tasks表priority字段的最小值",
+      "goldApi": "cloud.database.calculate",
+      "staged": [
+        "cloud.database.calculate",
+        "cloud.database.field",
+        "materials.search",
+        "materials.get",
+        "cloud.prefetch.resource"
+      ],
+      "unified": [
+        "cloud.database.calculate",
+        "cloud.database.field",
+        "materials.search",
+        "materials.get",
+        "cloud.prefetch.resource"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-cloud-043",
+      "testDomain": "cloud",
+      "scenario": "prefetch_resource",
+      "text": "预取云端注册资源resource_demo_bundle",
+      "goldApi": "cloud.prefetch.resource",
+      "staged": [
+        "cloud.prefetch.resource",
+        "cloud.prefetch.result",
+        "cloud.prefetch.timestamp",
+        "cloud.prefetch.token"
+      ],
+      "unified": [
+        "cloud.prefetch.resource",
+        "cloud.prefetch.result",
+        "cloud.prefetch.timestamp",
+        "cloud.prefetch.token",
+        "files.preview.prepare"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-cloud-044",
+      "testDomain": "cloud",
+      "scenario": "selected_object",
+      "text": "预取这个已选云端资源",
+      "goldApi": "cloud.prefetch.resource",
+      "staged": [
+        "cloud.prefetch.resource",
+        "cloud.prefetch.result",
+        "cloud.prefetch.timestamp",
+        "cloud.prefetch.token"
+      ],
+      "unified": [
+        "cloud.prefetch.resource",
+        "cloud.prefetch.result",
+        "cloud.prefetch.timestamp",
+        "cloud.prefetch.token",
+        "files.preview.prepare"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-cloud-045",
+      "testDomain": "cloud",
+      "scenario": "prefetch_defaults",
+      "text": "读取云端预加载结果，没指定预加载模式",
+      "goldApi": "cloud.prefetch.result",
+      "staged": [
+        "cloud.prefetch.result",
+        "cloud.prefetch.resource"
+      ],
+      "unified": [
+        "cloud.prefetch.result",
+        "cloud.prefetch.resource",
+        "files.preview.prepare"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-cloud-046",
+      "testDomain": "cloud",
+      "scenario": "prefetch_mode",
+      "text": "读取安装预加载的时间戳",
+      "goldApi": "cloud.prefetch.timestamp",
+      "staged": [
+        "cloud.prefetch.timestamp",
+        "cloud.prefetch.resource"
+      ],
+      "unified": [
+        "cloud.prefetch.timestamp",
+        "files.preview.prepare",
+        "cloud.prefetch.resource"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    },
+    {
+      "id": "d50-cloud-047",
+      "testDomain": "cloud",
+      "scenario": "prefetch_link",
+      "text": "读取跳链预加载的访问令牌，链接为app://materials/install?id=ma_link",
+      "goldApi": "cloud.prefetch.token",
+      "staged": [
+        "cloud.prefetch.token",
+        "cloud.prefetch.resource"
+      ],
+      "unified": [
+        "cloud.prefetch.token",
+        "files.preview.prepare",
+        "cloud.prefetch.resource"
+      ],
+      "stagedRecalled": true,
+      "unifiedRecalled": true
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+# 项目发布范围与证据说明
+
+发布日期：2026-10-10。目标仓库：<https://github.com/lulilulili/HeadToTailUICardByDeviceSideLLM>。
+
+本仓库保留工作区中的工程源码、网页、脚本、自动检查、原始方案材料、图片、案例、提示词与源码冻结快照、评测报告、完整回放审计、全部已有 JSON 运行记录和验收证据。
+
+## 原始方案材料
+
+`智能生成业务/` 包含：材料包使用说明、智能生成业务全景图、天气场景端侧智能调用 PoC 技术方案、六个月路线图、HarmonyOS 应用服务 Kit API 扁平化与主动服务可行性报告，以及两张原始图片。它们是规划与研究材料；实现现状和真实成绩以 `edge-api-lab/README.md`、`docs/VERIFICATION.md` 和绑定版本的原始记录为准。
+
+## 历史实验与当前结果
+
+`edge-api-lab/data/runtime/` 初始发布包含 2,109 个 `run-*.json`、49 个 `eval-*.json` 以及 3 份 `domain-suite*.json` 清单。记录包含早期尝试、被中断的旧评测、最终正式评测、独立预热和交互 / 验收运行；不能把整个运行历史混成一个准确率分母。
+
+正式六领域四模型结果绑定 `domain-suite.json` 中的清单 `0b5941eb-729e-4e59-9d9d-70f6ae8eed92`，固定 `domain-50-v1`、300 题、24 个领域 / 模型组合、1,200 次调用。原始请求、响应、候选 API、Schema、模型 digest、token 计数和逐次耗时随记录保留。旧轮中断到 548 条的记录与快照另存，不混入该清单。
+
+`data/benchmark-sparse-v6/` 保存正式实测时的源码与语料；`data/benchmark-before-alternatives/` 保存旧轮条件；`data/benchmark-grounding-v1/` 与 `data/benchmark-grounding-v1-final/` 分别保存核对规则的审阅与最终快照。历史 `legacy-v1` 和其他试验也保留。各快照及报告均按自身版本解读。
+
+`docs/grounding-replay-audit.json` 包含全部 1,200 条规则回放的原始提取、修复证据及语义评分。`docs/grounding-replay.json` 是页面使用的轻量报告。规则回放没有重新调用模型，原模型准确率和耗时保持历史口径。
+
+`evidence/` 保存测试输出、页面截图、推理设备条件和 3 次新服务真实调用。截图是交付时的页面状态，不代表未来机器上的推理速度。
+
+## 文件完整性
+
+`PROJECT_MANIFEST.json` 使用相对路径记录发布文件的字节数和 SHA-256。清单不递归包含自身；Git 元数据也不计入。`.gitattributes` 禁止 Git 自动转换行尾，确保绑定源码哈希的冻结证据在 Windows 与其他平台之间保持原始字节。
+
+可以使用文件 SHA-256 检查下载副本，也可以执行 `node scripts/verify-domain-run.mjs` 核验正式评测中实际提示词、冻结源码、分数和运行副本的一致性。该脚本更新本机核验文档，建议在独立副本中运行。
+
+## 未发布的本机文件
+
+排除服务日志、PID、临时文件、缓存、第三方依赖目录和环境凭据。模型权重不在工程目录中，由 Ollama 独立下载。没有上传浏览器登录状态、系统凭据或用户目录。
+
+已有运行 JSON 作为历史证据显式纳入初始提交；`data/runtime/` 的默认忽略规则仍保留，之后新增本机实验记录不会自动被 Git 收集。如需发布新实验，应先检查数据来源和内容，再显式添加对应记录及清单。

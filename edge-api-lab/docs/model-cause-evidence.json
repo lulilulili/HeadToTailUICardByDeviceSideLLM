@@ -1,0 +1,66 @@
+{
+  "manifestId": "0b5941eb-729e-4e59-9d9d-70f6ae8eed92",
+  "runs": 1200,
+  "numCtx": 2048,
+  "maxInputTokens": 533,
+  "maxOutputTokens": 224,
+  "outputBudget": 224,
+  "outputLimitReached": 1,
+  "models": [
+    {
+      "name": "qwen2.5:7b",
+      "digest": "845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
+      "quantization": "Q4_K_M"
+    },
+    {
+      "name": "qwen2.5:1.5b",
+      "digest": "65ec06548149b04c096a120e4a6da9d4017ea809c91734ea5631e89f96ddc57b",
+      "quantization": "Q4_K_M"
+    },
+    {
+      "name": "qwen2.5:0.5b",
+      "digest": "a8b0c51577010a279d933d14c2a8ab4b268079d44c5c8830c0a93900f1827c67",
+      "quantization": "Q4_K_M"
+    },
+    {
+      "name": "qwen2.5:3b",
+      "digest": "357c53fb659c5076de1d65ccb0b397446227b71a42be9d1603d46168015c9e4b",
+      "quantization": "Q4_K_M"
+    }
+  ],
+  "structuralErrors": [
+    {
+      "caseId": "d50-weather-035",
+      "runId": "be5a1d2e-95ee-4957-8b07-356a6863d4e2",
+      "model": "qwen2.5:0.5b",
+      "error": "输出 schema 结构校验失败：$: does not match exactly one schema branch",
+      "doneReason": "stop",
+      "inputTokens": 370,
+      "outputTokens": 34
+    },
+    {
+      "caseId": "d50-cloud-025",
+      "runId": "3e9f70ad-5a6d-4547-b5d3-56e19f835201",
+      "model": "qwen2.5:0.5b",
+      "error": "模型输出不是有效 JSON；本实验不自动重试或修复输出",
+      "doneReason": "length",
+      "inputTokens": 240,
+      "outputTokens": 224
+    }
+  ],
+  "scope": "输入token是Ollama实测prompt_eval_count；这不是注意分配或训练能力的证据。输出截断与上下文输入容量是不同约束。未做量化消融、模型家族对照或盲测。",
+  "sources": [
+    {
+      "title": "Ollama Structured Outputs",
+      "url": "https://docs.ollama.com/capabilities/structured-outputs"
+    },
+    {
+      "title": "Ollama Context length",
+      "url": "https://docs.ollama.com/context-length"
+    },
+    {
+      "title": "Qwen2.5 official model introduction",
+      "url": "https://qwenlm.github.io/blog/qwen2.5-llm/"
+    }
+  ]
+}

@@ -1,0 +1,792 @@
+{
+  "manifestId": "0b5941eb-729e-4e59-9d9d-70f6ae8eed92",
+  "promptVersion": "sparse-v6",
+  "status": "final",
+  "final": true,
+  "reviewedCalls": 1200,
+  "generatedAt": "2026-10-10T06:18:36.964Z",
+  "paragraphs": [
+    "本轮已完成四档模型各300题，共1200次真实调用；每个领域、每个模型都是相同50条。总体严格完整计划率及中位耗时：qwen2.5:0.5b 37.3% / 1.11秒；qwen2.5:1.5b 42.0% / 1.87秒；qwen2.5:3b 49.7% / 3.50秒；qwen2.5:7b 64.3% / 7.67秒。这些结果来自本机CPU、一次调用模式和公开开发题组，不能单凭参数量推断每个领域的表现。",
+    "本次优化将模型职责缩小为领域、具体API和用户明确提供的稀疏参数。未知字段省略，系统时钟、时区、位置和已选只读对象由确定性规则补全；文字地点与坐标是替代输入，最终统一为坐标并保留来源。通用检索同时区分完整对象/叶字段、读写动作和否定语句。旧轮取消的548条单独归档，不混入当前结果；0.5B同300题的前后对照另列，但这是组合优化，不能归功于某一条提示词。",
+    "天气：时间原文、实际精度和位置约束分别评估。四档模型的天气严格通过率依次为46%、14%、68%、68%；本机3B与7B中位耗时约5.17秒和11.38秒，相同通过率不代表相同错误。实质问题包括明确广州被漏后补成系统上海、20分钟变成默认两小时，以及7B自行给10月12日补出2023年。严格分数也受原文接口规范影响：1.5B的12条嵌套字段题全部选对API，只有1条整条通过，其中7条省略现在或今天仍得到同一窗口；3B保留未来30分钟时仍是分钟窗口，但7B删成30分钟则无法解析。完整保留今天白天或未来3天逐日又会碰到冻结解析器的分词覆盖限制。7B夜间表达引入18至24点范围，与官方overnight字段是否等价尚无真实SDK证据；可以降精度却填strict_time:true则确实反转策略。这些人工区别不加回严格分数，结果仅代表本次开发集、单次CPU运行。",
+    "日历：真实目标、标题与全部变更必须保留。四档模型的日历严格通过率依次为24%、54%、40%、62%，7B中位耗时约8.50秒。稳定错因包括字段说明进入keyword、明确事件ID被省略后变成今天的列表、创建标题被遗漏或写入description，以及双字段修改只保留一个字段。3B晨会已保留时间、参会人和重复规则，单独漏标题仍需澄清；7B同题又丢参会人并猜时长提醒，不能笼统归为相同复杂参数错误。默认补全由代码完成，但模型填当前选中的日程ID仍能绕过缺目标澄清；壳子不检查ID真实存在。严格原文变化有时不改实际时间，如3B明天16:00与下午4点；也有状态相同但机制错误，如7B把冲突起止时间交换成合法顺序，只因标题缺失继续澄清。7B能正确保留提醒[0,15]和显式false，却仍把删除桌面文件命令转成伪取消。未执行真实日程写入，原始参数、解析问题和状态需要同时阅读。",
+    "联系人：对象层级与姓名、ID、可信选择来源。四档模型的联系人严格通过率依次为46%、58%、56%、80%，7B中位耗时约8.24秒。7B在本组19条嵌套字段题中严格通过18条，也正确处理可信选中对象读补全和缺ID写操作澄清，但完整邮箱对象被选整个联系人、完整地址对象被选单个地址文本、主页或群组ID被选父对象的边界仍存在。姓名林晓、陈雨、张三还会被放进contact_id而非query；没有真实身份映射或对象存在性验证，ready_mock不说明查对了人。3B读当前选中邮箱时猜占位ID，7B同题则输出空参数让代码从可信context补ct_7，实际来源可以直接核对。7B三字段更新可完整提取，却仍把拨号和查邮箱后发邮件缩成读接口，将上传命令转成伪上传并猜路径。父对象可能包含所需字段，但尚无SDK响应和裁剪证据可把它等同字段直达；严格分数保持原样，不能外推为生产准确率。",
+    "文件：接口更稳，目标和过滤条件仍会错。四档文件完整计划依次为 20/50（40%）、24/50（48%）、30/50（60%）、38/50（76%）；典型耗时 P50 依次约 0.78、1.53、2.54、5.61 秒，较慢耗时 P95 约 1.56、2.55、4.30、9.67 秒。每档都是同一批 50 条，较大模型在本领域整体改善，代价是更长耗时。",
+    "200 条中 112 条完整通过；88 条失败的最早可观察环节为领域/拒识 27、API 7、多填 24、漏填 27、值差异 3。支持 API 的 168 次目标均在实际候选中；候选存在不代表能正确选取或填写。原文的否定、未知说明、文件 ID、类型过滤和窗口标题仍会被遗漏或混用。",
+    "需要特别区分两类结果：1.5B 漏掉明确 file_explicit 后补为 file_other，和 7B 把窗口标题待审稿当 file_id，都会改变目标；0.5B 改写 file URI、7B 丢 URL 的 #part2 则属于严格原文保留失败，真实 SDK 是否将其规范为同一文件或使用片段定位未验证。后者不会加回正确率，也不直接描述为已查错文件。",
+    "四档对 8 条文件边界拒识用例分别只完整通过 0、1、2、4 条；搜索后预览、读取大小同时关闭窗口均仍可能只生成其中一个动作。模拟状态 ready_mock 只能说明输入通过本实验解析，不能证明来自用户的目标和全部约束都正确。",
+    "服务入口：服务元信息、业务数据和页面动作仍容易混淆。四档服务入口完整计划依次为 24/50（48%）、26/50（52%）、28/50（56%）、30/50（60%）；典型耗时 P50 约 0.69、1.47、2.47、5.35 秒，较慢耗时 P95 约 1.52、2.62、4.93、11.15 秒。7B 比 3B 多通过 2 条，但 API 准确率由 76% 降到 74%，单看参数量不能断言每个环节都更准。",
+    "200 条中 108 条完整通过；92 条失败的最早可观察环节为领域/拒识 41、API 12、多填 11、漏填 25、值差异 3。支持 API 的 168 次目标均在实际候选中。天气服务的可用状态、页面参数或目标页面，仍可能被路由成天气数据查询；“能否打开”也可能被当成“打开”。",
+    "嵌套参数的主要损失是整段 parameters.query 被遗漏，不能解释为中文空格或 URL 转义的严格评分。1.5B、3B、7B 均出现只打开 contacts 页面而丢掉 query='张 三' 的例子；7B 同样丢掉 query='A&B 合并'。其余正确案例能生成嵌套对象，故应描述为条件提取不稳定，而非一律不支持嵌套数据。",
+    "明确 files 被漏掉后补为已选 weather、未知服务被猜成 weather，都能出现 ready_mock。四档 8 条边界拒识用例分别完整通过 1、0、1、1 条；取得链接再打开、打开日历再查天气经常只保留一个动作。当前只是模拟计划，服务可执行状态无法代替路由、目标、来源和全部参数正确。",
+    "云端业务：正文有所改善，对象、字段、路径和默认值仍不稳定。四档云端完整计划依次为 10/50（20%）、13/50（26%）、9/50（18%）、20/50（40%）；典型耗时 P50 约 0.95、1.75、3.17、6.77 秒，较慢耗时 P95 约 1.73、2.61、5.59、12.58 秒。3B 低于 1.5B，7B 在本批改善，但不存在参数量与准确率全程单调关系。",
+    "200 条中 52 条完整通过；148 条失败的最早可观察环节为调用/结构 1、领域/拒识 32、API 26、多填 48、漏填 36、值差异 5。支持 API 的 188 次目标均在本次候选中。会议资料对象/字段会与云数据库、存储下载链接或本地文件元信息混淆；同属云端领域并不意味着使用了正确对象和返回投影。",
+    "本测试的云函数 data 是保留原样的字符串，字符串内部可含对象和数组；服务 parameters 则是真正嵌套对象，二者不能混称。0.5B 将嵌套 JSON 正文置 null 或截断，1.5B 和 3B 能通过一条较复杂 JSON 字符串却遗漏另一条正文；7B 的四个函数用例均通过，包含明确版本/超时和函数名缺失后的澄清。成功样本证明能力存在，样本数不足以证明普遍可靠。",
+    "未知信息仍会被猜成字符串 null、参数说明、当前对象名称或本地 './' 路径。JSON null 被兼容清除，字符串 'null' 是有值的字符串；把前者与后者混为一谈会掩盖错误放行。明确 install/link 被漏掉后默认 periodic，存储 bucket 和数据库 zone 被遗漏，则会改变操作模式或目标范围。",
+    "严格格式差异不能掩盖独立错误：0.5B 一条正文句号改写同时编造会议 ID；1.5B 一条云路径增加前导斜线同时漏存储实例；3B 把 count(eventId) 填作字段名而另传 operation=count，是字段契约错误。四档的三条云端拒识用例均未完整通过，多动作保存后分享经常只剩一个保存计划。全部结果来自模拟业务壳子，未实际读写云端服务。",
+    "错误归类依据实际候选、原始提取、有效参数和状态，而不是模型内部原因猜测。核验1200条原始记录后，支持题的目标API全部进入实际候选，候选遗漏为0；本题组的主要剩余问题位于拒识/选API和参数保留。每个失败只计一个主错因，其他连带失败仍能在逐项分数与原始记录中查看。",
+    "严格分数与实际业务语义要一起读。原文时间的等价改写、与系统默认相同的冗余值也会扣分；漏地点后补到其他城市、漏事件ID后读取列表、漏明确写字段则会实际改变计划。今天白天等原文还暴露了冻结时间解析器和金标切分的局限。文档保留全部原分数，只在人工复核中解释差异；尚未接SDK的URI、父对象与字段返回形态不能擅自宣布等价。",
+    "下一阶段应优先保留显式约束并验证目标身份，扩展确定性时间规范化和解析覆盖，检查写操作的占位ID、缺字段与冲突信息，再以独立新表达做盲测及重复计时。当前ready_mock只表示伪接口计划通过部分契约，没有读取或修改真实业务数据；夹具位置、地理编码、天气可用性及所选对象都明确标记。"
+  ],
+  "domainNarratives": [
+    {
+      "testDomain": "weather",
+      "title": "天气：时间原文、实际精度和位置约束分别评估",
+      "text": "四档模型的天气严格通过率依次为46%、14%、68%、68%；本机3B与7B中位耗时约5.17秒和11.38秒，相同通过率不代表相同错误。实质问题包括明确广州被漏后补成系统上海、20分钟变成默认两小时，以及7B自行给10月12日补出2023年。严格分数也受原文接口规范影响：1.5B的12条嵌套字段题全部选对API，只有1条整条通过，其中7条省略现在或今天仍得到同一窗口；3B保留未来30分钟时仍是分钟窗口，但7B删成30分钟则无法解析。完整保留今天白天或未来3天逐日又会碰到冻结解析器的分词覆盖限制。7B夜间表达引入18至24点范围，与官方overnight字段是否等价尚无真实SDK证据；可以降精度却填strict_time:true则确实反转策略。这些人工区别不加回严格分数，结果仅代表本次开发集、单次CPU运行。",
+      "scope": "新manifest的天气最终200次：四档模型各50例",
+      "final": true,
+      "metrics": [
+        {
+          "model": "qwen2.5:0.5b",
+          "jobId": "6b75420a-9c00-4622-a7ac-aaeed097518a",
+          "cases": 50,
+          "strictPlanAccuracy": 0.46,
+          "apiAccuracy": 0.86,
+          "argumentAccuracy": 0.5,
+          "statusAccuracy": 0.82,
+          "p50Ms": 1498.48,
+          "p95Ms": 1820.15
+        },
+        {
+          "model": "qwen2.5:1.5b",
+          "jobId": "d9a681ab-612c-47e4-b681-2d1edb26ed79",
+          "cases": 50,
+          "strictPlanAccuracy": 0.14,
+          "apiAccuracy": 0.94,
+          "argumentAccuracy": 0.16,
+          "statusAccuracy": 0.92,
+          "p50Ms": 2315.21,
+          "p95Ms": 2934.31
+        },
+        {
+          "model": "qwen2.5:3b",
+          "jobId": "fc92b364-e09f-456c-86b1-b7626213df8b",
+          "cases": 50,
+          "strictPlanAccuracy": 0.68,
+          "apiAccuracy": 0.9,
+          "argumentAccuracy": 0.68,
+          "statusAccuracy": 0.94,
+          "p50Ms": 5167.65,
+          "p95Ms": 6538.26
+        },
+        {
+          "model": "qwen2.5:7b",
+          "jobId": "19dcb581-2443-4b16-851d-d6eeed4b9830",
+          "cases": 50,
+          "strictPlanAccuracy": 0.68,
+          "apiAccuracy": 0.94,
+          "argumentAccuracy": 0.68,
+          "statusAccuracy": 0.84,
+          "p50Ms": 11383.81,
+          "p95Ms": 14012.08
+        }
+      ],
+      "representativeRuns": [
+        {
+          "model": "qwen2.5:3b",
+          "caseId": "d50-weather-008",
+          "runId": "64337c12-9f2e-43ed-aa79-e35d52ab2a14",
+          "jobId": "fc92b364-e09f-456c-86b1-b7626213df8b",
+          "assessment": "explicit_location_lost"
+        },
+        {
+          "model": "qwen2.5:3b",
+          "caseId": "d50-weather-022",
+          "runId": "98d8472a-ebcb-4a1d-ad96-c3a6c748c256",
+          "jobId": "fc92b364-e09f-456c-86b1-b7626213df8b",
+          "assessment": "strict_extraction_only"
+        },
+        {
+          "model": "qwen2.5:3b",
+          "caseId": "d50-weather-023",
+          "runId": "f5b91cf9-7cc7-4b3f-8329-d126e12a4930",
+          "jobId": "fc92b364-e09f-456c-86b1-b7626213df8b",
+          "assessment": "forecast_window_changed"
+        },
+        {
+          "model": "qwen2.5:7b",
+          "caseId": "d50-weather-018",
+          "runId": "5487d323-2286-4e7b-8f8a-3710f6059f12",
+          "jobId": "19dcb581-2443-4b16-851d-d6eeed4b9830",
+          "assessment": "invented_date_year"
+        },
+        {
+          "model": "qwen2.5:7b",
+          "caseId": "d50-weather-020",
+          "runId": "0145977c-3e73-441c-bbd8-e826c88d9646",
+          "jobId": "19dcb581-2443-4b16-851d-d6eeed4b9830",
+          "assessment": "time_segmentation_and_parser_coverage"
+        },
+        {
+          "model": "qwen2.5:7b",
+          "caseId": "d50-weather-021",
+          "runId": "472707d9-5e81-4321-84f3-a42338aa5d12",
+          "jobId": "19dcb581-2443-4b16-851d-d6eeed4b9830",
+          "assessment": "native_time_scope_equivalence_unknown"
+        },
+        {
+          "model": "qwen2.5:7b",
+          "caseId": "d50-weather-022",
+          "runId": "b78c00f0-03f9-41bd-86f3-c79fa5fe97e9",
+          "jobId": "19dcb581-2443-4b16-851d-d6eeed4b9830",
+          "assessment": "relative_time_anchor_lost"
+        },
+        {
+          "model": "qwen2.5:7b",
+          "caseId": "d50-weather-024",
+          "runId": "bf8d6d8c-a7bc-4f59-abfa-e33c38a7059c",
+          "jobId": "19dcb581-2443-4b16-851d-d6eeed4b9830",
+          "assessment": "requested_precision_changed"
+        },
+        {
+          "model": "qwen2.5:7b",
+          "caseId": "d50-weather-035",
+          "runId": "a95397e1-3f91-4621-baa2-0dbff835fcdf",
+          "jobId": "19dcb581-2443-4b16-851d-d6eeed4b9830",
+          "assessment": "strict_extraction_only"
+        },
+        {
+          "model": "qwen2.5:7b",
+          "caseId": "d50-weather-036",
+          "runId": "143f731c-d537-426e-a7c8-67eab65df1d6",
+          "jobId": "19dcb581-2443-4b16-851d-d6eeed4b9830",
+          "assessment": "strict_extraction_only"
+        },
+        {
+          "model": "qwen2.5:7b",
+          "caseId": "d50-weather-043",
+          "runId": "558b1505-0dd7-4538-bac6-b224d4a3e131",
+          "jobId": "19dcb581-2443-4b16-851d-d6eeed4b9830",
+          "assessment": "explicit_fallback_policy_reversed"
+        }
+      ]
+    },
+    {
+      "testDomain": "calendar",
+      "title": "日历：真实目标、标题与全部变更必须保留",
+      "text": "四档模型的日历严格通过率依次为24%、54%、40%、62%，7B中位耗时约8.50秒。稳定错因包括字段说明进入keyword、明确事件ID被省略后变成今天的列表、创建标题被遗漏或写入description，以及双字段修改只保留一个字段。3B晨会已保留时间、参会人和重复规则，单独漏标题仍需澄清；7B同题又丢参会人并猜时长提醒，不能笼统归为相同复杂参数错误。默认补全由代码完成，但模型填当前选中的日程ID仍能绕过缺目标澄清；壳子不检查ID真实存在。严格原文变化有时不改实际时间，如3B明天16:00与下午4点；也有状态相同但机制错误，如7B把冲突起止时间交换成合法顺序，只因标题缺失继续澄清。7B能正确保留提醒[0,15]和显式false，却仍把删除桌面文件命令转成伪取消。未执行真实日程写入，原始参数、解析问题和状态需要同时阅读。",
+      "scope": "新manifest的日历最终200次：四档模型各50例",
+      "final": true,
+      "metrics": [
+        {
+          "model": "qwen2.5:0.5b",
+          "jobId": "af261b45-95d4-44b0-855b-0cecc1420a07",
+          "cases": 50,
+          "strictPlanAccuracy": 0.24,
+          "apiAccuracy": 0.7,
+          "argumentAccuracy": 0.32,
+          "statusAccuracy": 0.74,
+          "p50Ms": 1305.16,
+          "p95Ms": 2013.41
+        },
+        {
+          "model": "qwen2.5:1.5b",
+          "jobId": "8c154771-34d8-4032-a542-afb802a8c51c",
+          "cases": 50,
+          "strictPlanAccuracy": 0.54,
+          "apiAccuracy": 0.86,
+          "argumentAccuracy": 0.58,
+          "statusAccuracy": 0.84,
+          "p50Ms": 2078.18,
+          "p95Ms": 3050.58
+        },
+        {
+          "model": "qwen2.5:3b",
+          "jobId": "209bbbed-d192-4f88-9115-7c2dbcc2d01a",
+          "cases": 50,
+          "strictPlanAccuracy": 0.4,
+          "apiAccuracy": 0.9,
+          "argumentAccuracy": 0.44,
+          "statusAccuracy": 0.74,
+          "p50Ms": 3715.66,
+          "p95Ms": 5243.68
+        },
+        {
+          "model": "qwen2.5:7b",
+          "jobId": "7cf94c42-f866-4292-b824-32f2293c2a41",
+          "cases": 50,
+          "strictPlanAccuracy": 0.62,
+          "apiAccuracy": 0.86,
+          "argumentAccuracy": 0.66,
+          "statusAccuracy": 0.78,
+          "p50Ms": 8503.22,
+          "p95Ms": 10459.49
+        }
+      ],
+      "representativeRuns": [
+        {
+          "model": "qwen2.5:3b",
+          "caseId": "d50-calendar-030",
+          "runId": "75f62d17-6656-49c3-addd-dc9bf95b3a92",
+          "jobId": "209bbbed-d192-4f88-9115-7c2dbcc2d01a",
+          "assessment": "explicit_required_title_lost"
+        },
+        {
+          "model": "qwen2.5:3b",
+          "caseId": "d50-calendar-036",
+          "runId": "77c19cd7-5b9d-4eb5-980e-a126dd804510",
+          "jobId": "209bbbed-d192-4f88-9115-7c2dbcc2d01a",
+          "assessment": "strict_extraction_only"
+        },
+        {
+          "model": "qwen2.5:3b",
+          "caseId": "d50-calendar-038",
+          "runId": "e6b8d3db-0cee-4f81-b6e8-a19f9a06356e",
+          "jobId": "209bbbed-d192-4f88-9115-7c2dbcc2d01a",
+          "assessment": "explicit_array_value_lost"
+        },
+        {
+          "model": "qwen2.5:7b",
+          "caseId": "d50-calendar-026",
+          "runId": "aeb239b2-f58e-47b8-9da9-ba0ff506e88e",
+          "jobId": "7cf94c42-f866-4292-b824-32f2293c2a41",
+          "assessment": "explicit_required_title_lost"
+        },
+        {
+          "model": "qwen2.5:7b",
+          "caseId": "d50-calendar-028",
+          "runId": "a11d10f5-eb2e-4306-8036-096b3de8e986",
+          "jobId": "7cf94c42-f866-4292-b824-32f2293c2a41",
+          "assessment": "title_used_as_description"
+        },
+        {
+          "model": "qwen2.5:7b",
+          "caseId": "d50-calendar-030",
+          "runId": "aec23085-1784-4bab-8476-3affa663845f",
+          "jobId": "7cf94c42-f866-4292-b824-32f2293c2a41",
+          "assessment": "write_parameters_lost_and_invented"
+        },
+        {
+          "model": "qwen2.5:7b",
+          "caseId": "d50-calendar-034",
+          "runId": "99f20259-86b2-4a43-b1b5-045ae0f729ce",
+          "jobId": "7cf94c42-f866-4292-b824-32f2293c2a41",
+          "assessment": "conflicting_times_silently_swapped"
+        },
+        {
+          "model": "qwen2.5:7b",
+          "caseId": "d50-calendar-038",
+          "runId": "9aac3ec1-9f69-46d8-8331-2d01e026cf05",
+          "jobId": "7cf94c42-f866-4292-b824-32f2293c2a41",
+          "assessment": "positive_control_explicit_array_and_zero"
+        },
+        {
+          "model": "qwen2.5:7b",
+          "caseId": "d50-calendar-039",
+          "runId": "f9c93192-c43c-4eae-ad30-92d8288b3216",
+          "jobId": "7cf94c42-f866-4292-b824-32f2293c2a41",
+          "assessment": "positive_control_explicit_false"
+        },
+        {
+          "model": "qwen2.5:7b",
+          "caseId": "d50-calendar-040",
+          "runId": "ac0685c4-e162-409a-a01f-5ebe35c23417",
+          "jobId": "7cf94c42-f866-4292-b824-32f2293c2a41",
+          "assessment": "placeholder_id_overrides_missing_write_target"
+        },
+        {
+          "model": "qwen2.5:7b",
+          "caseId": "d50-calendar-049",
+          "runId": "16d66fca-bd7b-42d0-a158-be8efd4d56d1",
+          "jobId": "7cf94c42-f866-4292-b824-32f2293c2a41",
+          "assessment": "injection_action_and_fake_target"
+        }
+      ]
+    },
+    {
+      "testDomain": "contacts",
+      "title": "联系人：对象层级与姓名、ID、可信选择来源",
+      "text": "四档模型的联系人严格通过率依次为46%、58%、56%、80%，7B中位耗时约8.24秒。7B在本组19条嵌套字段题中严格通过18条，也正确处理可信选中对象读补全和缺ID写操作澄清，但完整邮箱对象被选整个联系人、完整地址对象被选单个地址文本、主页或群组ID被选父对象的边界仍存在。姓名林晓、陈雨、张三还会被放进contact_id而非query；没有真实身份映射或对象存在性验证，ready_mock不说明查对了人。3B读当前选中邮箱时猜占位ID，7B同题则输出空参数让代码从可信context补ct_7，实际来源可以直接核对。7B三字段更新可完整提取，却仍把拨号和查邮箱后发邮件缩成读接口，将上传命令转成伪上传并猜路径。父对象可能包含所需字段，但尚无SDK响应和裁剪证据可把它等同字段直达；严格分数保持原样，不能外推为生产准确率。",
+      "scope": "新manifest的联系人最终200次：四档模型各50例",
+      "final": true,
+      "metrics": [
+        {
+          "model": "qwen2.5:0.5b",
+          "jobId": "31cc732b-ca28-4412-bf21-bac905484aad",
+          "cases": 50,
+          "strictPlanAccuracy": 0.46,
+          "apiAccuracy": 0.68,
+          "argumentAccuracy": 0.56,
+          "statusAccuracy": 0.84,
+          "p50Ms": 1145.12,
+          "p95Ms": 1780.05
+        },
+        {
+          "model": "qwen2.5:1.5b",
+          "jobId": "f66e68c8-9080-436d-ab32-173b0f054a8b",
+          "cases": 50,
+          "strictPlanAccuracy": 0.58,
+          "apiAccuracy": 0.84,
+          "argumentAccuracy": 0.64,
+          "statusAccuracy": 0.78,
+          "p50Ms": 1909.15,
+          "p95Ms": 2647.67
+        },
+        {
+          "model": "qwen2.5:3b",
+          "jobId": "5ec58b55-5dfc-49df-8d83-a1e46e3311f1",
+          "cases": 50,
+          "strictPlanAccuracy": 0.56,
+          "apiAccuracy": 0.76,
+          "argumentAccuracy": 0.62,
+          "statusAccuracy": 0.84,
+          "p50Ms": 3729.59,
+          "p95Ms": 4960.18
+        },
+        {
+          "model": "qwen2.5:7b",
+          "jobId": "61fae402-8497-4ea4-a1d1-f432e17118c7",
+          "cases": 50,
+          "strictPlanAccuracy": 0.8,
+          "apiAccuracy": 0.86,
+          "argumentAccuracy": 0.84,
+          "statusAccuracy": 0.94,
+          "p50Ms": 8236.88,
+          "p95Ms": 10833.01
+        }
+      ],
+      "representativeRuns": [
+        {
+          "model": "qwen2.5:3b",
+          "caseId": "d50-contacts-036",
+          "runId": "e9218734-6499-49fe-8baa-457f99a2b9e2",
+          "jobId": "5ec58b55-5dfc-49df-8d83-a1e46e3311f1",
+          "assessment": "placeholder_id_overrides_trusted_read_context"
+        },
+        {
+          "model": "qwen2.5:3b",
+          "caseId": "d50-contacts-045",
+          "runId": "7397283f-e9fb-4e0f-a811-d9696d8c2a20",
+          "jobId": "5ec58b55-5dfc-49df-8d83-a1e46e3311f1",
+          "assessment": "placeholder_id_overrides_missing_write_target"
+        },
+        {
+          "model": "qwen2.5:7b",
+          "caseId": "d50-contacts-007",
+          "runId": "45394b10-4088-46ea-9cf6-5aabfcac3c8f",
+          "jobId": "61fae402-8497-4ea4-a1d1-f432e17118c7",
+          "assessment": "parent_scope_and_name_id_confusion"
+        },
+        {
+          "model": "qwen2.5:7b",
+          "caseId": "d50-contacts-010",
+          "runId": "697e035a-4826-4b7c-b9aa-16fdb6fd137d",
+          "jobId": "61fae402-8497-4ea4-a1d1-f432e17118c7",
+          "assessment": "leaf_scope_and_name_id_confusion"
+        },
+        {
+          "model": "qwen2.5:7b",
+          "caseId": "d50-contacts-014",
+          "runId": "7ff5a4fc-cfe8-4836-834e-22f9db4bb4af",
+          "jobId": "61fae402-8497-4ea4-a1d1-f432e17118c7",
+          "assessment": "name_used_as_id"
+        },
+        {
+          "model": "qwen2.5:7b",
+          "caseId": "d50-contacts-022",
+          "runId": "d375e407-eea7-4641-af11-1428cfc50aea",
+          "jobId": "61fae402-8497-4ea4-a1d1-f432e17118c7",
+          "assessment": "parent_scope_overbroad"
+        },
+        {
+          "model": "qwen2.5:7b",
+          "caseId": "d50-contacts-028",
+          "runId": "7e566848-788f-4665-95cc-348284b55e6a",
+          "jobId": "61fae402-8497-4ea4-a1d1-f432e17118c7",
+          "assessment": "name_used_as_id"
+        },
+        {
+          "model": "qwen2.5:7b",
+          "caseId": "d50-contacts-036",
+          "runId": "9e6538aa-1401-4f32-945b-eaba501632ad",
+          "jobId": "61fae402-8497-4ea4-a1d1-f432e17118c7",
+          "assessment": "positive_control_trusted_read_context"
+        },
+        {
+          "model": "qwen2.5:7b",
+          "caseId": "d50-contacts-042",
+          "runId": "dfa94694-a36e-4737-a532-d337d7534807",
+          "jobId": "61fae402-8497-4ea4-a1d1-f432e17118c7",
+          "assessment": "positive_control_multi_field_update"
+        },
+        {
+          "model": "qwen2.5:7b",
+          "caseId": "d50-contacts-045",
+          "runId": "ac0e64fa-79a3-45d5-b068-9dbea999d1ff",
+          "jobId": "61fae402-8497-4ea4-a1d1-f432e17118c7",
+          "assessment": "positive_control_missing_write_target"
+        },
+        {
+          "model": "qwen2.5:7b",
+          "caseId": "d50-contacts-049",
+          "runId": "c19f840e-adfd-499f-b122-2d1f0b1b6aa1",
+          "jobId": "61fae402-8497-4ea4-a1d1-f432e17118c7",
+          "assessment": "injection_action_with_invented_storage_arguments"
+        },
+        {
+          "model": "qwen2.5:7b",
+          "caseId": "d50-contacts-050",
+          "runId": "e72d2945-6911-4d8a-bf4d-b5068260c08f",
+          "jobId": "61fae402-8497-4ea4-a1d1-f432e17118c7",
+          "assessment": "multi_intent_and_name_id_confusion"
+        }
+      ]
+    },
+    {
+      "testDomain": "files",
+      "title": "文件：接口更稳，目标和过滤条件仍会错",
+      "total": 200,
+      "paragraphs": [
+        "四档文件完整计划依次为 20/50（40%）、24/50（48%）、30/50（60%）、38/50（76%）；典型耗时 P50 依次约 0.78、1.53、2.54、5.61 秒，较慢耗时 P95 约 1.56、2.55、4.30、9.67 秒。每档都是同一批 50 条，较大模型在本领域整体改善，代价是更长耗时。",
+        "200 条中 112 条完整通过；88 条失败的最早可观察环节为领域/拒识 27、API 7、多填 24、漏填 27、值差异 3。支持 API 的 168 次目标均在实际候选中；候选存在不代表能正确选取或填写。原文的否定、未知说明、文件 ID、类型过滤和窗口标题仍会被遗漏或混用。",
+        "需要特别区分两类结果：1.5B 漏掉明确 file_explicit 后补为 file_other，和 7B 把窗口标题待审稿当 file_id，都会改变目标；0.5B 改写 file URI、7B 丢 URL 的 #part2 则属于严格原文保留失败，真实 SDK 是否将其规范为同一文件或使用片段定位未验证。后者不会加回正确率，也不直接描述为已查错文件。",
+        "四档对 8 条文件边界拒识用例分别只完整通过 0、1、2、4 条；搜索后预览、读取大小同时关闭窗口均仍可能只生成其中一个动作。模拟状态 ready_mock 只能说明输入通过本实验解析，不能证明来自用户的目标和全部约束都正确。"
+      ],
+      "exampleRefs": [
+        {
+          "model": "qwen2.5:1.5b",
+          "caseId": "d50-files-019",
+          "runId": "75b03572-4769-451c-83da-33076069dd7d",
+          "jobId": "0fcb3e5f-71e1-46e3-87a9-cf046541ee1f",
+          "traceRef": {
+            "runId": "75b03572-4769-451c-83da-33076069dd7d",
+            "stage": "unified",
+            "index": 0
+          }
+        },
+        {
+          "model": "qwen2.5:7b",
+          "caseId": "d50-files-030",
+          "runId": "4011b7d5-7282-413b-a906-09682ea0b46b",
+          "jobId": "b60358ec-067c-4563-9504-b8a108ab159c",
+          "traceRef": {
+            "runId": "4011b7d5-7282-413b-a906-09682ea0b46b",
+            "stage": "unified",
+            "index": 0
+          }
+        },
+        {
+          "model": "qwen2.5:7b",
+          "caseId": "d50-files-032",
+          "runId": "2ec767b3-f848-46da-b254-f232efa80fd0",
+          "jobId": "b60358ec-067c-4563-9504-b8a108ab159c",
+          "traceRef": {
+            "runId": "2ec767b3-f848-46da-b254-f232efa80fd0",
+            "stage": "unified",
+            "index": 0
+          }
+        },
+        {
+          "model": "qwen2.5:7b",
+          "caseId": "d50-files-043",
+          "runId": "f2d0d099-d87f-4dc0-ad94-31e2063a2780",
+          "jobId": "b60358ec-067c-4563-9504-b8a108ab159c",
+          "traceRef": {
+            "runId": "f2d0d099-d87f-4dc0-ad94-31e2063a2780",
+            "stage": "unified",
+            "index": 0
+          }
+        }
+      ],
+      "primaryCauses": {
+        "service_error": 0,
+        "domain_error": 27,
+        "candidate_missing": 0,
+        "api_error": 7,
+        "arguments_extra": 24,
+        "arguments_missing": 27,
+        "arguments_value": 3,
+        "resolution_error": 0,
+        "status_error": 0,
+        "other": 0
+      },
+      "modelEvidence": [
+        {
+          "model": "qwen2.5:0.5b",
+          "correct": 20,
+          "total": 50,
+          "incorrectPlansMarkedReady": 23,
+          "missingInfoMistakenlyReady": 7,
+          "refusalTotal": 8,
+          "refusalCorrect": 0
+        },
+        {
+          "model": "qwen2.5:1.5b",
+          "correct": 24,
+          "total": 50,
+          "incorrectPlansMarkedReady": 11,
+          "missingInfoMistakenlyReady": 2,
+          "refusalTotal": 8,
+          "refusalCorrect": 1
+        },
+        {
+          "model": "qwen2.5:3b",
+          "correct": 30,
+          "total": 50,
+          "incorrectPlansMarkedReady": 13,
+          "missingInfoMistakenlyReady": 4,
+          "refusalTotal": 8,
+          "refusalCorrect": 2
+        },
+        {
+          "model": "qwen2.5:7b",
+          "correct": 38,
+          "total": 50,
+          "incorrectPlansMarkedReady": 9,
+          "missingInfoMistakenlyReady": 2,
+          "refusalTotal": 8,
+          "refusalCorrect": 4
+        }
+      ],
+      "manifestId": "0b5941eb-729e-4e59-9d9d-70f6ae8eed92",
+      "promptVersion": "sparse-v6",
+      "final": true,
+      "text": "四档文件完整计划依次为 20/50（40%）、24/50（48%）、30/50（60%）、38/50（76%）；典型耗时 P50 依次约 0.78、1.53、2.54、5.61 秒，较慢耗时 P95 约 1.56、2.55、4.30、9.67 秒。每档都是同一批 50 条，较大模型在本领域整体改善，代价是更长耗时。 200 条中 112 条完整通过；88 条失败的最早可观察环节为领域/拒识 27、API 7、多填 24、漏填 27、值差异 3。支持 API 的 168 次目标均在实际候选中；候选存在不代表能正确选取或填写。原文的否定、未知说明、文件 ID、类型过滤和窗口标题仍会被遗漏或混用。 需要特别区分两类结果：1.5B 漏掉明确 file_explicit 后补为 file_other，和 7B 把窗口标题待审稿当 file_id，都会改变目标；0.5B 改写 file URI、7B 丢 URL 的 #part2 则属于严格原文保留失败，真实 SDK 是否将其规范为同一文件或使用片段定位未验证。后者不会加回正确率，也不直接描述为已查错文件。 四档对 8 条文件边界拒识用例分别只完整通过 0、1、2、4 条；搜索后预览、读取大小同时关闭窗口均仍可能只生成其中一个动作。模拟状态 ready_mock 只能说明输入通过本实验解析，不能证明来自用户的目标和全部约束都正确。"
+    },
+    {
+      "testDomain": "services",
+      "title": "服务入口：服务元信息、业务数据和页面动作仍容易混淆",
+      "total": 200,
+      "paragraphs": [
+        "四档服务入口完整计划依次为 24/50（48%）、26/50（52%）、28/50（56%）、30/50（60%）；典型耗时 P50 约 0.69、1.47、2.47、5.35 秒，较慢耗时 P95 约 1.52、2.62、4.93、11.15 秒。7B 比 3B 多通过 2 条，但 API 准确率由 76% 降到 74%，单看参数量不能断言每个环节都更准。",
+        "200 条中 108 条完整通过；92 条失败的最早可观察环节为领域/拒识 41、API 12、多填 11、漏填 25、值差异 3。支持 API 的 168 次目标均在实际候选中。天气服务的可用状态、页面参数或目标页面，仍可能被路由成天气数据查询；“能否打开”也可能被当成“打开”。",
+        "嵌套参数的主要损失是整段 parameters.query 被遗漏，不能解释为中文空格或 URL 转义的严格评分。1.5B、3B、7B 均出现只打开 contacts 页面而丢掉 query='张 三' 的例子；7B 同样丢掉 query='A&B 合并'。其余正确案例能生成嵌套对象，故应描述为条件提取不稳定，而非一律不支持嵌套数据。",
+        "明确 files 被漏掉后补为已选 weather、未知服务被猜成 weather，都能出现 ready_mock。四档 8 条边界拒识用例分别完整通过 1、0、1、1 条；取得链接再打开、打开日历再查天气经常只保留一个动作。当前只是模拟计划，服务可执行状态无法代替路由、目标、来源和全部参数正确。"
+      ],
+      "primaryCauses": {
+        "service_error": 0,
+        "domain_error": 41,
+        "candidate_missing": 0,
+        "api_error": 12,
+        "arguments_extra": 11,
+        "arguments_missing": 25,
+        "arguments_value": 3,
+        "resolution_error": 0,
+        "status_error": 0,
+        "other": 0
+      },
+      "modelEvidence": [
+        {
+          "model": "qwen2.5:0.5b",
+          "correct": 24,
+          "total": 50,
+          "incorrectPlansMarkedReady": 21,
+          "missingInfoMistakenlyReady": 6,
+          "refusalTotal": 8,
+          "refusalCorrect": 1
+        },
+        {
+          "model": "qwen2.5:1.5b",
+          "correct": 26,
+          "total": 50,
+          "incorrectPlansMarkedReady": 9,
+          "missingInfoMistakenlyReady": 0,
+          "refusalTotal": 8,
+          "refusalCorrect": 0
+        },
+        {
+          "model": "qwen2.5:3b",
+          "correct": 28,
+          "total": 50,
+          "incorrectPlansMarkedReady": 12,
+          "missingInfoMistakenlyReady": 2,
+          "refusalTotal": 8,
+          "refusalCorrect": 1
+        },
+        {
+          "model": "qwen2.5:7b",
+          "correct": 30,
+          "total": 50,
+          "incorrectPlansMarkedReady": 10,
+          "missingInfoMistakenlyReady": 0,
+          "refusalTotal": 8,
+          "refusalCorrect": 1
+        }
+      ],
+      "exampleRefs": [
+        {
+          "model": "qwen2.5:7b",
+          "caseId": "d50-services-009",
+          "runId": "5e620ec3-c49e-4065-a3db-968fe2370a4d",
+          "jobId": "de60b2e0-3c2b-40d1-8a0a-cb104f925390",
+          "traceRef": {
+            "runId": "5e620ec3-c49e-4065-a3db-968fe2370a4d",
+            "stage": "unified",
+            "index": 0
+          }
+        },
+        {
+          "model": "qwen2.5:7b",
+          "caseId": "d50-services-027",
+          "runId": "cef45fe5-ac9a-4007-878c-a9543eaa34b2",
+          "jobId": "de60b2e0-3c2b-40d1-8a0a-cb104f925390",
+          "traceRef": {
+            "runId": "cef45fe5-ac9a-4007-878c-a9543eaa34b2",
+            "stage": "unified",
+            "index": 0
+          }
+        },
+        {
+          "model": "qwen2.5:7b",
+          "caseId": "d50-services-022",
+          "runId": "b8b43d95-5829-4034-855e-3f5fee8d4793",
+          "jobId": "de60b2e0-3c2b-40d1-8a0a-cb104f925390",
+          "traceRef": {
+            "runId": "b8b43d95-5829-4034-855e-3f5fee8d4793",
+            "stage": "unified",
+            "index": 0
+          }
+        },
+        {
+          "model": "qwen2.5:1.5b",
+          "caseId": "d50-services-042",
+          "runId": "d756491e-ffbf-4ca6-9a3a-595afe637958",
+          "jobId": "f5b0f5be-4b8e-4779-875f-9e1f041336e1",
+          "traceRef": {
+            "runId": "d756491e-ffbf-4ca6-9a3a-595afe637958",
+            "stage": "unified",
+            "index": 0
+          }
+        }
+      ],
+      "manifestId": "0b5941eb-729e-4e59-9d9d-70f6ae8eed92",
+      "promptVersion": "sparse-v6",
+      "final": true,
+      "text": "四档服务入口完整计划依次为 24/50（48%）、26/50（52%）、28/50（56%）、30/50（60%）；典型耗时 P50 约 0.69、1.47、2.47、5.35 秒，较慢耗时 P95 约 1.52、2.62、4.93、11.15 秒。7B 比 3B 多通过 2 条，但 API 准确率由 76% 降到 74%，单看参数量不能断言每个环节都更准。 200 条中 108 条完整通过；92 条失败的最早可观察环节为领域/拒识 41、API 12、多填 11、漏填 25、值差异 3。支持 API 的 168 次目标均在实际候选中。天气服务的可用状态、页面参数或目标页面，仍可能被路由成天气数据查询；“能否打开”也可能被当成“打开”。 嵌套参数的主要损失是整段 parameters.query 被遗漏，不能解释为中文空格或 URL 转义的严格评分。1.5B、3B、7B 均出现只打开 contacts 页面而丢掉 query='张 三' 的例子；7B 同样丢掉 query='A&B 合并'。其余正确案例能生成嵌套对象，故应描述为条件提取不稳定，而非一律不支持嵌套数据。 明确 files 被漏掉后补为已选 weather、未知服务被猜成 weather，都能出现 ready_mock。四档 8 条边界拒识用例分别完整通过 1、0、1、1 条；取得链接再打开、打开日历再查天气经常只保留一个动作。当前只是模拟计划，服务可执行状态无法代替路由、目标、来源和全部参数正确。"
+    },
+    {
+      "testDomain": "cloud",
+      "title": "云端业务：正文有所改善，对象、字段、路径和默认值仍不稳定",
+      "total": 200,
+      "paragraphs": [
+        "四档云端完整计划依次为 10/50（20%）、13/50（26%）、9/50（18%）、20/50（40%）；典型耗时 P50 约 0.95、1.75、3.17、6.77 秒，较慢耗时 P95 约 1.73、2.61、5.59、12.58 秒。3B 低于 1.5B，7B 在本批改善，但不存在参数量与准确率全程单调关系。",
+        "200 条中 52 条完整通过；148 条失败的最早可观察环节为调用/结构 1、领域/拒识 32、API 26、多填 48、漏填 36、值差异 5。支持 API 的 188 次目标均在本次候选中。会议资料对象/字段会与云数据库、存储下载链接或本地文件元信息混淆；同属云端领域并不意味着使用了正确对象和返回投影。",
+        "本测试的云函数 data 是保留原样的字符串，字符串内部可含对象和数组；服务 parameters 则是真正嵌套对象，二者不能混称。0.5B 将嵌套 JSON 正文置 null 或截断，1.5B 和 3B 能通过一条较复杂 JSON 字符串却遗漏另一条正文；7B 的四个函数用例均通过，包含明确版本/超时和函数名缺失后的澄清。成功样本证明能力存在，样本数不足以证明普遍可靠。",
+        "未知信息仍会被猜成字符串 null、参数说明、当前对象名称或本地 './' 路径。JSON null 被兼容清除，字符串 'null' 是有值的字符串；把前者与后者混为一谈会掩盖错误放行。明确 install/link 被漏掉后默认 periodic，存储 bucket 和数据库 zone 被遗漏，则会改变操作模式或目标范围。",
+        "严格格式差异不能掩盖独立错误：0.5B 一条正文句号改写同时编造会议 ID；1.5B 一条云路径增加前导斜线同时漏存储实例；3B 把 count(eventId) 填作字段名而另传 operation=count，是字段契约错误。四档的三条云端拒识用例均未完整通过，多动作保存后分享经常只剩一个保存计划。全部结果来自模拟业务壳子，未实际读写云端服务。"
+      ],
+      "primaryCauses": {
+        "service_error": 1,
+        "domain_error": 32,
+        "candidate_missing": 0,
+        "api_error": 26,
+        "arguments_extra": 48,
+        "arguments_missing": 36,
+        "arguments_value": 5,
+        "resolution_error": 0,
+        "status_error": 0,
+        "other": 0
+      },
+      "modelEvidence": [
+        {
+          "model": "qwen2.5:0.5b",
+          "correct": 10,
+          "total": 50,
+          "incorrectPlansMarkedReady": 23,
+          "missingInfoMistakenlyReady": 6,
+          "refusalTotal": 3,
+          "refusalCorrect": 0
+        },
+        {
+          "model": "qwen2.5:1.5b",
+          "correct": 13,
+          "total": 50,
+          "incorrectPlansMarkedReady": 23,
+          "missingInfoMistakenlyReady": 9,
+          "refusalTotal": 3,
+          "refusalCorrect": 0
+        },
+        {
+          "model": "qwen2.5:3b",
+          "correct": 9,
+          "total": 50,
+          "incorrectPlansMarkedReady": 23,
+          "missingInfoMistakenlyReady": 8,
+          "refusalTotal": 3,
+          "refusalCorrect": 0
+        },
+        {
+          "model": "qwen2.5:7b",
+          "correct": 20,
+          "total": 50,
+          "incorrectPlansMarkedReady": 13,
+          "missingInfoMistakenlyReady": 3,
+          "refusalTotal": 3,
+          "refusalCorrect": 0
+        }
+      ],
+      "exampleRefs": [
+        {
+          "model": "qwen2.5:0.5b",
+          "caseId": "d50-cloud-031",
+          "runId": "bd4bb6fa-c3c9-4b91-92ae-9448f799b926",
+          "jobId": "0d928fe6-7923-430e-ab94-4f5d9ecdd075",
+          "traceRef": {
+            "runId": "bd4bb6fa-c3c9-4b91-92ae-9448f799b926",
+            "stage": "unified",
+            "index": 0
+          }
+        },
+        {
+          "model": "qwen2.5:3b",
+          "caseId": "d50-cloud-038",
+          "runId": "c433e117-1f5d-4811-a310-6603fba580a7",
+          "jobId": "b46a8ce1-a9fe-4016-a9bf-72c2825f4727",
+          "traceRef": {
+            "runId": "c433e117-1f5d-4811-a310-6603fba580a7",
+            "stage": "unified",
+            "index": 0
+          }
+        },
+        {
+          "model": "qwen2.5:7b",
+          "caseId": "d50-cloud-033",
+          "runId": "79fe1c6f-c701-47f3-ab0a-0eb9093467b5",
+          "jobId": "11fa30c4-9afa-4f8d-8f8d-d37ef0a9db6b",
+          "traceRef": {
+            "runId": "79fe1c6f-c701-47f3-ab0a-0eb9093467b5",
+            "stage": "unified",
+            "index": 0
+          }
+        },
+        {
+          "model": "qwen2.5:7b",
+          "caseId": "d50-cloud-034",
+          "runId": "3035df85-106e-4dee-97c3-80fefe265f47",
+          "jobId": "11fa30c4-9afa-4f8d-8f8d-d37ef0a9db6b",
+          "traceRef": {
+            "runId": "3035df85-106e-4dee-97c3-80fefe265f47",
+            "stage": "unified",
+            "index": 0
+          }
+        },
+        {
+          "model": "qwen2.5:7b",
+          "caseId": "d50-cloud-046",
+          "runId": "7263718f-6d29-46fc-b6b8-5a0c598fdb5d",
+          "jobId": "11fa30c4-9afa-4f8d-8f8d-d37ef0a9db6b",
+          "traceRef": {
+            "runId": "7263718f-6d29-46fc-b6b8-5a0c598fdb5d",
+            "stage": "unified",
+            "index": 0
+          }
+        }
+      ],
+      "manifestId": "0b5941eb-729e-4e59-9d9d-70f6ae8eed92",
+      "promptVersion": "sparse-v6",
+      "final": true,
+      "text": "四档云端完整计划依次为 10/50（20%）、13/50（26%）、9/50（18%）、20/50（40%）；典型耗时 P50 约 0.95、1.75、3.17、6.77 秒，较慢耗时 P95 约 1.73、2.61、5.59、12.58 秒。3B 低于 1.5B，7B 在本批改善，但不存在参数量与准确率全程单调关系。 200 条中 52 条完整通过；148 条失败的最早可观察环节为调用/结构 1、领域/拒识 32、API 26、多填 48、漏填 36、值差异 5。支持 API 的 188 次目标均在本次候选中。会议资料对象/字段会与云数据库、存储下载链接或本地文件元信息混淆；同属云端领域并不意味着使用了正确对象和返回投影。 本测试的云函数 data 是保留原样的字符串，字符串内部可含对象和数组；服务 parameters 则是真正嵌套对象，二者不能混称。0.5B 将嵌套 JSON 正文置 null 或截断，1.5B 和 3B 能通过一条较复杂 JSON 字符串却遗漏另一条正文；7B 的四个函数用例均通过，包含明确版本/超时和函数名缺失后的澄清。成功样本证明能力存在，样本数不足以证明普遍可靠。 未知信息仍会被猜成字符串 null、参数说明、当前对象名称或本地 './' 路径。JSON null 被兼容清除，字符串 'null' 是有值的字符串；把前者与后者混为一谈会掩盖错误放行。明确 install/link 被漏掉后默认 periodic，存储 bucket 和数据库 zone 被遗漏，则会改变操作模式或目标范围。 严格格式差异不能掩盖独立错误：0.5B 一条正文句号改写同时编造会议 ID；1.5B 一条云路径增加前导斜线同时漏存储实例；3B 把 count(eventId) 填作字段名而另传 operation=count，是字段契约错误。四档的三条云端拒识用例均未完整通过，多动作保存后分享经常只剩一个保存计划。全部结果来自模拟业务壳子，未实际读写云端服务。"
+    }
+  ],
+  "reviewSources": [
+    "docs/domain-core-analysis-sparse.json",
+    "docs/domain-other-analysis-sparse.json"
+  ],
+  "verificationSource": "docs/domain-run-verification.json",
+  "limits": [
+    "公开开发集，非独立留出集",
+    "每题一次，不代表耗时稳定性或生产分布",
+    "严格契约评分保留，不以人工解释重打分",
+    "伪业务回执，未验证Huawei SDK业务结果"
+  ]
+}

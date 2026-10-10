@@ -1,0 +1,2319 @@
+{
+  "verifiedAt": "2026-10-10",
+  "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice",
+  "sourceMarkdown": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice.md",
+  "granularitySourceRef": "https://developer.huawei.com/consumer/en/doc/harmonyos-guides-V14/weather-service-introduction-V14",
+  "scope": "官方对象字段核验；本地 getter 是实验适配契约，不是官方 SDK 新增方法",
+  "location": {
+    "nativeInput": "WeatherRequest.location",
+    "required": "latitude,longitude",
+    "coordinates": "有效经纬度，命名地点须额外地理编码",
+    "precision": "大陆6.1.0(23)起经纬度支持5位小数，其他版本/地区2位小数；行政区代表点与设备精确坐标分别呈现"
+  },
+  "datasets": {
+    "current": {
+      "name": "实况天气",
+      "precision": "current",
+      "horizon": null,
+      "absence": null,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#currentweather"
+    },
+    "hourly": {
+      "name": "逐小时天气",
+      "precision": "hour",
+      "horizon": {
+        "chinaHours": 48,
+        "outsideChinaHours": 24,
+        "sourceRef": "https://developer.huawei.com/consumer/en/doc/harmonyos-guides-V14/weather-service-introduction-V14"
+      },
+      "absence": null,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#hourlyweather"
+    },
+    "daily": {
+      "name": "多日天气",
+      "precision": "day",
+      "horizon": {
+        "days": 10,
+        "sourceRef": "https://developer.huawei.com/consumer/en/doc/harmonyos-guides-V14/weather-service-introduction-V14"
+      },
+      "absence": null,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#dailyweather"
+    },
+    "minute": {
+      "name": "分钟降水",
+      "precision": "minute",
+      "horizon": {
+        "minutes": 120,
+        "radiusKm": 5,
+        "sourceRef": "https://developer.huawei.com/consumer/en/doc/harmonyos-guides-V14/weather-service-introduction-V14"
+      },
+      "absence": "短期无降水时 minute 字段可能不返回，不能把字段缺失当作确定无雨。",
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#minuteweather"
+    },
+    "alerts": {
+      "name": "天气预警",
+      "precision": "current",
+      "horizon": null,
+      "absence": "当前无预警时该字段可能不返回。",
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weatheralert"
+    },
+    "indices": {
+      "name": "天气指数",
+      "precision": "day",
+      "horizon": null,
+      "absence": null,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weatherindex"
+    },
+    "tides": {
+      "name": "潮汐",
+      "precision": "hour",
+      "horizon": null,
+      "absence": "无潮汐站点时该字段可能不返回。",
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#tide"
+    },
+    "city": {
+      "name": "天气城市信息",
+      "precision": "current",
+      "horizon": null,
+      "absence": null,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#city"
+    }
+  },
+  "minuteLimits": {
+    "supportedFields": [
+      "date",
+      "precipitation",
+      "precipitationIntensity"
+    ],
+    "densityRange": [
+      0,
+      1
+    ],
+    "doesNotProvide": [
+      "humidity",
+      "temperature",
+      "wind",
+      "precipitationAmount"
+    ],
+    "policy": "没有同字段、同单位接口时不替换成另一种天气含义"
+  },
+  "fieldMatrix": {
+    "temperature": [
+      "current",
+      "hourly"
+    ],
+    "apparentTemperature": [
+      "current",
+      "hourly"
+    ],
+    "humidity": [
+      "current",
+      "hourly"
+    ],
+    "wind": [
+      "current",
+      "hourly"
+    ],
+    "wind.direction": [
+      "current",
+      "hourly"
+    ],
+    "wind.speed": [
+      "current",
+      "hourly"
+    ],
+    "wind.level": [
+      "current",
+      "hourly"
+    ],
+    "wind.gustDirection": [
+      "current",
+      "hourly"
+    ],
+    "wind.gustSpeed": [
+      "current",
+      "hourly"
+    ],
+    "wind.gustLevel": [
+      "current",
+      "hourly"
+    ],
+    "cloudCover": [
+      "current",
+      "hourly"
+    ],
+    "condition": [
+      "current",
+      "hourly"
+    ],
+    "condition.type": [
+      "current",
+      "hourly"
+    ],
+    "condition.description": [
+      "current",
+      "hourly"
+    ],
+    "condition.icon": [
+      "current",
+      "hourly"
+    ],
+    "pressure": [
+      "current",
+      "daily"
+    ],
+    "pressureTrend": [
+      "current"
+    ],
+    "uvIndex": [
+      "current",
+      "hourly",
+      "daily"
+    ],
+    "uvIndex.category": [
+      "current",
+      "hourly",
+      "daily"
+    ],
+    "uvIndex.value": [
+      "current",
+      "hourly",
+      "daily"
+    ],
+    "uvIndex.description": [
+      "current",
+      "hourly",
+      "daily"
+    ],
+    "aqi": [
+      "current",
+      "hourly",
+      "daily"
+    ],
+    "aqi.aqiValue": [
+      "current",
+      "hourly",
+      "daily"
+    ],
+    "aqi.aqiCategory": [
+      "current",
+      "hourly",
+      "daily"
+    ],
+    "aqi.aqiDescription": [
+      "current",
+      "hourly",
+      "daily"
+    ],
+    "aqi.pm25": [
+      "current",
+      "hourly",
+      "daily"
+    ],
+    "aqi.pm10": [
+      "current",
+      "hourly",
+      "daily"
+    ],
+    "aqi.no2": [
+      "current",
+      "hourly",
+      "daily"
+    ],
+    "aqi.o3": [
+      "current",
+      "hourly",
+      "daily"
+    ],
+    "aqi.so2": [
+      "current",
+      "hourly",
+      "daily"
+    ],
+    "aqi.co": [
+      "current",
+      "hourly",
+      "daily"
+    ],
+    "visibility": [
+      "current",
+      "hourly",
+      "daily"
+    ],
+    "updateTime": [
+      "current",
+      "hourly",
+      "daily",
+      "minute",
+      "alerts",
+      "indices",
+      "tides"
+    ],
+    "expirationTime": [
+      "current",
+      "hourly",
+      "daily",
+      "minute",
+      "alerts",
+      "indices",
+      "tides"
+    ],
+    "summary": [
+      "current",
+      "minute"
+    ],
+    "alertTitle": [
+      "current"
+    ],
+    "date": [
+      "hourly",
+      "daily",
+      "minute"
+    ],
+    "precipitationProbability": [
+      "hourly"
+    ],
+    "precipitationAmount": [
+      "hourly"
+    ],
+    "highTemperature": [
+      "daily"
+    ],
+    "lowTemperature": [
+      "daily"
+    ],
+    "highApparentTemperature": [
+      "daily"
+    ],
+    "lowApparentTemperature": [
+      "daily"
+    ],
+    "sun": [
+      "daily"
+    ],
+    "sun.sunrise": [
+      "daily"
+    ],
+    "sun.sunset": [
+      "daily"
+    ],
+    "moon": [
+      "daily"
+    ],
+    "moon.moonrise": [
+      "daily"
+    ],
+    "moon.moonset": [
+      "daily"
+    ],
+    "moon.illuminatedFraction": [
+      "daily"
+    ],
+    "moon.age": [
+      "daily"
+    ],
+    "moon.phase": [
+      "daily"
+    ],
+    "moon.phase.type": [
+      "daily"
+    ],
+    "moon.phase.description": [
+      "daily"
+    ],
+    "moon.phase.icon": [
+      "daily"
+    ],
+    "daytimeForecast": [
+      "daily"
+    ],
+    "daytimeForecast.humidity": [
+      "daily"
+    ],
+    "daytimeForecast.wind": [
+      "daily"
+    ],
+    "daytimeForecast.wind.direction": [
+      "daily"
+    ],
+    "daytimeForecast.wind.speed": [
+      "daily"
+    ],
+    "daytimeForecast.wind.level": [
+      "daily"
+    ],
+    "daytimeForecast.wind.gustDirection": [
+      "daily"
+    ],
+    "daytimeForecast.wind.gustSpeed": [
+      "daily"
+    ],
+    "daytimeForecast.wind.gustLevel": [
+      "daily"
+    ],
+    "daytimeForecast.cloudCover": [
+      "daily"
+    ],
+    "daytimeForecast.condition": [
+      "daily"
+    ],
+    "daytimeForecast.condition.type": [
+      "daily"
+    ],
+    "daytimeForecast.condition.description": [
+      "daily"
+    ],
+    "daytimeForecast.condition.icon": [
+      "daily"
+    ],
+    "daytimeForecast.precipitationProbability": [
+      "daily"
+    ],
+    "daytimeForecast.precipitationAmount": [
+      "daily"
+    ],
+    "daytimeForecast.rainfallProbability": [
+      "daily"
+    ],
+    "daytimeForecast.rainfallAmount": [
+      "daily"
+    ],
+    "daytimeForecast.snowfallProbability": [
+      "daily"
+    ],
+    "daytimeForecast.snowfallAmount": [
+      "daily"
+    ],
+    "overnightForecast": [
+      "daily"
+    ],
+    "overnightForecast.humidity": [
+      "daily"
+    ],
+    "overnightForecast.wind": [
+      "daily"
+    ],
+    "overnightForecast.wind.direction": [
+      "daily"
+    ],
+    "overnightForecast.wind.speed": [
+      "daily"
+    ],
+    "overnightForecast.wind.level": [
+      "daily"
+    ],
+    "overnightForecast.wind.gustDirection": [
+      "daily"
+    ],
+    "overnightForecast.wind.gustSpeed": [
+      "daily"
+    ],
+    "overnightForecast.wind.gustLevel": [
+      "daily"
+    ],
+    "overnightForecast.cloudCover": [
+      "daily"
+    ],
+    "overnightForecast.condition": [
+      "daily"
+    ],
+    "overnightForecast.condition.type": [
+      "daily"
+    ],
+    "overnightForecast.condition.description": [
+      "daily"
+    ],
+    "overnightForecast.condition.icon": [
+      "daily"
+    ],
+    "overnightForecast.precipitationProbability": [
+      "daily"
+    ],
+    "overnightForecast.precipitationAmount": [
+      "daily"
+    ],
+    "overnightForecast.rainfallProbability": [
+      "daily"
+    ],
+    "overnightForecast.rainfallAmount": [
+      "daily"
+    ],
+    "overnightForecast.snowfallProbability": [
+      "daily"
+    ],
+    "overnightForecast.snowfallAmount": [
+      "daily"
+    ],
+    "precipitation": [
+      "minute"
+    ],
+    "precipitationIntensity": [
+      "minute"
+    ],
+    "id": [
+      "alerts"
+    ],
+    "title": [
+      "alerts"
+    ],
+    "region": [
+      "alerts"
+    ],
+    "level": [
+      "alerts",
+      "city"
+    ],
+    "levelDescription": [
+      "alerts"
+    ],
+    "type": [
+      "alerts",
+      "indices"
+    ],
+    "typeDescription": [
+      "alerts"
+    ],
+    "content": [
+      "alerts"
+    ],
+    "guide": [
+      "alerts"
+    ],
+    "detailsUrl": [
+      "alerts"
+    ],
+    "source": [
+      "alerts"
+    ],
+    "icon": [
+      "alerts"
+    ],
+    "name": [
+      "indices"
+    ],
+    "dailyItems": [
+      "indices"
+    ],
+    "dailyItems.date": [
+      "indices"
+    ],
+    "dailyItems.level": [
+      "indices"
+    ],
+    "dailyItems.levelDescription": [
+      "indices"
+    ],
+    "dailyItems.content": [
+      "indices"
+    ],
+    "stationId": [
+      "tides"
+    ],
+    "stationName": [
+      "tides"
+    ],
+    "hourlyTides": [
+      "tides"
+    ],
+    "hourlyTides.date": [
+      "tides"
+    ],
+    "hourlyTides.category": [
+      "tides"
+    ],
+    "hourlyTides.height": [
+      "tides"
+    ],
+    "countryCode": [
+      "city"
+    ],
+    "localizedName": [
+      "city"
+    ],
+    "chineseName": [
+      "city"
+    ],
+    "englishName": [
+      "city"
+    ],
+    "timezone": [
+      "city"
+    ],
+    "administrativeAreas": [
+      "city"
+    ],
+    "administrativeAreas.level": [
+      "city"
+    ],
+    "administrativeAreas.localizedName": [
+      "city"
+    ],
+    "administrativeAreas.chineseName": [
+      "city"
+    ],
+    "administrativeAreas.englishName": [
+      "city"
+    ]
+  },
+  "fields": [
+    {
+      "object": "current",
+      "path": "temperature",
+      "label": "温度",
+      "type": "number",
+      "unit": "℃",
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#currentweather"
+    },
+    {
+      "object": "current",
+      "path": "apparentTemperature",
+      "label": "体感温度",
+      "type": "number",
+      "unit": "℃",
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#currentweather"
+    },
+    {
+      "object": "current",
+      "path": "humidity",
+      "label": "相对湿度",
+      "type": "number",
+      "unit": "%",
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#currentweather"
+    },
+    {
+      "object": "current",
+      "path": "wind",
+      "label": "风力风向",
+      "type": "object",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#wind"
+    },
+    {
+      "object": "current",
+      "path": "wind.direction",
+      "label": "风力风向·风向",
+      "type": "enum",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#wind"
+    },
+    {
+      "object": "current",
+      "path": "wind.speed",
+      "label": "风力风向·风速",
+      "type": "number",
+      "unit": "km/h",
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#wind"
+    },
+    {
+      "object": "current",
+      "path": "wind.level",
+      "label": "风力风向·风力级别",
+      "type": "number",
+      "unit": "级",
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#wind"
+    },
+    {
+      "object": "current",
+      "path": "wind.gustDirection",
+      "label": "风力风向·阵风风向",
+      "type": "enum",
+      "unit": null,
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#wind"
+    },
+    {
+      "object": "current",
+      "path": "wind.gustSpeed",
+      "label": "风力风向·阵风风速",
+      "type": "number",
+      "unit": "km/h",
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#wind"
+    },
+    {
+      "object": "current",
+      "path": "wind.gustLevel",
+      "label": "风力风向·阵风风力级别",
+      "type": "number",
+      "unit": "级",
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#wind"
+    },
+    {
+      "object": "current",
+      "path": "cloudCover",
+      "label": "云量",
+      "type": "number",
+      "unit": "%",
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#currentweather"
+    },
+    {
+      "object": "current",
+      "path": "condition",
+      "label": "天气现象",
+      "type": "object",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weathercondition"
+    },
+    {
+      "object": "current",
+      "path": "condition.type",
+      "label": "天气现象·天气现象类型",
+      "type": "enum",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weathercondition"
+    },
+    {
+      "object": "current",
+      "path": "condition.description",
+      "label": "天气现象·天气现象描述",
+      "type": "string",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weathercondition"
+    },
+    {
+      "object": "current",
+      "path": "condition.icon",
+      "label": "天气现象·天气图标",
+      "type": "resource",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weathercondition"
+    },
+    {
+      "object": "current",
+      "path": "pressure",
+      "label": "地面气压",
+      "type": "number",
+      "unit": "hPa",
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#currentweather"
+    },
+    {
+      "object": "current",
+      "path": "pressureTrend",
+      "label": "气压趋势",
+      "type": "enum",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#currentweather"
+    },
+    {
+      "object": "current",
+      "path": "uvIndex",
+      "label": "紫外线指数",
+      "type": "object",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#uvindex"
+    },
+    {
+      "object": "current",
+      "path": "uvIndex.category",
+      "label": "紫外线指数·紫外线暴露类别",
+      "type": "enum",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#uvindex"
+    },
+    {
+      "object": "current",
+      "path": "uvIndex.value",
+      "label": "紫外线指数·紫外线指数值",
+      "type": "number",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#uvindex"
+    },
+    {
+      "object": "current",
+      "path": "uvIndex.description",
+      "label": "紫外线指数·紫外线等级描述",
+      "type": "string",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#uvindex"
+    },
+    {
+      "object": "current",
+      "path": "aqi",
+      "label": "空气质量",
+      "type": "object",
+      "unit": null,
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weatheraqi"
+    },
+    {
+      "object": "current",
+      "path": "aqi.aqiValue",
+      "label": "空气质量·空气质量指数",
+      "type": "number",
+      "unit": null,
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weatheraqi"
+    },
+    {
+      "object": "current",
+      "path": "aqi.aqiCategory",
+      "label": "空气质量·空气质量类别",
+      "type": "enum",
+      "unit": null,
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weatheraqi"
+    },
+    {
+      "object": "current",
+      "path": "aqi.aqiDescription",
+      "label": "空气质量·空气质量描述",
+      "type": "string",
+      "unit": null,
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weatheraqi"
+    },
+    {
+      "object": "current",
+      "path": "aqi.pm25",
+      "label": "空气质量·PM2.5浓度",
+      "type": "number",
+      "unit": "μg/m³",
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weatheraqi"
+    },
+    {
+      "object": "current",
+      "path": "aqi.pm10",
+      "label": "空气质量·PM10浓度",
+      "type": "number",
+      "unit": "μg/m³",
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weatheraqi"
+    },
+    {
+      "object": "current",
+      "path": "aqi.no2",
+      "label": "空气质量·二氧化氮浓度",
+      "type": "number",
+      "unit": "μg/m³",
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weatheraqi"
+    },
+    {
+      "object": "current",
+      "path": "aqi.o3",
+      "label": "空气质量·臭氧浓度",
+      "type": "number",
+      "unit": "μg/m³",
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weatheraqi"
+    },
+    {
+      "object": "current",
+      "path": "aqi.so2",
+      "label": "空气质量·二氧化硫浓度",
+      "type": "number",
+      "unit": "μg/m³",
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weatheraqi"
+    },
+    {
+      "object": "current",
+      "path": "aqi.co",
+      "label": "空气质量·一氧化碳浓度",
+      "type": "number",
+      "unit": "μg/m³",
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weatheraqi"
+    },
+    {
+      "object": "current",
+      "path": "visibility",
+      "label": "能见度",
+      "type": "number",
+      "unit": "km",
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#currentweather"
+    },
+    {
+      "object": "current",
+      "path": "updateTime",
+      "label": "数据更新时间",
+      "type": "date",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#currentweather"
+    },
+    {
+      "object": "current",
+      "path": "expirationTime",
+      "label": "数据失效时间",
+      "type": "date",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#currentweather"
+    },
+    {
+      "object": "current",
+      "path": "summary",
+      "label": "实况天气一句话描述",
+      "type": "string",
+      "unit": null,
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#currentweather"
+    },
+    {
+      "object": "current",
+      "path": "alertTitle",
+      "label": "预警标题",
+      "type": "string",
+      "unit": null,
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#currentweather"
+    },
+    {
+      "object": "hourly",
+      "path": "date",
+      "label": "预报日期",
+      "type": "date",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#hourlyweather"
+    },
+    {
+      "object": "hourly",
+      "path": "temperature",
+      "label": "温度",
+      "type": "number",
+      "unit": "℃",
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#hourlyweather"
+    },
+    {
+      "object": "hourly",
+      "path": "apparentTemperature",
+      "label": "体感温度",
+      "type": "number",
+      "unit": "℃",
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#hourlyweather"
+    },
+    {
+      "object": "hourly",
+      "path": "humidity",
+      "label": "相对湿度",
+      "type": "number",
+      "unit": "%",
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#hourlyweather"
+    },
+    {
+      "object": "hourly",
+      "path": "wind",
+      "label": "风力风向",
+      "type": "object",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#wind"
+    },
+    {
+      "object": "hourly",
+      "path": "wind.direction",
+      "label": "风力风向·风向",
+      "type": "enum",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#wind"
+    },
+    {
+      "object": "hourly",
+      "path": "wind.speed",
+      "label": "风力风向·风速",
+      "type": "number",
+      "unit": "km/h",
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#wind"
+    },
+    {
+      "object": "hourly",
+      "path": "wind.level",
+      "label": "风力风向·风力级别",
+      "type": "number",
+      "unit": "级",
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#wind"
+    },
+    {
+      "object": "hourly",
+      "path": "wind.gustDirection",
+      "label": "风力风向·阵风风向",
+      "type": "enum",
+      "unit": null,
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#wind"
+    },
+    {
+      "object": "hourly",
+      "path": "wind.gustSpeed",
+      "label": "风力风向·阵风风速",
+      "type": "number",
+      "unit": "km/h",
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#wind"
+    },
+    {
+      "object": "hourly",
+      "path": "wind.gustLevel",
+      "label": "风力风向·阵风风力级别",
+      "type": "number",
+      "unit": "级",
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#wind"
+    },
+    {
+      "object": "hourly",
+      "path": "cloudCover",
+      "label": "云量",
+      "type": "number",
+      "unit": "%",
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#hourlyweather"
+    },
+    {
+      "object": "hourly",
+      "path": "condition",
+      "label": "天气现象",
+      "type": "object",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weathercondition"
+    },
+    {
+      "object": "hourly",
+      "path": "condition.type",
+      "label": "天气现象·天气现象类型",
+      "type": "enum",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weathercondition"
+    },
+    {
+      "object": "hourly",
+      "path": "condition.description",
+      "label": "天气现象·天气现象描述",
+      "type": "string",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weathercondition"
+    },
+    {
+      "object": "hourly",
+      "path": "condition.icon",
+      "label": "天气现象·天气图标",
+      "type": "resource",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weathercondition"
+    },
+    {
+      "object": "hourly",
+      "path": "uvIndex",
+      "label": "紫外线指数",
+      "type": "object",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#uvindex"
+    },
+    {
+      "object": "hourly",
+      "path": "uvIndex.category",
+      "label": "紫外线指数·紫外线暴露类别",
+      "type": "enum",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#uvindex"
+    },
+    {
+      "object": "hourly",
+      "path": "uvIndex.value",
+      "label": "紫外线指数·紫外线指数值",
+      "type": "number",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#uvindex"
+    },
+    {
+      "object": "hourly",
+      "path": "uvIndex.description",
+      "label": "紫外线指数·紫外线等级描述",
+      "type": "string",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#uvindex"
+    },
+    {
+      "object": "hourly",
+      "path": "aqi",
+      "label": "空气质量",
+      "type": "object",
+      "unit": null,
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weatheraqi"
+    },
+    {
+      "object": "hourly",
+      "path": "aqi.aqiValue",
+      "label": "空气质量·空气质量指数",
+      "type": "number",
+      "unit": null,
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weatheraqi"
+    },
+    {
+      "object": "hourly",
+      "path": "aqi.aqiCategory",
+      "label": "空气质量·空气质量类别",
+      "type": "enum",
+      "unit": null,
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weatheraqi"
+    },
+    {
+      "object": "hourly",
+      "path": "aqi.aqiDescription",
+      "label": "空气质量·空气质量描述",
+      "type": "string",
+      "unit": null,
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weatheraqi"
+    },
+    {
+      "object": "hourly",
+      "path": "aqi.pm25",
+      "label": "空气质量·PM2.5浓度",
+      "type": "number",
+      "unit": "μg/m³",
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weatheraqi"
+    },
+    {
+      "object": "hourly",
+      "path": "aqi.pm10",
+      "label": "空气质量·PM10浓度",
+      "type": "number",
+      "unit": "μg/m³",
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weatheraqi"
+    },
+    {
+      "object": "hourly",
+      "path": "aqi.no2",
+      "label": "空气质量·二氧化氮浓度",
+      "type": "number",
+      "unit": "μg/m³",
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weatheraqi"
+    },
+    {
+      "object": "hourly",
+      "path": "aqi.o3",
+      "label": "空气质量·臭氧浓度",
+      "type": "number",
+      "unit": "μg/m³",
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weatheraqi"
+    },
+    {
+      "object": "hourly",
+      "path": "aqi.so2",
+      "label": "空气质量·二氧化硫浓度",
+      "type": "number",
+      "unit": "μg/m³",
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weatheraqi"
+    },
+    {
+      "object": "hourly",
+      "path": "aqi.co",
+      "label": "空气质量·一氧化碳浓度",
+      "type": "number",
+      "unit": "μg/m³",
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weatheraqi"
+    },
+    {
+      "object": "hourly",
+      "path": "visibility",
+      "label": "能见度",
+      "type": "number",
+      "unit": "km",
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#hourlyweather"
+    },
+    {
+      "object": "hourly",
+      "path": "precipitationProbability",
+      "label": "降水概率",
+      "type": "number",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#hourlyweather"
+    },
+    {
+      "object": "hourly",
+      "path": "precipitationAmount",
+      "label": "降水量",
+      "type": "number",
+      "unit": "mm",
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#hourlyweather"
+    },
+    {
+      "object": "hourly",
+      "path": "updateTime",
+      "label": "数据更新时间",
+      "type": "date",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#forecastt"
+    },
+    {
+      "object": "hourly",
+      "path": "expirationTime",
+      "label": "数据失效时间",
+      "type": "date",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#forecastt"
+    },
+    {
+      "object": "daily",
+      "path": "date",
+      "label": "预报日期",
+      "type": "date",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#dailyweather"
+    },
+    {
+      "object": "daily",
+      "path": "highTemperature",
+      "label": "最高温度",
+      "type": "number",
+      "unit": "℃",
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#dailyweather"
+    },
+    {
+      "object": "daily",
+      "path": "lowTemperature",
+      "label": "最低温度",
+      "type": "number",
+      "unit": "℃",
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#dailyweather"
+    },
+    {
+      "object": "daily",
+      "path": "highApparentTemperature",
+      "label": "最高体感温度",
+      "type": "number",
+      "unit": "℃",
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#dailyweather"
+    },
+    {
+      "object": "daily",
+      "path": "lowApparentTemperature",
+      "label": "最低体感温度",
+      "type": "number",
+      "unit": "℃",
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#dailyweather"
+    },
+    {
+      "object": "daily",
+      "path": "uvIndex",
+      "label": "紫外线指数",
+      "type": "object",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#uvindex"
+    },
+    {
+      "object": "daily",
+      "path": "uvIndex.category",
+      "label": "紫外线指数·紫外线暴露类别",
+      "type": "enum",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#uvindex"
+    },
+    {
+      "object": "daily",
+      "path": "uvIndex.value",
+      "label": "紫外线指数·紫外线指数值",
+      "type": "number",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#uvindex"
+    },
+    {
+      "object": "daily",
+      "path": "uvIndex.description",
+      "label": "紫外线指数·紫外线等级描述",
+      "type": "string",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#uvindex"
+    },
+    {
+      "object": "daily",
+      "path": "aqi",
+      "label": "空气质量",
+      "type": "object",
+      "unit": null,
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weatheraqi"
+    },
+    {
+      "object": "daily",
+      "path": "aqi.aqiValue",
+      "label": "空气质量·空气质量指数",
+      "type": "number",
+      "unit": null,
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weatheraqi"
+    },
+    {
+      "object": "daily",
+      "path": "aqi.aqiCategory",
+      "label": "空气质量·空气质量类别",
+      "type": "enum",
+      "unit": null,
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weatheraqi"
+    },
+    {
+      "object": "daily",
+      "path": "aqi.aqiDescription",
+      "label": "空气质量·空气质量描述",
+      "type": "string",
+      "unit": null,
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weatheraqi"
+    },
+    {
+      "object": "daily",
+      "path": "aqi.pm25",
+      "label": "空气质量·PM2.5浓度",
+      "type": "number",
+      "unit": "μg/m³",
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weatheraqi"
+    },
+    {
+      "object": "daily",
+      "path": "aqi.pm10",
+      "label": "空气质量·PM10浓度",
+      "type": "number",
+      "unit": "μg/m³",
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weatheraqi"
+    },
+    {
+      "object": "daily",
+      "path": "aqi.no2",
+      "label": "空气质量·二氧化氮浓度",
+      "type": "number",
+      "unit": "μg/m³",
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weatheraqi"
+    },
+    {
+      "object": "daily",
+      "path": "aqi.o3",
+      "label": "空气质量·臭氧浓度",
+      "type": "number",
+      "unit": "μg/m³",
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weatheraqi"
+    },
+    {
+      "object": "daily",
+      "path": "aqi.so2",
+      "label": "空气质量·二氧化硫浓度",
+      "type": "number",
+      "unit": "μg/m³",
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weatheraqi"
+    },
+    {
+      "object": "daily",
+      "path": "aqi.co",
+      "label": "空气质量·一氧化碳浓度",
+      "type": "number",
+      "unit": "μg/m³",
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weatheraqi"
+    },
+    {
+      "object": "daily",
+      "path": "visibility",
+      "label": "能见度",
+      "type": "number",
+      "unit": "km",
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#dailyweather"
+    },
+    {
+      "object": "daily",
+      "path": "pressure",
+      "label": "地面气压",
+      "type": "number",
+      "unit": "hPa",
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#dailyweather"
+    },
+    {
+      "object": "daily",
+      "path": "sun",
+      "label": "日出日落",
+      "type": "object",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#sunevents"
+    },
+    {
+      "object": "daily",
+      "path": "sun.sunrise",
+      "label": "日出日落·日出时间",
+      "type": "date",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#sunevents"
+    },
+    {
+      "object": "daily",
+      "path": "sun.sunset",
+      "label": "日出日落·日落时间",
+      "type": "date",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#sunevents"
+    },
+    {
+      "object": "daily",
+      "path": "moon",
+      "label": "月亮信息",
+      "type": "object",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#moonevents"
+    },
+    {
+      "object": "daily",
+      "path": "moon.moonrise",
+      "label": "月亮信息·月出时间",
+      "type": "date",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#moonevents"
+    },
+    {
+      "object": "daily",
+      "path": "moon.moonset",
+      "label": "月亮信息·月落时间",
+      "type": "date",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#moonevents"
+    },
+    {
+      "object": "daily",
+      "path": "moon.illuminatedFraction",
+      "label": "月亮信息·月面照亮比例",
+      "type": "number",
+      "unit": "%",
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#moonevents"
+    },
+    {
+      "object": "daily",
+      "path": "moon.age",
+      "label": "月亮信息·月龄",
+      "type": "number",
+      "unit": null,
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#moonevents"
+    },
+    {
+      "object": "daily",
+      "path": "moon.phase",
+      "label": "月亮信息·月相",
+      "type": "object",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#moonphase"
+    },
+    {
+      "object": "daily",
+      "path": "moon.phase.type",
+      "label": "月亮信息·月相·月相类型",
+      "type": "enum",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#moonphase"
+    },
+    {
+      "object": "daily",
+      "path": "moon.phase.description",
+      "label": "月亮信息·月相·月相描述",
+      "type": "string",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#moonphase"
+    },
+    {
+      "object": "daily",
+      "path": "moon.phase.icon",
+      "label": "月亮信息·月相·月相图标",
+      "type": "resource",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#moonphase"
+    },
+    {
+      "object": "daily",
+      "path": "daytimeForecast",
+      "label": "白天天气",
+      "type": "object",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#daypartforecast"
+    },
+    {
+      "object": "daily",
+      "path": "daytimeForecast.humidity",
+      "label": "白天天气·相对湿度",
+      "type": "number",
+      "unit": "%",
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#daypartforecast"
+    },
+    {
+      "object": "daily",
+      "path": "daytimeForecast.wind",
+      "label": "白天天气·风力风向",
+      "type": "object",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#wind"
+    },
+    {
+      "object": "daily",
+      "path": "daytimeForecast.wind.direction",
+      "label": "白天天气·风力风向·风向",
+      "type": "enum",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#wind"
+    },
+    {
+      "object": "daily",
+      "path": "daytimeForecast.wind.speed",
+      "label": "白天天气·风力风向·风速",
+      "type": "number",
+      "unit": "km/h",
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#wind"
+    },
+    {
+      "object": "daily",
+      "path": "daytimeForecast.wind.level",
+      "label": "白天天气·风力风向·风力级别",
+      "type": "number",
+      "unit": "级",
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#wind"
+    },
+    {
+      "object": "daily",
+      "path": "daytimeForecast.wind.gustDirection",
+      "label": "白天天气·风力风向·阵风风向",
+      "type": "enum",
+      "unit": null,
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#wind"
+    },
+    {
+      "object": "daily",
+      "path": "daytimeForecast.wind.gustSpeed",
+      "label": "白天天气·风力风向·阵风风速",
+      "type": "number",
+      "unit": "km/h",
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#wind"
+    },
+    {
+      "object": "daily",
+      "path": "daytimeForecast.wind.gustLevel",
+      "label": "白天天气·风力风向·阵风风力级别",
+      "type": "number",
+      "unit": "级",
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#wind"
+    },
+    {
+      "object": "daily",
+      "path": "daytimeForecast.cloudCover",
+      "label": "白天天气·云量",
+      "type": "number",
+      "unit": "%",
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#daypartforecast"
+    },
+    {
+      "object": "daily",
+      "path": "daytimeForecast.condition",
+      "label": "白天天气·天气现象",
+      "type": "object",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weathercondition"
+    },
+    {
+      "object": "daily",
+      "path": "daytimeForecast.condition.type",
+      "label": "白天天气·天气现象·天气现象类型",
+      "type": "enum",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weathercondition"
+    },
+    {
+      "object": "daily",
+      "path": "daytimeForecast.condition.description",
+      "label": "白天天气·天气现象·天气现象描述",
+      "type": "string",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weathercondition"
+    },
+    {
+      "object": "daily",
+      "path": "daytimeForecast.condition.icon",
+      "label": "白天天气·天气现象·天气图标",
+      "type": "resource",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weathercondition"
+    },
+    {
+      "object": "daily",
+      "path": "daytimeForecast.precipitationProbability",
+      "label": "白天天气·降水概率",
+      "type": "number",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#daypartforecast"
+    },
+    {
+      "object": "daily",
+      "path": "daytimeForecast.precipitationAmount",
+      "label": "白天天气·降水量",
+      "type": "number",
+      "unit": "mm",
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#daypartforecast"
+    },
+    {
+      "object": "daily",
+      "path": "daytimeForecast.rainfallProbability",
+      "label": "白天天气·降雨概率",
+      "type": "number",
+      "unit": null,
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#daypartforecast"
+    },
+    {
+      "object": "daily",
+      "path": "daytimeForecast.rainfallAmount",
+      "label": "白天天气·降雨量",
+      "type": "number",
+      "unit": "mm",
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#daypartforecast"
+    },
+    {
+      "object": "daily",
+      "path": "daytimeForecast.snowfallProbability",
+      "label": "白天天气·降雪概率",
+      "type": "number",
+      "unit": null,
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#daypartforecast"
+    },
+    {
+      "object": "daily",
+      "path": "daytimeForecast.snowfallAmount",
+      "label": "白天天气·降雪量",
+      "type": "number",
+      "unit": "mm",
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#daypartforecast"
+    },
+    {
+      "object": "daily",
+      "path": "overnightForecast",
+      "label": "夜晚天气",
+      "type": "object",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#daypartforecast"
+    },
+    {
+      "object": "daily",
+      "path": "overnightForecast.humidity",
+      "label": "夜晚天气·相对湿度",
+      "type": "number",
+      "unit": "%",
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#daypartforecast"
+    },
+    {
+      "object": "daily",
+      "path": "overnightForecast.wind",
+      "label": "夜晚天气·风力风向",
+      "type": "object",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#wind"
+    },
+    {
+      "object": "daily",
+      "path": "overnightForecast.wind.direction",
+      "label": "夜晚天气·风力风向·风向",
+      "type": "enum",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#wind"
+    },
+    {
+      "object": "daily",
+      "path": "overnightForecast.wind.speed",
+      "label": "夜晚天气·风力风向·风速",
+      "type": "number",
+      "unit": "km/h",
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#wind"
+    },
+    {
+      "object": "daily",
+      "path": "overnightForecast.wind.level",
+      "label": "夜晚天气·风力风向·风力级别",
+      "type": "number",
+      "unit": "级",
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#wind"
+    },
+    {
+      "object": "daily",
+      "path": "overnightForecast.wind.gustDirection",
+      "label": "夜晚天气·风力风向·阵风风向",
+      "type": "enum",
+      "unit": null,
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#wind"
+    },
+    {
+      "object": "daily",
+      "path": "overnightForecast.wind.gustSpeed",
+      "label": "夜晚天气·风力风向·阵风风速",
+      "type": "number",
+      "unit": "km/h",
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#wind"
+    },
+    {
+      "object": "daily",
+      "path": "overnightForecast.wind.gustLevel",
+      "label": "夜晚天气·风力风向·阵风风力级别",
+      "type": "number",
+      "unit": "级",
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#wind"
+    },
+    {
+      "object": "daily",
+      "path": "overnightForecast.cloudCover",
+      "label": "夜晚天气·云量",
+      "type": "number",
+      "unit": "%",
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#daypartforecast"
+    },
+    {
+      "object": "daily",
+      "path": "overnightForecast.condition",
+      "label": "夜晚天气·天气现象",
+      "type": "object",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weathercondition"
+    },
+    {
+      "object": "daily",
+      "path": "overnightForecast.condition.type",
+      "label": "夜晚天气·天气现象·天气现象类型",
+      "type": "enum",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weathercondition"
+    },
+    {
+      "object": "daily",
+      "path": "overnightForecast.condition.description",
+      "label": "夜晚天气·天气现象·天气现象描述",
+      "type": "string",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weathercondition"
+    },
+    {
+      "object": "daily",
+      "path": "overnightForecast.condition.icon",
+      "label": "夜晚天气·天气现象·天气图标",
+      "type": "resource",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weathercondition"
+    },
+    {
+      "object": "daily",
+      "path": "overnightForecast.precipitationProbability",
+      "label": "夜晚天气·降水概率",
+      "type": "number",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#daypartforecast"
+    },
+    {
+      "object": "daily",
+      "path": "overnightForecast.precipitationAmount",
+      "label": "夜晚天气·降水量",
+      "type": "number",
+      "unit": "mm",
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#daypartforecast"
+    },
+    {
+      "object": "daily",
+      "path": "overnightForecast.rainfallProbability",
+      "label": "夜晚天气·降雨概率",
+      "type": "number",
+      "unit": null,
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#daypartforecast"
+    },
+    {
+      "object": "daily",
+      "path": "overnightForecast.rainfallAmount",
+      "label": "夜晚天气·降雨量",
+      "type": "number",
+      "unit": "mm",
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#daypartforecast"
+    },
+    {
+      "object": "daily",
+      "path": "overnightForecast.snowfallProbability",
+      "label": "夜晚天气·降雪概率",
+      "type": "number",
+      "unit": null,
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#daypartforecast"
+    },
+    {
+      "object": "daily",
+      "path": "overnightForecast.snowfallAmount",
+      "label": "夜晚天气·降雪量",
+      "type": "number",
+      "unit": "mm",
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#daypartforecast"
+    },
+    {
+      "object": "daily",
+      "path": "updateTime",
+      "label": "数据更新时间",
+      "type": "date",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#forecastt"
+    },
+    {
+      "object": "daily",
+      "path": "expirationTime",
+      "label": "数据失效时间",
+      "type": "date",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#forecastt"
+    },
+    {
+      "object": "minute",
+      "path": "date",
+      "label": "分钟降水时间",
+      "type": "date",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#minuteweather"
+    },
+    {
+      "object": "minute",
+      "path": "precipitation",
+      "label": "降水类型",
+      "type": "enum",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#minuteweather"
+    },
+    {
+      "object": "minute",
+      "path": "precipitationIntensity",
+      "label": "降水密度",
+      "type": "number",
+      "unit": "0..1",
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#minuteweather"
+    },
+    {
+      "object": "minute",
+      "path": "updateTime",
+      "label": "数据更新时间",
+      "type": "date",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#forecastt"
+    },
+    {
+      "object": "minute",
+      "path": "expirationTime",
+      "label": "数据失效时间",
+      "type": "date",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#forecastt"
+    },
+    {
+      "object": "minute",
+      "path": "summary",
+      "label": "分钟降水一句话描述",
+      "type": "string",
+      "unit": null,
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#forecastt"
+    },
+    {
+      "object": "alerts",
+      "path": "updateTime",
+      "label": "数据更新时间",
+      "type": "date",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weatheralert"
+    },
+    {
+      "object": "alerts",
+      "path": "expirationTime",
+      "label": "数据失效时间",
+      "type": "date",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weatheralert"
+    },
+    {
+      "object": "alerts",
+      "path": "id",
+      "label": "预警ID",
+      "type": "string",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weatheralert"
+    },
+    {
+      "object": "alerts",
+      "path": "title",
+      "label": "预警标题",
+      "type": "string",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weatheralert"
+    },
+    {
+      "object": "alerts",
+      "path": "region",
+      "label": "预警区域",
+      "type": "string",
+      "unit": null,
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weatheralert"
+    },
+    {
+      "object": "alerts",
+      "path": "level",
+      "label": "预警等级",
+      "type": "enum",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weatheralert"
+    },
+    {
+      "object": "alerts",
+      "path": "levelDescription",
+      "label": "预警等级描述",
+      "type": "string",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weatheralert"
+    },
+    {
+      "object": "alerts",
+      "path": "type",
+      "label": "预警类型",
+      "type": "enum",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weatheralert"
+    },
+    {
+      "object": "alerts",
+      "path": "typeDescription",
+      "label": "预警类型描述",
+      "type": "string",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weatheralert"
+    },
+    {
+      "object": "alerts",
+      "path": "content",
+      "label": "预警正文",
+      "type": "string",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weatheralert"
+    },
+    {
+      "object": "alerts",
+      "path": "guide",
+      "label": "预警防御指南",
+      "type": "string",
+      "unit": null,
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weatheralert"
+    },
+    {
+      "object": "alerts",
+      "path": "detailsUrl",
+      "label": "预警详情链接",
+      "type": "string",
+      "unit": null,
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weatheralert"
+    },
+    {
+      "object": "alerts",
+      "path": "source",
+      "label": "预警来源",
+      "type": "string",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weatheralert"
+    },
+    {
+      "object": "alerts",
+      "path": "icon",
+      "label": "预警图标",
+      "type": "resource",
+      "unit": null,
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weatheralert"
+    },
+    {
+      "object": "indices",
+      "path": "updateTime",
+      "label": "数据更新时间",
+      "type": "date",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weatherindex"
+    },
+    {
+      "object": "indices",
+      "path": "expirationTime",
+      "label": "数据失效时间",
+      "type": "date",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weatherindex"
+    },
+    {
+      "object": "indices",
+      "path": "type",
+      "label": "指数类型",
+      "type": "enum",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weatherindex"
+    },
+    {
+      "object": "indices",
+      "path": "name",
+      "label": "指数名称",
+      "type": "string",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#weatherindex"
+    },
+    {
+      "object": "indices",
+      "path": "dailyItems",
+      "label": "每天指数详情",
+      "type": "array",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#dailyindex"
+    },
+    {
+      "object": "indices",
+      "path": "dailyItems.date",
+      "label": "每天指数详情·指数日期",
+      "type": "date",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#dailyindex"
+    },
+    {
+      "object": "indices",
+      "path": "dailyItems.level",
+      "label": "每天指数详情·指数级别",
+      "type": "number",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#dailyindex"
+    },
+    {
+      "object": "indices",
+      "path": "dailyItems.levelDescription",
+      "label": "每天指数详情·指数级别描述",
+      "type": "string",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#dailyindex"
+    },
+    {
+      "object": "indices",
+      "path": "dailyItems.content",
+      "label": "每天指数详情·指数内容",
+      "type": "string",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#dailyindex"
+    },
+    {
+      "object": "tides",
+      "path": "updateTime",
+      "label": "数据更新时间",
+      "type": "date",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#tide"
+    },
+    {
+      "object": "tides",
+      "path": "expirationTime",
+      "label": "数据失效时间",
+      "type": "date",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#tide"
+    },
+    {
+      "object": "tides",
+      "path": "stationId",
+      "label": "潮汐站点ID",
+      "type": "string",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#tide"
+    },
+    {
+      "object": "tides",
+      "path": "stationName",
+      "label": "潮汐站点名称",
+      "type": "string",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#tide"
+    },
+    {
+      "object": "tides",
+      "path": "hourlyTides",
+      "label": "小时潮汐",
+      "type": "array",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#hourlytide"
+    },
+    {
+      "object": "tides",
+      "path": "hourlyTides.date",
+      "label": "小时潮汐·潮汐小时日期",
+      "type": "date",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#hourlytide"
+    },
+    {
+      "object": "tides",
+      "path": "hourlyTides.category",
+      "label": "小时潮汐·潮汐类型",
+      "type": "enum",
+      "unit": null,
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#hourlytide"
+    },
+    {
+      "object": "tides",
+      "path": "hourlyTides.height",
+      "label": "小时潮汐·潮汐高度",
+      "type": "number",
+      "unit": "cm",
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#hourlytide"
+    },
+    {
+      "object": "city",
+      "path": "countryCode",
+      "label": "国家编码",
+      "type": "string",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#city"
+    },
+    {
+      "object": "city",
+      "path": "level",
+      "label": "行政区划等级",
+      "type": "number",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#city"
+    },
+    {
+      "object": "city",
+      "path": "localizedName",
+      "label": "本地化城市名称",
+      "type": "string",
+      "unit": null,
+      "optional": false,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#city"
+    },
+    {
+      "object": "city",
+      "path": "chineseName",
+      "label": "中文城市名称",
+      "type": "string",
+      "unit": null,
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#city"
+    },
+    {
+      "object": "city",
+      "path": "englishName",
+      "label": "英文城市名称",
+      "type": "string",
+      "unit": null,
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#city"
+    },
+    {
+      "object": "city",
+      "path": "timezone",
+      "label": "城市时区",
+      "type": "string",
+      "unit": null,
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#city"
+    },
+    {
+      "object": "city",
+      "path": "administrativeAreas",
+      "label": "行政区域列表",
+      "type": "array",
+      "unit": null,
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#administrativearea"
+    },
+    {
+      "object": "city",
+      "path": "administrativeAreas.level",
+      "label": "行政区域列表·行政区划等级",
+      "type": "number",
+      "unit": null,
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#administrativearea"
+    },
+    {
+      "object": "city",
+      "path": "administrativeAreas.localizedName",
+      "label": "行政区域列表·本地化行政区域名称",
+      "type": "string",
+      "unit": null,
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#administrativearea"
+    },
+    {
+      "object": "city",
+      "path": "administrativeAreas.chineseName",
+      "label": "行政区域列表·行政区域中文名",
+      "type": "string",
+      "unit": null,
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#administrativearea"
+    },
+    {
+      "object": "city",
+      "path": "administrativeAreas.englishName",
+      "label": "行政区域列表·行政区域英文名",
+      "type": "string",
+      "unit": null,
+      "optional": true,
+      "sourceRef": "https://developer.huawei.com/consumer/cn/doc/doccenter-references/api/weather-service-weatherservice#administrativearea"
+    }
+  ],
+  "counts": {
+    "originalBusinessApis": 15,
+    "weatherApis": 202,
+    "total": 372,
+    "byDomain": {
+      "weather": 203,
+      "calendar": 53,
+      "contacts": 76,
+      "files": 12,
+      "services": 7,
+      "cloud": 21
+    }
+  }
+}

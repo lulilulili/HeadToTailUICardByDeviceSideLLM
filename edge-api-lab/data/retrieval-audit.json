@@ -1,0 +1,3082 @@
+{
+  "purpose": "只审查候选召回，不能当成模型准确率；gold仅本地评分，不送检索或模型",
+  "generatedAt": "2026-10-10T04:59:04.926Z",
+  "summary": {
+    "promptVersion": "sparse-v6",
+    "apiCount": 372,
+    "caseCount": 178,
+    "total": 168,
+    "stagedHits": 168,
+    "unifiedHits": 168,
+    "byDomain": {
+      "weather": {
+        "total": 62,
+        "stagedHits": 62,
+        "unifiedHits": 62
+      },
+      "calendar": {
+        "total": 28,
+        "stagedHits": 28,
+        "unifiedHits": 28
+      },
+      "contacts": {
+        "total": 27,
+        "stagedHits": 27,
+        "unifiedHits": 27
+      },
+      "files": {
+        "total": 16,
+        "stagedHits": 16,
+        "unifiedHits": 16
+      },
+      "services": {
+        "total": 11,
+        "stagedHits": 11,
+        "unifiedHits": 11
+      },
+      "cloud": {
+        "total": 24,
+        "stagedHits": 24,
+        "unifiedHits": 24
+      }
+    },
+    "maxSystemChars": {
+      "intent": 910,
+      "unified": 997,
+      "arguments": 662
+    }
+  },
+  "cases": [
+    {
+      "caseId": "w01",
+      "text": "查上海今天的天气",
+      "expectedApi": "weather.query",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.query",
+        "weather.daily.overview"
+      ],
+      "unified": [
+        "weather.query",
+        "weather.daily.overview"
+      ]
+    },
+    {
+      "caseId": "c01",
+      "text": "查今天的日程",
+      "expectedApi": "calendar.search",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "calendar.search",
+        "calendar.event.get",
+        "calendar.event.id",
+        "calendar.event.title",
+        "calendar.event.start",
+        "calendar.event.end"
+      ],
+      "unified": [
+        "calendar.search",
+        "calendar.event.get",
+        "calendar.event.id",
+        "calendar.event.title",
+        "calendar.event.start",
+        "calendar.event.end",
+        "calendar.event.location",
+        "calendar.event.attendees",
+        "calendar.event.reminders",
+        "calendar.event.recurrence",
+        "calendar.event.description",
+        "calendar.event.all_day"
+      ]
+    },
+    {
+      "caseId": "p01",
+      "text": "查找联系人张三",
+      "expectedApi": "contacts.search",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "contacts.search",
+        "contacts.get",
+        "contacts.phone",
+        "contacts.email",
+        "contacts.address",
+        "contacts.organization"
+      ],
+      "unified": [
+        "contacts.search",
+        "contacts.get",
+        "contacts.phone",
+        "contacts.email",
+        "contacts.address",
+        "contacts.organization",
+        "contacts.events",
+        "contacts.name",
+        "contacts.nickname",
+        "contacts.note",
+        "contacts.websites",
+        "contacts.portrait"
+      ]
+    },
+    {
+      "caseId": "f01",
+      "text": "查找文件预算，类型是 pdf",
+      "expectedApi": "files.search",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "files.search",
+        "files.metadata.mime_type",
+        "files.preview",
+        "files.preview.close",
+        "files.preview.prepare"
+      ],
+      "unified": [
+        "files.search",
+        "files.metadata.mime_type",
+        "calendar.event.type",
+        "files.preview",
+        "files.preview.close",
+        "files.preview.prepare"
+      ]
+    },
+    {
+      "caseId": "s01",
+      "text": "打开日历服务页面",
+      "expectedApi": "services.open",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "services.open"
+      ],
+      "unified": [
+        "services.open"
+      ]
+    },
+    {
+      "caseId": "m01",
+      "text": "在云端会议资料里搜索关键词预算",
+      "expectedApi": "materials.search",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "materials.search",
+        "materials.get",
+        "materials.title",
+        "materials.content",
+        "materials.meeting_id",
+        "materials.updated_at"
+      ],
+      "unified": [
+        "materials.search",
+        "calendar.search",
+        "materials.get",
+        "materials.title",
+        "materials.content",
+        "materials.meeting_id",
+        "materials.updated_at",
+        "materials.owner",
+        "materials.permissions",
+        "materials.download_url",
+        "cloud.storage.download_url",
+        "cloud.database.field"
+      ]
+    },
+    {
+      "caseId": "w02",
+      "text": "会下雨吗",
+      "expectedApi": "weather.query",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.query",
+        "weather.current.overview"
+      ],
+      "unified": [
+        "weather.query",
+        "weather.current.overview"
+      ]
+    },
+    {
+      "caseId": "c02",
+      "text": "帮我建个日程，标题是项目复盘",
+      "expectedApi": "calendar.create",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "calendar.create"
+      ],
+      "unified": [
+        "calendar.create",
+        "contacts.create"
+      ]
+    },
+    {
+      "caseId": "w03",
+      "text": "明天北京会下雨吗",
+      "expectedApi": "weather.query",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.query",
+        "weather.daily.overview"
+      ],
+      "unified": [
+        "weather.query",
+        "weather.daily.overview"
+      ]
+    },
+    {
+      "caseId": "w04",
+      "text": "后天杭州气温多少",
+      "expectedApi": "weather.query",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.hourly.temperature",
+        "weather.current.temperature",
+        "weather.query"
+      ],
+      "unified": [
+        "weather.hourly.temperature",
+        "weather.current.temperature",
+        "weather.query"
+      ]
+    },
+    {
+      "caseId": "w05",
+      "text": "查深圳的天气预警",
+      "expectedApi": "weather.alerts.overview",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.query",
+        "weather.alerts.overview"
+      ],
+      "unified": [
+        "weather.query",
+        "weather.alerts.overview"
+      ]
+    },
+    {
+      "caseId": "w06",
+      "text": "查天气",
+      "expectedApi": "weather.query",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.query",
+        "weather.current.overview"
+      ],
+      "unified": [
+        "weather.query",
+        "weather.current.overview"
+      ]
+    },
+    {
+      "caseId": "w07",
+      "text": "查2026-10-12广州的气温",
+      "expectedApi": "weather.query",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.hourly.temperature",
+        "weather.current.temperature",
+        "weather.query"
+      ],
+      "unified": [
+        "weather.hourly.temperature",
+        "weather.current.temperature",
+        "weather.query"
+      ]
+    },
+    {
+      "caseId": "w08",
+      "text": "今天上海会下雨吗，气温多少",
+      "expectedApi": "weather.query",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.hourly.temperature",
+        "weather.current.temperature",
+        "weather.query"
+      ],
+      "unified": [
+        "weather.hourly.temperature",
+        "weather.current.temperature",
+        "weather.query"
+      ]
+    },
+    {
+      "caseId": "w09",
+      "text": "查本周上海天气",
+      "expectedApi": "weather.query",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.query",
+        "weather.daily.overview"
+      ],
+      "unified": [
+        "weather.query",
+        "weather.daily.overview"
+      ]
+    },
+    {
+      "caseId": "w10",
+      "text": "查明天的天气",
+      "expectedApi": "weather.query",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.query",
+        "weather.daily.overview"
+      ],
+      "unified": [
+        "weather.query",
+        "weather.daily.overview"
+      ]
+    },
+    {
+      "caseId": "w11",
+      "text": "查上海天气",
+      "expectedApi": "weather.query",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.query",
+        "weather.current.overview"
+      ],
+      "unified": [
+        "weather.query",
+        "weather.current.overview"
+      ]
+    },
+    {
+      "caseId": "c03",
+      "text": "查关键词项目复盘的日程",
+      "expectedApi": "calendar.search",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "calendar.search",
+        "calendar.event.get",
+        "calendar.event.id",
+        "calendar.event.title",
+        "calendar.event.start",
+        "calendar.event.end"
+      ],
+      "unified": [
+        "calendar.search",
+        "calendar.event.get",
+        "calendar.event.id",
+        "calendar.event.title",
+        "calendar.event.start",
+        "calendar.event.end",
+        "calendar.event.location",
+        "calendar.event.attendees",
+        "calendar.event.reminders",
+        "calendar.event.recurrence",
+        "calendar.event.description",
+        "calendar.event.all_day"
+      ]
+    },
+    {
+      "caseId": "c04",
+      "text": "查明天的日程",
+      "expectedApi": "calendar.search",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "calendar.search",
+        "calendar.event.get",
+        "calendar.event.id",
+        "calendar.event.title",
+        "calendar.event.start",
+        "calendar.event.end"
+      ],
+      "unified": [
+        "calendar.search",
+        "calendar.event.get",
+        "calendar.event.id",
+        "calendar.event.title",
+        "calendar.event.start",
+        "calendar.event.end",
+        "calendar.event.location",
+        "calendar.event.attendees",
+        "calendar.event.reminders",
+        "calendar.event.recurrence",
+        "calendar.event.description",
+        "calendar.event.all_day"
+      ]
+    },
+    {
+      "caseId": "c05",
+      "text": "创建日程，标题是周会，开始时间是2026-10-12T15:00:00+08:00，持续60分钟",
+      "expectedApi": "calendar.create",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "calendar.create"
+      ],
+      "unified": [
+        "calendar.create",
+        "contacts.create"
+      ]
+    },
+    {
+      "caseId": "c06",
+      "text": "创建日程，标题是复盘，开始时间是明天下午三点",
+      "expectedApi": "calendar.create",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "calendar.create"
+      ],
+      "unified": [
+        "calendar.create",
+        "contacts.create"
+      ]
+    },
+    {
+      "caseId": "c07",
+      "text": "创建日程，标题是面试，开始时间是2026-10-12T10:00:00+08:00，结束时间是2026-10-12T11:00:00+08:00，地点是会议室A，提前15分钟提醒",
+      "expectedApi": "calendar.create",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "calendar.create"
+      ],
+      "unified": [
+        "calendar.create",
+        "contacts.create"
+      ]
+    },
+    {
+      "caseId": "c08",
+      "text": "创建一个日程，开始时间是明天下午三点",
+      "expectedApi": "calendar.create",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "calendar.create"
+      ],
+      "unified": [
+        "calendar.create",
+        "contacts.create"
+      ]
+    },
+    {
+      "caseId": "c09",
+      "text": "把日程ev_42的标题改成项目评审",
+      "expectedApi": "calendar.event.set.title",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "calendar.event.set.title",
+        "calendar.update"
+      ],
+      "unified": [
+        "calendar.event.set.title",
+        "calendar.update",
+        "contacts.update"
+      ]
+    },
+    {
+      "caseId": "c10",
+      "text": "取消日程ev_42",
+      "expectedApi": "calendar.cancel",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "calendar.cancel"
+      ],
+      "unified": [
+        "calendar.cancel"
+      ]
+    },
+    {
+      "caseId": "c11",
+      "text": "取消明天那个会议",
+      "expectedApi": "calendar.cancel",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "calendar.cancel"
+      ],
+      "unified": [
+        "calendar.cancel"
+      ]
+    },
+    {
+      "caseId": "c12",
+      "text": "修改日程ev_42",
+      "expectedApi": "calendar.update",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "calendar.update",
+        "calendar.event.set.title",
+        "calendar.event.set.location",
+        "calendar.event.set.description",
+        "calendar.event.set.all_day",
+        "calendar.event.set.reminders"
+      ],
+      "unified": [
+        "calendar.update",
+        "calendar.event.set.title",
+        "calendar.event.set.location",
+        "calendar.event.set.description",
+        "calendar.event.set.all_day",
+        "calendar.event.set.reminders",
+        "contacts.update",
+        "contacts.set.phone",
+        "contacts.set.email",
+        "contacts.set.address",
+        "contacts.set.organization",
+        "contacts.set.name"
+      ]
+    },
+    {
+      "caseId": "c13",
+      "text": "把周会标题改成项目评审",
+      "expectedApi": "calendar.event.set.title",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "calendar.event.set.title",
+        "calendar.update"
+      ],
+      "unified": [
+        "calendar.event.set.title",
+        "calendar.update",
+        "contacts.update"
+      ]
+    },
+    {
+      "caseId": "p02",
+      "text": "查找号码13800138000的联系人",
+      "expectedApi": "contacts.search",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "contacts.search",
+        "contacts.phone",
+        "contacts.get"
+      ],
+      "unified": [
+        "contacts.search",
+        "contacts.phone",
+        "contacts.get"
+      ]
+    },
+    {
+      "caseId": "p03",
+      "text": "新建联系人，姓名是李四，号码是13800138000",
+      "expectedApi": "contacts.create",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "contacts.create"
+      ],
+      "unified": [
+        "contacts.create",
+        "calendar.create"
+      ]
+    },
+    {
+      "caseId": "p04",
+      "text": "新建联系人，姓名是王五，邮箱是wang@example.com，组织是研发部",
+      "expectedApi": "contacts.create",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "contacts.create"
+      ],
+      "unified": [
+        "contacts.create",
+        "calendar.create"
+      ]
+    },
+    {
+      "caseId": "p05",
+      "text": "把联系人ct_7的号码改成13900139000",
+      "expectedApi": "contacts.set.phone",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "contacts.set.phone",
+        "contacts.update"
+      ],
+      "unified": [
+        "contacts.set.phone",
+        "contacts.update",
+        "calendar.update"
+      ]
+    },
+    {
+      "caseId": "p06",
+      "text": "把小王的号码改成13900139000",
+      "expectedApi": "contacts.set.phone",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "contacts.set.phone",
+        "contacts.update"
+      ],
+      "unified": [
+        "contacts.set.phone",
+        "contacts.update",
+        "calendar.update"
+      ]
+    },
+    {
+      "caseId": "p07",
+      "text": "新建联系人，号码是13800138000",
+      "expectedApi": "contacts.create",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "contacts.create"
+      ],
+      "unified": [
+        "contacts.create",
+        "calendar.create"
+      ]
+    },
+    {
+      "caseId": "p08",
+      "text": "更新联系人ct_7",
+      "expectedApi": "contacts.update",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "contacts.update",
+        "contacts.set.phone",
+        "contacts.set.email",
+        "contacts.set.address",
+        "contacts.set.organization",
+        "contacts.set.name"
+      ],
+      "unified": [
+        "contacts.update",
+        "contacts.set.phone",
+        "contacts.set.email",
+        "contacts.set.address",
+        "contacts.set.organization",
+        "contacts.set.name",
+        "contacts.set.nickname",
+        "contacts.set.note",
+        "contacts.set.birthday",
+        "calendar.update",
+        "calendar.event.set.title",
+        "calendar.event.set.location"
+      ]
+    },
+    {
+      "caseId": "p09",
+      "text": "查联系人",
+      "expectedApi": "contacts.search",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "contacts.search",
+        "contacts.get",
+        "contacts.phone",
+        "contacts.email",
+        "contacts.address",
+        "contacts.organization"
+      ],
+      "unified": [
+        "contacts.search",
+        "contacts.get",
+        "contacts.phone",
+        "contacts.email",
+        "contacts.address",
+        "contacts.organization",
+        "contacts.events",
+        "contacts.name",
+        "contacts.nickname",
+        "contacts.note",
+        "contacts.websites",
+        "contacts.portrait"
+      ]
+    },
+    {
+      "caseId": "f02",
+      "text": "预览文件file_12",
+      "expectedApi": "files.preview",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "files.preview"
+      ],
+      "unified": [
+        "files.preview"
+      ]
+    },
+    {
+      "caseId": "f03",
+      "text": "预览文件 content://docs/42",
+      "expectedApi": "files.preview",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "files.preview"
+      ],
+      "unified": [
+        "files.preview"
+      ]
+    },
+    {
+      "caseId": "f04",
+      "text": "打开那份文件看看",
+      "expectedApi": "files.preview",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "files.preview"
+      ],
+      "unified": [
+        "files.preview"
+      ]
+    },
+    {
+      "caseId": "f05",
+      "text": "查找文件年报",
+      "expectedApi": "files.search",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "files.search",
+        "files.preview",
+        "files.metadata.name",
+        "files.metadata.size",
+        "files.metadata.mime_type",
+        "files.metadata.modified_at"
+      ],
+      "unified": [
+        "files.search",
+        "files.preview",
+        "files.metadata.name",
+        "files.metadata.size",
+        "files.metadata.mime_type",
+        "files.metadata.modified_at",
+        "files.metadata.uri",
+        "files.metadata.extension",
+        "files.preview.can_preview",
+        "files.preview.is_open",
+        "files.preview.close",
+        "files.preview.prepare"
+      ]
+    },
+    {
+      "caseId": "f06",
+      "text": "找一份文件",
+      "expectedApi": "files.search",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "files.search",
+        "files.preview",
+        "files.metadata.name",
+        "files.metadata.size",
+        "files.metadata.mime_type",
+        "files.metadata.modified_at"
+      ],
+      "unified": [
+        "files.search",
+        "files.preview",
+        "files.metadata.name",
+        "files.metadata.size",
+        "files.metadata.mime_type",
+        "files.metadata.modified_at",
+        "files.metadata.uri",
+        "files.metadata.extension",
+        "files.preview.can_preview",
+        "files.preview.is_open",
+        "files.preview.close",
+        "files.preview.prepare"
+      ]
+    },
+    {
+      "caseId": "f07",
+      "text": "查找文件销售，类型是 xlsx",
+      "expectedApi": "files.search",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "files.search",
+        "files.metadata.mime_type",
+        "files.preview",
+        "files.preview.close",
+        "files.preview.prepare"
+      ],
+      "unified": [
+        "files.search",
+        "files.metadata.mime_type",
+        "calendar.event.type",
+        "files.preview",
+        "files.preview.close",
+        "files.preview.prepare"
+      ]
+    },
+    {
+      "caseId": "s02",
+      "text": "打开天气服务页面",
+      "expectedApi": "services.open",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "services.open"
+      ],
+      "unified": [
+        "services.open"
+      ]
+    },
+    {
+      "caseId": "s03",
+      "text": "打开通讯录服务页面",
+      "expectedApi": "services.open",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "services.open"
+      ],
+      "unified": [
+        "services.open"
+      ]
+    },
+    {
+      "caseId": "s04",
+      "text": "打开文件服务页面，页面搜索词是预算",
+      "expectedApi": "services.open",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "services.open"
+      ],
+      "unified": [
+        "services.open"
+      ]
+    },
+    {
+      "caseId": "s05",
+      "text": "打开会议资料服务页面",
+      "expectedApi": "services.open",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "services.open"
+      ],
+      "unified": [
+        "services.open"
+      ]
+    },
+    {
+      "caseId": "s06",
+      "text": "打开一个服务页面",
+      "expectedApi": "services.open",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "services.open"
+      ],
+      "unified": [
+        "services.open"
+      ]
+    },
+    {
+      "caseId": "m02",
+      "text": "在云端查会议mt_8的资料",
+      "expectedApi": "materials.search",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "materials.search",
+        "materials.get",
+        "materials.title",
+        "materials.content",
+        "materials.meeting_id",
+        "materials.updated_at"
+      ],
+      "unified": [
+        "materials.search",
+        "materials.get",
+        "materials.title",
+        "materials.content",
+        "materials.meeting_id",
+        "materials.updated_at",
+        "materials.owner",
+        "materials.permissions",
+        "materials.download_url",
+        "cloud.storage.download_url",
+        "cloud.database.field",
+        "cloud.database.calculate"
+      ]
+    },
+    {
+      "caseId": "m03",
+      "text": "在云端查询会议mt_8的资料，关键词是复盘",
+      "expectedApi": "materials.search",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "materials.search",
+        "materials.get",
+        "materials.title",
+        "materials.content",
+        "materials.meeting_id",
+        "materials.updated_at"
+      ],
+      "unified": [
+        "materials.search",
+        "calendar.search",
+        "materials.get",
+        "materials.title",
+        "materials.content",
+        "materials.meeting_id",
+        "materials.updated_at",
+        "materials.owner",
+        "materials.permissions",
+        "materials.download_url",
+        "cloud.storage.download_url",
+        "cloud.database.field"
+      ]
+    },
+    {
+      "caseId": "m04",
+      "text": "获取云端会议资料doc_9",
+      "expectedApi": "materials.get",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "materials.search",
+        "materials.get",
+        "materials.title",
+        "materials.content",
+        "materials.meeting_id",
+        "materials.updated_at"
+      ],
+      "unified": [
+        "materials.search",
+        "materials.get",
+        "materials.title",
+        "materials.content",
+        "materials.meeting_id",
+        "materials.updated_at",
+        "materials.owner",
+        "materials.permissions",
+        "materials.download_url",
+        "cloud.storage.download_url",
+        "cloud.database.field",
+        "cloud.database.calculate"
+      ]
+    },
+    {
+      "caseId": "m05",
+      "text": "保存云端会议资料，标题是复盘纪要，内容是下周完成验收，关联会议mt_8",
+      "expectedApi": "materials.save",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "materials.save"
+      ],
+      "unified": [
+        "materials.save"
+      ]
+    },
+    {
+      "caseId": "m06",
+      "text": "将云端资料doc_9分享给联系人ct_7",
+      "expectedApi": "materials.share",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "materials.share"
+      ],
+      "unified": [
+        "materials.share"
+      ]
+    },
+    {
+      "caseId": "m07",
+      "text": "把云端资料doc_9分享给张三",
+      "expectedApi": "materials.share",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "materials.share"
+      ],
+      "unified": [
+        "materials.share"
+      ]
+    },
+    {
+      "caseId": "m08",
+      "text": "保存云端会议资料，标题是周会纪要",
+      "expectedApi": "materials.save",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "materials.save"
+      ],
+      "unified": [
+        "materials.save"
+      ]
+    },
+    {
+      "caseId": "m09",
+      "text": "查云端会议资料",
+      "expectedApi": "materials.search",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "materials.search",
+        "materials.get",
+        "materials.title",
+        "materials.content",
+        "materials.meeting_id",
+        "materials.updated_at"
+      ],
+      "unified": [
+        "materials.search",
+        "materials.get",
+        "materials.title",
+        "materials.content",
+        "materials.meeting_id",
+        "materials.updated_at",
+        "materials.owner",
+        "materials.permissions",
+        "materials.download_url",
+        "cloud.storage.download_url",
+        "cloud.database.field",
+        "cloud.database.calculate"
+      ]
+    },
+    {
+      "caseId": "wx01",
+      "text": "上海现在湿度多少",
+      "expectedApi": "weather.current.humidity",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.current.humidity",
+        "weather.hourly.humidity",
+        "weather.query"
+      ],
+      "unified": [
+        "weather.current.humidity",
+        "weather.hourly.humidity",
+        "weather.query"
+      ]
+    },
+    {
+      "caseId": "wx02",
+      "text": "现在湿度多少",
+      "expectedApi": "weather.current.humidity",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.current.humidity",
+        "weather.hourly.humidity",
+        "weather.query"
+      ],
+      "unified": [
+        "weather.current.humidity",
+        "weather.hourly.humidity",
+        "weather.query"
+      ]
+    },
+    {
+      "caseId": "wx03",
+      "text": "查湿度",
+      "expectedApi": "weather.current.humidity",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.current.humidity",
+        "weather.hourly.humidity",
+        "weather.query"
+      ],
+      "unified": [
+        "weather.current.humidity",
+        "weather.hourly.humidity",
+        "weather.query"
+      ]
+    },
+    {
+      "caseId": "wx04",
+      "text": "北京现在风速多少",
+      "expectedApi": "weather.current.wind.speed",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.current.wind.speed",
+        "weather.hourly.wind.speed",
+        "weather.query"
+      ],
+      "unified": [
+        "weather.current.wind.speed",
+        "weather.hourly.wind.speed",
+        "weather.query"
+      ]
+    },
+    {
+      "caseId": "wx05",
+      "text": "上海此刻风向是什么",
+      "expectedApi": "weather.current.wind.direction",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.current.wind.direction",
+        "weather.hourly.wind.direction",
+        "weather.query"
+      ],
+      "unified": [
+        "weather.current.wind.direction",
+        "weather.hourly.wind.direction"
+      ]
+    },
+    {
+      "caseId": "wx06",
+      "text": "杭州现在体感温度",
+      "expectedApi": "weather.current.apparentTemperature",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.current.apparentTemperature",
+        "weather.hourly.apparentTemperature",
+        "weather.current.temperature",
+        "weather.query",
+        "weather.hourly.temperature"
+      ],
+      "unified": [
+        "weather.current.apparentTemperature",
+        "weather.hourly.apparentTemperature",
+        "weather.current.temperature",
+        "weather.query",
+        "weather.hourly.temperature"
+      ]
+    },
+    {
+      "caseId": "wx07",
+      "text": "上海现在气压多少",
+      "expectedApi": "weather.current.pressure",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.current.pressure",
+        "weather.daily.pressure",
+        "weather.query"
+      ],
+      "unified": [
+        "weather.current.pressure",
+        "weather.daily.pressure",
+        "weather.query"
+      ]
+    },
+    {
+      "caseId": "wx08",
+      "text": "深圳现在能见度",
+      "expectedApi": "weather.current.visibility",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.current.visibility",
+        "weather.hourly.visibility",
+        "weather.daily.visibility",
+        "weather.query"
+      ],
+      "unified": [
+        "weather.current.visibility",
+        "weather.hourly.visibility",
+        "weather.daily.visibility"
+      ]
+    },
+    {
+      "caseId": "wx09",
+      "text": "广州现在PM2.5浓度",
+      "expectedApi": "weather.current.aqi.pm25",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.current.aqi.pm25",
+        "weather.hourly.aqi.pm25",
+        "weather.daily.aqi.pm25",
+        "weather.query"
+      ],
+      "unified": [
+        "weather.current.aqi.pm25",
+        "weather.hourly.aqi.pm25",
+        "weather.daily.aqi.pm25"
+      ]
+    },
+    {
+      "caseId": "wx10",
+      "text": "成都现在紫外线指数值",
+      "expectedApi": "weather.current.uvIndex.value",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.current.uvIndex.value",
+        "weather.hourly.uvIndex.value",
+        "weather.daily.uvIndex.value",
+        "weather.current.uvIndex",
+        "weather.hourly.uvIndex",
+        "weather.query"
+      ],
+      "unified": [
+        "weather.current.uvIndex.value",
+        "weather.hourly.uvIndex.value",
+        "weather.daily.uvIndex.value",
+        "weather.current.uvIndex",
+        "weather.hourly.uvIndex",
+        "weather.daily.uvIndex",
+        "weather.query"
+      ]
+    },
+    {
+      "caseId": "wx11",
+      "text": "北京现在云量百分比",
+      "expectedApi": "weather.current.cloudCover",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.current.cloudCover",
+        "weather.hourly.cloudCover",
+        "weather.query"
+      ],
+      "unified": [
+        "weather.current.cloudCover",
+        "weather.hourly.cloudCover",
+        "weather.query"
+      ]
+    },
+    {
+      "caseId": "wx12",
+      "text": "上海现在的天气现象描述",
+      "expectedApi": "weather.current.condition.description",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.current.condition.description",
+        "weather.hourly.condition.description",
+        "weather.current.condition",
+        "weather.query",
+        "weather.hourly.condition"
+      ],
+      "unified": [
+        "weather.current.condition.description",
+        "weather.hourly.condition.description",
+        "weather.current.condition",
+        "weather.query",
+        "weather.hourly.condition"
+      ]
+    },
+    {
+      "caseId": "wx13",
+      "text": "查询上海未来24小时的逐小时湿度",
+      "expectedApi": "weather.hourly.humidity",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.hourly.humidity",
+        "weather.current.humidity",
+        "weather.query"
+      ],
+      "unified": [
+        "weather.hourly.humidity",
+        "weather.current.humidity",
+        "weather.query"
+      ]
+    },
+    {
+      "caseId": "wx14",
+      "text": "北京明天下午的逐小时风速",
+      "expectedApi": "weather.hourly.wind.speed",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.hourly.wind.speed",
+        "weather.current.wind.speed",
+        "weather.query"
+      ],
+      "unified": [
+        "weather.hourly.wind.speed",
+        "weather.current.wind.speed",
+        "weather.query"
+      ]
+    },
+    {
+      "caseId": "wx15",
+      "text": "上海今晚的逐小时降水概率",
+      "expectedApi": "weather.hourly.precipitationProbability",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.hourly.precipitationProbability",
+        "weather.query"
+      ],
+      "unified": [
+        "weather.hourly.precipitationProbability"
+      ]
+    },
+    {
+      "caseId": "wx16",
+      "text": "杭州明天下午三点的气温",
+      "expectedApi": "weather.hourly.temperature",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.hourly.temperature",
+        "weather.current.temperature",
+        "weather.query"
+      ],
+      "unified": [
+        "weather.hourly.temperature",
+        "weather.current.temperature",
+        "weather.query"
+      ]
+    },
+    {
+      "caseId": "wx17",
+      "text": "武汉未来6小时的逐小时降水量",
+      "expectedApi": "weather.hourly.precipitationAmount",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.hourly.precipitationAmount",
+        "weather.query"
+      ],
+      "unified": [
+        "weather.hourly.precipitationAmount"
+      ]
+    },
+    {
+      "caseId": "wx18",
+      "text": "上海明天白天的湿度",
+      "expectedApi": "weather.daily.daytimeForecast.humidity",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.daily.daytimeForecast.humidity",
+        "weather.daily.overnightForecast.humidity",
+        "weather.hourly.humidity",
+        "weather.daily.daytimeForecast",
+        "weather.current.humidity",
+        "weather.query"
+      ],
+      "unified": [
+        "weather.daily.daytimeForecast.humidity",
+        "weather.daily.overnightForecast.humidity",
+        "weather.hourly.humidity",
+        "weather.daily.daytimeForecast",
+        "weather.current.humidity",
+        "weather.query"
+      ]
+    },
+    {
+      "caseId": "wx19",
+      "text": "北京明天白天的降雨概率",
+      "expectedApi": "weather.daily.daytimeForecast.rainfallProbability",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.daily.daytimeForecast.rainfallProbability",
+        "weather.daily.overnightForecast.rainfallProbability",
+        "weather.daily.daytimeForecast",
+        "weather.query"
+      ],
+      "unified": [
+        "weather.daily.daytimeForecast.rainfallProbability",
+        "weather.daily.overnightForecast.rainfallProbability",
+        "weather.daily.daytimeForecast",
+        "weather.query"
+      ]
+    },
+    {
+      "caseId": "wx20",
+      "text": "杭州后天夜晚的风力级别",
+      "expectedApi": "weather.daily.overnightForecast.wind.level",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.daily.overnightForecast.wind.level",
+        "weather.daily.daytimeForecast.wind.level",
+        "weather.hourly.wind.level",
+        "weather.current.wind.level",
+        "weather.query"
+      ],
+      "unified": [
+        "weather.daily.overnightForecast.wind.level",
+        "weather.daily.daytimeForecast.wind.level",
+        "weather.hourly.wind.level",
+        "weather.current.wind.level",
+        "weather.query"
+      ]
+    },
+    {
+      "caseId": "wx21",
+      "text": "上海明天最高气温",
+      "expectedApi": "weather.daily.highTemperature",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.daily.highTemperature",
+        "weather.hourly.temperature",
+        "weather.query",
+        "weather.current.temperature"
+      ],
+      "unified": [
+        "weather.daily.highTemperature",
+        "weather.hourly.temperature",
+        "weather.query",
+        "weather.current.temperature"
+      ]
+    },
+    {
+      "caseId": "wx22",
+      "text": "南京明天最低气温",
+      "expectedApi": "weather.daily.lowTemperature",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.daily.lowTemperature",
+        "weather.hourly.temperature",
+        "weather.query",
+        "weather.current.temperature"
+      ],
+      "unified": [
+        "weather.daily.lowTemperature",
+        "weather.hourly.temperature",
+        "weather.query",
+        "weather.current.temperature"
+      ]
+    },
+    {
+      "caseId": "wx23",
+      "text": "上海明天几点日出",
+      "expectedApi": "weather.daily.sun.sunrise",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.daily.sun.sunrise",
+        "weather.query"
+      ],
+      "unified": [
+        "weather.daily.sun.sunrise",
+        "weather.query"
+      ]
+    },
+    {
+      "caseId": "wx24",
+      "text": "广州今天几点日落",
+      "expectedApi": "weather.daily.sun.sunset",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.daily.sun.sunset",
+        "weather.query"
+      ],
+      "unified": [
+        "weather.daily.sun.sunset",
+        "weather.query"
+      ]
+    },
+    {
+      "caseId": "wx25",
+      "text": "北京明天的月相描述",
+      "expectedApi": "weather.daily.moon.phase.description",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.daily.moon.phase.description",
+        "weather.daily.moon.phase",
+        "weather.query"
+      ],
+      "unified": [
+        "weather.daily.moon.phase.description",
+        "weather.daily.moon.phase"
+      ]
+    },
+    {
+      "caseId": "wx26",
+      "text": "上海未来20分钟的分钟降水强度",
+      "expectedApi": "weather.minute.precipitationIntensity",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.minute.precipitationIntensity",
+        "weather.minute.overview",
+        "weather.query"
+      ],
+      "unified": [
+        "weather.minute.overview",
+        "weather.minute.precipitationIntensity"
+      ]
+    },
+    {
+      "caseId": "wx27",
+      "text": "北京未来30分钟的分钟降水类型",
+      "expectedApi": "weather.minute.precipitation",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.minute.precipitation",
+        "weather.minute.overview",
+        "weather.query"
+      ],
+      "unified": [
+        "calendar.event.type",
+        "files.metadata.mime_type",
+        "weather.minute.overview",
+        "weather.minute.precipitation"
+      ]
+    },
+    {
+      "caseId": "wx28",
+      "text": "查询分钟降水总览",
+      "expectedApi": "weather.minute.overview",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.minute.overview",
+        "weather.query"
+      ],
+      "unified": [
+        "weather.minute.overview"
+      ]
+    },
+    {
+      "caseId": "wx29",
+      "text": "上海天气预警等级",
+      "expectedApi": "weather.alerts.level",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.alerts.level",
+        "weather.alerts.overview",
+        "weather.query"
+      ],
+      "unified": [
+        "weather.alerts.level",
+        "weather.alerts.overview",
+        "weather.query"
+      ]
+    },
+    {
+      "caseId": "wx30",
+      "text": "深圳天气预警正文",
+      "expectedApi": "weather.alerts.content",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.alerts.content",
+        "weather.alerts.overview",
+        "weather.query",
+        "weather.indices.dailyItems.content"
+      ],
+      "unified": [
+        "weather.alerts.content",
+        "weather.alerts.overview",
+        "weather.query",
+        "weather.indices.dailyItems.content",
+        "materials.content"
+      ]
+    },
+    {
+      "caseId": "wx31",
+      "text": "上海天气指数每日内容",
+      "expectedApi": "weather.indices.dailyItems.content",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.indices.dailyItems.content",
+        "weather.indices.overview",
+        "weather.alerts.content",
+        "weather.query"
+      ],
+      "unified": [
+        "weather.indices.dailyItems.content",
+        "weather.indices.overview",
+        "weather.alerts.content",
+        "weather.query",
+        "materials.content"
+      ]
+    },
+    {
+      "caseId": "wx32",
+      "text": "广州潮汐站点名称",
+      "expectedApi": "weather.tides.stationName",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.tides.stationName",
+        "weather.tides.overview",
+        "weather.query"
+      ],
+      "unified": [
+        "weather.tides.stationName",
+        "weather.tides.overview",
+        "weather.query",
+        "files.metadata.name"
+      ]
+    },
+    {
+      "caseId": "wx33",
+      "text": "广州今天小时潮汐高度",
+      "expectedApi": "weather.tides.hourlyTides.height",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.tides.hourlyTides.height",
+        "weather.tides.hourlyTides",
+        "weather.tides.overview",
+        "weather.query"
+      ],
+      "unified": [
+        "weather.tides.hourlyTides.height",
+        "weather.tides.hourlyTides",
+        "weather.tides.overview",
+        "weather.query"
+      ]
+    },
+    {
+      "caseId": "wx34",
+      "text": "上海天气城市时区",
+      "expectedApi": "weather.city.timezone",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.city.timezone",
+        "weather.query"
+      ],
+      "unified": [
+        "weather.city.timezone",
+        "weather.query",
+        "calendar.event.timezone"
+      ]
+    },
+    {
+      "caseId": "wx35",
+      "text": "北京天气城市行政区域中文名",
+      "expectedApi": "weather.city.administrativeAreas.chineseName",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.city.administrativeAreas.chineseName",
+        "weather.query"
+      ],
+      "unified": [
+        "weather.city.administrativeAreas.chineseName",
+        "weather.query"
+      ]
+    },
+    {
+      "caseId": "wx36",
+      "text": "获取上海实况天气总览",
+      "expectedApi": "weather.current.overview",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.current.overview",
+        "weather.query"
+      ],
+      "unified": [
+        "weather.current.overview",
+        "weather.query"
+      ]
+    },
+    {
+      "caseId": "wx37",
+      "text": "获取北京未来24小时的逐小时天气总览",
+      "expectedApi": "weather.hourly.overview",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.hourly.overview",
+        "weather.query"
+      ],
+      "unified": [
+        "weather.hourly.overview",
+        "weather.query"
+      ]
+    },
+    {
+      "caseId": "wx38",
+      "text": "查上海明天白天降水量与最高气温",
+      "expectedApi": "weather.query",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.daily.daytimeForecast.precipitationAmount",
+        "weather.daily.highTemperature",
+        "weather.daily.overnightForecast.precipitationAmount",
+        "weather.query",
+        "weather.hourly.precipitationAmount",
+        "weather.daily.daytimeForecast"
+      ],
+      "unified": [
+        "weather.daily.daytimeForecast.precipitationAmount",
+        "weather.daily.highTemperature",
+        "weather.daily.overnightForecast.precipitationAmount",
+        "weather.query",
+        "weather.hourly.precipitationAmount",
+        "weather.daily.daytimeForecast",
+        "weather.hourly.temperature",
+        "weather.current.temperature"
+      ]
+    },
+    {
+      "caseId": "wx39",
+      "text": "查询纬度31.2304经度121.4737当前湿度",
+      "expectedApi": "weather.current.humidity",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.current.humidity",
+        "weather.hourly.humidity",
+        "weather.query"
+      ],
+      "unified": [
+        "weather.current.humidity",
+        "weather.hourly.humidity",
+        "weather.query"
+      ]
+    },
+    {
+      "caseId": "wx40",
+      "text": "上海2026-10-12最高气温",
+      "expectedApi": "weather.daily.highTemperature",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.daily.highTemperature",
+        "weather.hourly.temperature",
+        "weather.query",
+        "weather.current.temperature"
+      ],
+      "unified": [
+        "weather.daily.highTemperature",
+        "weather.hourly.temperature",
+        "weather.query",
+        "weather.current.temperature"
+      ]
+    },
+    {
+      "caseId": "wx41",
+      "text": "查现在湿度",
+      "expectedApi": "weather.current.humidity",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.current.humidity",
+        "weather.hourly.humidity",
+        "weather.query"
+      ],
+      "unified": [
+        "weather.current.humidity",
+        "weather.hourly.humidity",
+        "weather.query"
+      ]
+    },
+    {
+      "caseId": "wx42",
+      "text": "阿尔法村现在湿度",
+      "expectedApi": "weather.current.humidity",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.current.humidity",
+        "weather.hourly.humidity",
+        "weather.query"
+      ],
+      "unified": [
+        "weather.current.humidity",
+        "weather.hourly.humidity",
+        "weather.query"
+      ]
+    },
+    {
+      "caseId": "wx43",
+      "text": "上海2026-10-10T08:15:00+08:00的湿度，可接受小时预报",
+      "expectedApi": "weather.hourly.humidity",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.hourly.humidity",
+        "weather.current.humidity",
+        "weather.query"
+      ],
+      "unified": [
+        "weather.hourly.humidity",
+        "weather.current.humidity",
+        "weather.query"
+      ]
+    },
+    {
+      "caseId": "wx44",
+      "text": "上海2026-10-10T08:15:00+08:00精确到这一分钟的湿度，不接受小时数据",
+      "expectedApi": "weather.hourly.humidity",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.hourly.humidity",
+        "weather.current.humidity",
+        "weather.query"
+      ],
+      "unified": [
+        "weather.hourly.humidity",
+        "weather.current.humidity",
+        "weather.query"
+      ]
+    },
+    {
+      "caseId": "wx45",
+      "text": "上海未来20分钟的分钟降水强度",
+      "expectedApi": "weather.minute.precipitationIntensity",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.minute.precipitationIntensity",
+        "weather.minute.overview",
+        "weather.query"
+      ],
+      "unified": [
+        "weather.minute.overview",
+        "weather.minute.precipitationIntensity"
+      ]
+    },
+    {
+      "caseId": "wx46",
+      "text": "上海2026-10-10T08:15:00+08:00的逐小时降水概率，允许降级",
+      "expectedApi": "weather.hourly.precipitationProbability",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.hourly.precipitationProbability",
+        "weather.query"
+      ],
+      "unified": [
+        "weather.hourly.precipitationProbability"
+      ]
+    },
+    {
+      "caseId": "wx47",
+      "text": "查上海2026-99-99的逐小时湿度",
+      "expectedApi": "weather.hourly.humidity",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.hourly.humidity",
+        "weather.current.humidity",
+        "weather.query"
+      ],
+      "unified": [
+        "weather.hourly.humidity",
+        "weather.current.humidity",
+        "weather.query"
+      ]
+    },
+    {
+      "caseId": "wx48",
+      "text": "查北京现在湿度",
+      "expectedApi": "weather.current.humidity",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.current.humidity",
+        "weather.hourly.humidity",
+        "weather.query"
+      ],
+      "unified": [
+        "weather.current.humidity",
+        "weather.hourly.humidity",
+        "weather.query"
+      ]
+    },
+    {
+      "caseId": "px01",
+      "text": "联系人张三邮箱",
+      "expectedApi": "contacts.email",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "contacts.email",
+        "contacts.search",
+        "contacts.get"
+      ],
+      "unified": [
+        "contacts.email",
+        "contacts.search",
+        "contacts.get"
+      ]
+    },
+    {
+      "caseId": "px02",
+      "text": "联系人ct_7住址",
+      "expectedApi": "contacts.address",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "contacts.address",
+        "contacts.search",
+        "contacts.get"
+      ],
+      "unified": [
+        "contacts.address",
+        "contacts.search",
+        "contacts.get"
+      ]
+    },
+    {
+      "caseId": "px03",
+      "text": "查联系人张三电话",
+      "expectedApi": "contacts.phone",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "contacts.phone",
+        "contacts.search",
+        "contacts.get"
+      ],
+      "unified": [
+        "contacts.phone",
+        "contacts.search",
+        "contacts.get"
+      ]
+    },
+    {
+      "caseId": "px04",
+      "text": "联系人ct_7的生日与纪念日",
+      "expectedApi": "contacts.events",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "contacts.events",
+        "contacts.search",
+        "contacts.get"
+      ],
+      "unified": [
+        "contacts.events",
+        "contacts.search",
+        "contacts.get"
+      ]
+    },
+    {
+      "caseId": "px05",
+      "text": "联系人ct_7的公司和职位",
+      "expectedApi": "contacts.organization",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "contacts.organization",
+        "contacts.search",
+        "contacts.get"
+      ],
+      "unified": [
+        "contacts.organization",
+        "contacts.search",
+        "contacts.get"
+      ]
+    },
+    {
+      "caseId": "px06",
+      "text": "这个联系人的邮箱",
+      "expectedApi": "contacts.email",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "contacts.email",
+        "contacts.get",
+        "contacts.search"
+      ],
+      "unified": [
+        "contacts.email",
+        "contacts.get",
+        "contacts.search"
+      ]
+    },
+    {
+      "caseId": "px07",
+      "text": "那个联系人的邮箱",
+      "expectedApi": "contacts.email",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "contacts.email",
+        "contacts.search",
+        "contacts.get"
+      ],
+      "unified": [
+        "contacts.email",
+        "contacts.search",
+        "contacts.get"
+      ]
+    },
+    {
+      "caseId": "px08",
+      "text": "这个联系人的电话",
+      "expectedApi": "contacts.phone",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "contacts.phone",
+        "contacts.search",
+        "contacts.get"
+      ],
+      "unified": [
+        "contacts.phone",
+        "contacts.search",
+        "contacts.get"
+      ]
+    },
+    {
+      "caseId": "px09",
+      "text": "修改联系人ct_7的备注为客户",
+      "expectedApi": "contacts.set.note",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "contacts.set.note",
+        "contacts.update"
+      ],
+      "unified": [
+        "contacts.set.note",
+        "contacts.update",
+        "calendar.update"
+      ]
+    },
+    {
+      "caseId": "px10",
+      "text": "把这个联系人的邮箱改成zhang@example.com",
+      "expectedApi": "contacts.set.email",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "contacts.set.email",
+        "contacts.update"
+      ],
+      "unified": [
+        "contacts.set.email",
+        "contacts.update",
+        "calendar.update"
+      ]
+    },
+    {
+      "caseId": "px11",
+      "text": "新建联系人姓名张三，住址上海浦东，生日10月10日，昵称小张",
+      "expectedApi": "contacts.create",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "contacts.create"
+      ],
+      "unified": [
+        "contacts.create",
+        "calendar.create"
+      ]
+    },
+    {
+      "caseId": "px12",
+      "text": "更新联系人ct_7，住址上海浦东，备注同事",
+      "expectedApi": "contacts.update",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "contacts.set.note",
+        "contacts.update"
+      ],
+      "unified": [
+        "contacts.set.note",
+        "contacts.update",
+        "calendar.update"
+      ]
+    },
+    {
+      "caseId": "cx01",
+      "text": "明天会议地点",
+      "expectedApi": "calendar.event.location",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "calendar.event.location",
+        "calendar.search",
+        "calendar.event.get"
+      ],
+      "unified": [
+        "calendar.event.location",
+        "calendar.search",
+        "calendar.event.get"
+      ]
+    },
+    {
+      "caseId": "cx02",
+      "text": "ev_42的参会人",
+      "expectedApi": "calendar.event.attendees",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "calendar.event.attendees",
+        "calendar.search",
+        "calendar.event.get"
+      ],
+      "unified": [
+        "calendar.event.attendees",
+        "calendar.search",
+        "calendar.event.get"
+      ]
+    },
+    {
+      "caseId": "cx03",
+      "text": "日程ev_42开始时间",
+      "expectedApi": "calendar.event.start",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "calendar.event.start",
+        "calendar.search",
+        "calendar.event.get"
+      ],
+      "unified": [
+        "calendar.event.start",
+        "calendar.search",
+        "calendar.event.get",
+        "files.metadata.modified_at"
+      ]
+    },
+    {
+      "caseId": "cx04",
+      "text": "明天会议的提醒时间",
+      "expectedApi": "calendar.event.reminders",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "calendar.event.reminders",
+        "calendar.search",
+        "calendar.event.get"
+      ],
+      "unified": [
+        "calendar.event.reminders",
+        "calendar.search",
+        "calendar.event.get",
+        "files.metadata.modified_at"
+      ]
+    },
+    {
+      "caseId": "cx05",
+      "text": "这个日程的地点",
+      "expectedApi": "calendar.event.location",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "calendar.event.location",
+        "calendar.event.get",
+        "calendar.search"
+      ],
+      "unified": [
+        "calendar.event.location",
+        "calendar.event.get",
+        "calendar.search"
+      ]
+    },
+    {
+      "caseId": "cx06",
+      "text": "设置日程ev_42的地点为A301",
+      "expectedApi": "calendar.event.set.location",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "calendar.event.set.location",
+        "calendar.update"
+      ],
+      "unified": [
+        "calendar.event.set.location",
+        "calendar.update",
+        "contacts.update"
+      ]
+    },
+    {
+      "caseId": "cx07",
+      "text": "把这个日程地点改成A301",
+      "expectedApi": "calendar.event.set.location",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "calendar.event.set.location",
+        "calendar.update"
+      ],
+      "unified": [
+        "calendar.event.set.location",
+        "calendar.update",
+        "contacts.update"
+      ]
+    },
+    {
+      "caseId": "cx08",
+      "text": "新建日程标题项目会，明天下午三点开始，说明讨论预算，参会人张三和李四，每周三重复",
+      "expectedApi": "calendar.create",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "calendar.create"
+      ],
+      "unified": [
+        "calendar.create",
+        "contacts.create"
+      ]
+    },
+    {
+      "caseId": "cx09",
+      "text": "修改日程ev_42，说明预算评审，时区Asia/Shanghai",
+      "expectedApi": "calendar.update",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "calendar.event.set.description",
+        "calendar.update"
+      ],
+      "unified": [
+        "calendar.event.set.description",
+        "calendar.update",
+        "contacts.update"
+      ]
+    },
+    {
+      "caseId": "fx01",
+      "text": "查看file_9文件大小",
+      "expectedApi": "files.metadata.size",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "files.metadata.size",
+        "files.search",
+        "files.preview",
+        "files.preview.close",
+        "files.preview.prepare"
+      ],
+      "unified": [
+        "files.metadata.size",
+        "files.search",
+        "files.preview",
+        "files.preview.close",
+        "files.preview.prepare"
+      ]
+    },
+    {
+      "caseId": "fx02",
+      "text": "这份文件多大",
+      "expectedApi": "files.metadata.size",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "files.metadata.size",
+        "files.preview",
+        "files.preview.prepare",
+        "files.search",
+        "files.preview.close"
+      ],
+      "unified": [
+        "files.metadata.size",
+        "files.preview",
+        "files.preview.prepare",
+        "files.search",
+        "files.preview.close"
+      ]
+    },
+    {
+      "caseId": "fx03",
+      "text": "那份文件多大",
+      "expectedApi": "files.metadata.size",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "files.metadata.size",
+        "files.search",
+        "files.preview",
+        "files.preview.close",
+        "files.preview.prepare"
+      ],
+      "unified": [
+        "files.metadata.size",
+        "files.search",
+        "files.preview",
+        "files.preview.close",
+        "files.preview.prepare"
+      ]
+    },
+    {
+      "caseId": "fx04",
+      "text": "这份文件多大",
+      "expectedApi": "files.metadata.size",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "files.metadata.size",
+        "files.search",
+        "files.preview",
+        "files.preview.close",
+        "files.preview.prepare"
+      ],
+      "unified": [
+        "files.metadata.size",
+        "files.search",
+        "files.preview",
+        "files.preview.close",
+        "files.preview.prepare"
+      ]
+    },
+    {
+      "caseId": "fx05",
+      "text": "查看file_9文件的修改时间",
+      "expectedApi": "files.metadata.modified_at",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "files.metadata.modified_at",
+        "files.search",
+        "files.preview",
+        "files.preview.close",
+        "files.preview.prepare"
+      ],
+      "unified": [
+        "files.metadata.modified_at",
+        "files.search",
+        "files.preview",
+        "files.preview.close",
+        "files.preview.prepare"
+      ]
+    },
+    {
+      "caseId": "fx06",
+      "text": "file_9能否预览",
+      "expectedApi": "files.preview.can_preview",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "files.preview.can_preview",
+        "files.search",
+        "files.preview",
+        "files.preview.close",
+        "files.preview.prepare"
+      ],
+      "unified": [
+        "files.preview.can_preview",
+        "files.search",
+        "files.preview",
+        "files.preview.close",
+        "files.preview.prepare"
+      ]
+    },
+    {
+      "caseId": "fx07",
+      "text": "预取file_9的预览资源",
+      "expectedApi": "files.preview.prepare",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "files.preview.prepare"
+      ],
+      "unified": [
+        "files.preview.prepare",
+        "cloud.prefetch.resource",
+        "cloud.prefetch.result",
+        "cloud.prefetch.timestamp",
+        "cloud.prefetch.token"
+      ]
+    },
+    {
+      "caseId": "fx08",
+      "text": "预览file:///D:/reports/budget.pdf，标题预算",
+      "expectedApi": "files.preview",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "files.preview"
+      ],
+      "unified": [
+        "files.preview"
+      ]
+    },
+    {
+      "caseId": "sx01",
+      "text": "日历服务直达链接",
+      "expectedApi": "services.link",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "services.link",
+        "services.open",
+        "services.link.parse"
+      ],
+      "unified": [
+        "services.link",
+        "services.open",
+        "services.link.parse"
+      ]
+    },
+    {
+      "caseId": "sx02",
+      "text": "通讯录服务是否可用",
+      "expectedApi": "services.availability",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "services.availability",
+        "services.open",
+        "services.link.parse"
+      ],
+      "unified": [
+        "services.availability",
+        "services.open",
+        "services.link.parse"
+      ]
+    },
+    {
+      "caseId": "sx03",
+      "text": "这个服务的页面参数",
+      "expectedApi": "services.parameters",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "services.parameters",
+        "services.open",
+        "services.link.parse"
+      ],
+      "unified": [
+        "services.parameters",
+        "services.open",
+        "services.link.parse"
+      ]
+    },
+    {
+      "caseId": "sx04",
+      "text": "那个服务的直达链接",
+      "expectedApi": "services.link",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "services.link",
+        "services.open",
+        "services.link.parse"
+      ],
+      "unified": [
+        "services.link",
+        "services.open",
+        "services.link.parse"
+      ]
+    },
+    {
+      "caseId": "sx05",
+      "text": "解析应用链接https://example.com/app/calendar?id=ev_42",
+      "expectedApi": "services.link.parse",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "services.link.parse",
+        "services.open",
+        "services.target",
+        "services.parameters",
+        "services.availability",
+        "services.link"
+      ],
+      "unified": [
+        "services.link.parse",
+        "services.open",
+        "services.target",
+        "services.parameters",
+        "services.availability",
+        "services.link",
+        "services.link.deferred"
+      ]
+    },
+    {
+      "caseId": "mx01",
+      "text": "读取ma_8正文",
+      "expectedApi": "materials.content",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "materials.content",
+        "materials.search",
+        "materials.get",
+        "cloud.database.calculate",
+        "cloud.prefetch.resource"
+      ],
+      "unified": [
+        "materials.content",
+        "weather.alerts.content",
+        "weather.indices.dailyItems.content"
+      ]
+    },
+    {
+      "caseId": "mx02",
+      "text": "资料ma_8更新时间",
+      "expectedApi": "materials.updated_at",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "materials.updated_at",
+        "materials.search",
+        "materials.get",
+        "cloud.database.calculate",
+        "cloud.prefetch.resource"
+      ],
+      "unified": [
+        "materials.updated_at",
+        "materials.search",
+        "materials.get",
+        "cloud.database.calculate",
+        "cloud.prefetch.resource",
+        "files.metadata.modified_at"
+      ]
+    },
+    {
+      "caseId": "mx03",
+      "text": "这份会议资料的所有者",
+      "expectedApi": "materials.owner",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "materials.owner",
+        "materials.get",
+        "materials.search",
+        "cloud.database.calculate",
+        "cloud.prefetch.resource"
+      ],
+      "unified": [
+        "materials.owner",
+        "materials.get",
+        "materials.search",
+        "cloud.database.calculate",
+        "cloud.prefetch.resource"
+      ]
+    },
+    {
+      "caseId": "mx04",
+      "text": "那份会议资料的正文",
+      "expectedApi": "materials.content",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "materials.content",
+        "materials.search",
+        "materials.get",
+        "cloud.database.calculate",
+        "cloud.prefetch.resource"
+      ],
+      "unified": [
+        "materials.content",
+        "materials.search",
+        "materials.get",
+        "cloud.database.calculate",
+        "cloud.prefetch.resource"
+      ]
+    },
+    {
+      "caseId": "mx05",
+      "text": "取得云文件reports/budget.pdf的下载地址",
+      "expectedApi": "cloud.storage.download_url",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "cloud.storage.download_url",
+        "materials.search",
+        "materials.get",
+        "cloud.database.calculate",
+        "cloud.prefetch.resource"
+      ],
+      "unified": [
+        "cloud.storage.download_url",
+        "files.metadata.uri",
+        "materials.search",
+        "materials.get",
+        "cloud.database.calculate",
+        "cloud.prefetch.resource",
+        "contacts.address"
+      ]
+    },
+    {
+      "caseId": "mx06",
+      "text": "这个云文件的下载地址",
+      "expectedApi": "cloud.storage.download_url",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "cloud.storage.download_url",
+        "materials.search",
+        "materials.get",
+        "cloud.database.calculate",
+        "cloud.prefetch.resource"
+      ],
+      "unified": [
+        "cloud.storage.download_url",
+        "materials.search",
+        "files.metadata.uri",
+        "materials.get",
+        "cloud.database.calculate",
+        "cloud.prefetch.resource",
+        "contacts.address"
+      ]
+    },
+    {
+      "caseId": "mx07",
+      "text": "调用云函数sum，正文是{\"a\":1,\"b\":2}",
+      "expectedApi": "cloud.function.call",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "cloud.function.call"
+      ],
+      "unified": [
+        "cloud.function.call"
+      ]
+    },
+    {
+      "caseId": "mx08",
+      "text": "调用云函数",
+      "expectedApi": "cloud.function.call",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "cloud.function.call"
+      ],
+      "unified": [
+        "cloud.function.call"
+      ]
+    },
+    {
+      "caseId": "mx09",
+      "text": "读取云数据库Meetings表记录mt_2的title字段",
+      "expectedApi": "cloud.database.field",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "cloud.database.field",
+        "cloud.database.calculate",
+        "materials.search",
+        "materials.get",
+        "cloud.prefetch.resource"
+      ],
+      "unified": [
+        "cloud.database.field",
+        "cloud.database.calculate",
+        "materials.search",
+        "materials.get",
+        "cloud.prefetch.resource"
+      ]
+    },
+    {
+      "caseId": "mx10",
+      "text": "读取云数据库Meetings表当前记录的title字段",
+      "expectedApi": "cloud.database.field",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "cloud.database.field",
+        "cloud.database.calculate",
+        "materials.search",
+        "materials.get",
+        "cloud.prefetch.resource"
+      ],
+      "unified": [
+        "cloud.database.field",
+        "cloud.database.calculate",
+        "materials.search",
+        "materials.get",
+        "cloud.prefetch.resource"
+      ]
+    },
+    {
+      "caseId": "mx11",
+      "text": "统计云数据库Orders表amount字段求和",
+      "expectedApi": "cloud.database.calculate",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "cloud.database.calculate",
+        "cloud.database.field",
+        "materials.search",
+        "materials.get",
+        "cloud.prefetch.resource"
+      ],
+      "unified": [
+        "cloud.database.calculate",
+        "cloud.database.field",
+        "materials.search",
+        "materials.get",
+        "cloud.prefetch.resource"
+      ]
+    },
+    {
+      "caseId": "mx12",
+      "text": "上传本地文件D:/reports/budget.pdf到云端reports/budget.pdf",
+      "expectedApi": "cloud.storage.upload",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "cloud.storage.upload"
+      ],
+      "unified": [
+        "cloud.storage.upload"
+      ]
+    },
+    {
+      "caseId": "mx13",
+      "text": "下载云文件reports/budget.pdf到本地D:/reports/budget.pdf",
+      "expectedApi": "cloud.storage.download",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "cloud.storage.download"
+      ],
+      "unified": [
+        "cloud.storage.download"
+      ]
+    },
+    {
+      "caseId": "mx14",
+      "text": "预取云端资源meeting.cover",
+      "expectedApi": "cloud.prefetch.resource",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "cloud.prefetch.resource",
+        "cloud.prefetch.result",
+        "cloud.prefetch.timestamp",
+        "cloud.prefetch.token"
+      ],
+      "unified": [
+        "cloud.prefetch.resource",
+        "cloud.prefetch.result",
+        "cloud.prefetch.timestamp",
+        "cloud.prefetch.token",
+        "files.preview.prepare"
+      ]
+    },
+    {
+      "caseId": "wx49",
+      "text": "查现在湿度",
+      "expectedApi": "weather.current.humidity",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.current.humidity",
+        "weather.hourly.humidity",
+        "weather.query"
+      ],
+      "unified": [
+        "weather.current.humidity",
+        "weather.hourly.humidity",
+        "weather.query"
+      ]
+    },
+    {
+      "caseId": "wx50",
+      "text": "查看上海未来20分钟的分钟降水总览",
+      "expectedApi": "weather.minute.overview",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.minute.overview",
+        "weather.query"
+      ],
+      "unified": [
+        "weather.minute.overview"
+      ]
+    },
+    {
+      "caseId": "wx51",
+      "text": "查看上海未来20分钟的分钟降水总览，不允许降精度",
+      "expectedApi": "weather.minute.overview",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "weather.minute.overview",
+        "weather.query"
+      ],
+      "unified": [
+        "weather.minute.overview"
+      ]
+    },
+    {
+      "caseId": "fx09",
+      "text": "预览这份文件",
+      "expectedApi": "files.preview",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "files.preview"
+      ],
+      "unified": [
+        "files.preview"
+      ]
+    },
+    {
+      "caseId": "mx15",
+      "text": "获取当前会议资料",
+      "expectedApi": "materials.get",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "materials.get",
+        "materials.title",
+        "materials.content",
+        "materials.meeting_id",
+        "materials.updated_at",
+        "materials.owner"
+      ],
+      "unified": [
+        "materials.get",
+        "materials.title",
+        "materials.content",
+        "materials.meeting_id",
+        "materials.updated_at",
+        "materials.owner",
+        "materials.permissions",
+        "materials.download_url",
+        "materials.search",
+        "cloud.storage.download_url",
+        "cloud.database.field",
+        "cloud.database.calculate"
+      ]
+    },
+    {
+      "caseId": "cx10",
+      "text": "读取日程ev_42的参会人姓名",
+      "expectedApi": "calendar.event.attendee.name",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "calendar.event.attendee.name",
+        "calendar.event.attendees",
+        "calendar.search",
+        "calendar.event.get"
+      ],
+      "unified": [
+        "calendar.event.attendee.name",
+        "calendar.event.attendees",
+        "calendar.search",
+        "calendar.event.get",
+        "contacts.name"
+      ]
+    },
+    {
+      "caseId": "cx11",
+      "text": "读取当前日程的参会人邮箱",
+      "expectedApi": "calendar.event.attendee.email",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "calendar.event.attendee.email",
+        "calendar.event.attendees",
+        "calendar.event.get",
+        "calendar.search"
+      ],
+      "unified": [
+        "calendar.event.attendee.email",
+        "calendar.event.attendees",
+        "calendar.event.get",
+        "calendar.search",
+        "contacts.email"
+      ]
+    },
+    {
+      "caseId": "cx12",
+      "text": "读取日程ev_42的参会人回复状态",
+      "expectedApi": "calendar.event.attendee.status",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "calendar.event.attendee.status",
+        "calendar.event.attendees",
+        "calendar.search",
+        "calendar.event.get"
+      ],
+      "unified": [
+        "calendar.event.attendee.status",
+        "calendar.event.attendees",
+        "calendar.search",
+        "calendar.event.get"
+      ]
+    },
+    {
+      "caseId": "cx13",
+      "text": "读取日程ev_42的重复频率",
+      "expectedApi": "calendar.event.recurrenceRule.recurrenceFrequency",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "calendar.event.recurrenceRule.recurrenceFrequency",
+        "calendar.search",
+        "calendar.event.get"
+      ],
+      "unified": [
+        "calendar.event.recurrenceRule.recurrenceFrequency",
+        "calendar.search",
+        "calendar.event.get"
+      ]
+    },
+    {
+      "caseId": "cx14",
+      "text": "读取日程ev_42的重复星期编号",
+      "expectedApi": "calendar.event.recurrenceRule.daysOfWeek",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "calendar.event.recurrenceRule.daysOfWeek",
+        "calendar.search",
+        "calendar.event.get"
+      ],
+      "unified": [
+        "calendar.event.recurrenceRule.daysOfWeek",
+        "calendar.search",
+        "calendar.event.get"
+      ]
+    },
+    {
+      "caseId": "cx15",
+      "text": "读取日程ev_42的重复间隔",
+      "expectedApi": "calendar.event.recurrenceRule.interval",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "calendar.event.recurrenceRule.interval",
+        "calendar.search",
+        "calendar.event.get"
+      ],
+      "unified": [
+        "calendar.event.recurrenceRule.interval",
+        "calendar.search",
+        "calendar.event.get"
+      ]
+    },
+    {
+      "caseId": "px13",
+      "text": "读取联系人ct_7的网站地址",
+      "expectedApi": "contacts.websites.website",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "contacts.websites.website",
+        "contacts.search",
+        "contacts.address",
+        "contacts.websites",
+        "contacts.get"
+      ],
+      "unified": [
+        "contacts.websites.website",
+        "contacts.search",
+        "contacts.address",
+        "contacts.websites",
+        "contacts.get",
+        "files.metadata.uri"
+      ]
+    },
+    {
+      "caseId": "px14",
+      "text": "读取联系人张三的关系名称",
+      "expectedApi": "contacts.relations.relationName",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "contacts.relations.relationName",
+        "contacts.search",
+        "contacts.relations",
+        "contacts.get"
+      ],
+      "unified": [
+        "contacts.relations.relationName",
+        "contacts.search",
+        "contacts.relations",
+        "contacts.get",
+        "files.metadata.name"
+      ]
+    },
+    {
+      "caseId": "px15",
+      "text": "读取当前联系人的群组名称",
+      "expectedApi": "contacts.groups.title",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "contacts.groups.title",
+        "contacts.groups",
+        "contacts.get",
+        "contacts.search"
+      ],
+      "unified": [
+        "contacts.groups.title",
+        "contacts.groups",
+        "contacts.get",
+        "contacts.search",
+        "files.metadata.name"
+      ]
+    },
+    {
+      "caseId": "px16",
+      "text": "读取联系人ct_7的即时消息类型编码",
+      "expectedApi": "contacts.imAddresses.labelId",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "contacts.imAddresses.labelId",
+        "contacts.search",
+        "contacts.get"
+      ],
+      "unified": [
+        "contacts.imAddresses.labelId",
+        "contacts.search",
+        "contacts.get",
+        "calendar.event.type",
+        "files.metadata.mime_type"
+      ]
+    },
+    {
+      "caseId": "px17",
+      "text": "读取那位联系人的SIP地址值",
+      "expectedApi": "contacts.sipAddresses.sipAddress",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "contacts.sipAddresses.sipAddress",
+        "contacts.sip",
+        "contacts.search",
+        "contacts.address",
+        "contacts.get"
+      ],
+      "unified": [
+        "contacts.sipAddresses.sipAddress",
+        "contacts.sip",
+        "contacts.search",
+        "contacts.address",
+        "contacts.get",
+        "files.metadata.uri"
+      ]
+    },
+    {
+      "caseId": "px18",
+      "text": "读取当前联系人的备注内容",
+      "expectedApi": "contacts.note.noteContent",
+      "stagedHit": true,
+      "unifiedHit": true,
+      "staged": [
+        "contacts.note.noteContent",
+        "contacts.note",
+        "contacts.search",
+        "contacts.get"
+      ],
+      "unified": [
+        "contacts.note.noteContent",
+        "contacts.note",
+        "contacts.search",
+        "contacts.get",
+        "calendar.event.description",
+        "materials.content"
+      ]
+    }
+  ]
+}

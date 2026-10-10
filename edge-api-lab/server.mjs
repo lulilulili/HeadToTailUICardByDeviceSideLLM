@@ -1,0 +1,34 @@
+import {createServer} from 'node:http';
+import {readFile,mkdir,writeFile} from 'node:fs/promises';
+import {fileURLToPath} from 'node:url';
+import {join,dirname} from 'node:path';
+import {RuntimeStore} from './src/runtime.mjs';
+import {createApplication} from './src/application.mjs';
+import {createProviders} from './src/providers.mjs';
+import {runPipeline} from './src/pipeline.mjs';
+import {domains,capabilities} from './src/registry.mjs';
+import {experimentDefaults} from './src/fixtures.mjs';
+import {loadCases} from './src/corpus.mjs';
+
+const root=dirname(fileURLToPath(import.meta.url));
+const ollamaUrl=(process.env.OLLAMA_URL??'http://127.0.0.1:11434').replace(/\/$/,'');
+const port=Number(process.env.PORT??3210);
+if(!Number.isInteger(port)||port<1024||port>65535)throw new Error('PORT 必须为 1024 至 65535 的整数');
+const address=new URL(ollamaUrl);
+if(!['localhost','127.0.0.1','[::1]'].includes(address.hostname)||address.protocol!=='http:')throw new Error('本工程仅接入本机 HTTP Ollama 服务');
+const store=await new RuntimeStore(join(root,'data','runtime')).init();
+const docs=JSON.parse(await readFile(join(root,'docs','guide.json'),'utf8'));
+const cases=await loadCases(root);
+const baseContext={...experimentDefaults,now:'2026-10-10T08:00:00+08:00',timezone:'Asia/Shanghai',location:{latitude:31.2304,longitude:121.4737,label:'上海（固定实验位置）',precision:'coordinate',source:'fixture'}};
+const providers=createProviders({ollamaUrl,jevUrl:process.env.JEV_URL});
+const app=createApplication({store,providers,runPipeline,catalog:{version:'object-fields-v2',domains,capabilities},docs,cases,baseContext,contextDefaults:experimentDefaults,publicDirectory:join(root,'public'),groundingReportPath:join(root,'docs','grounding-replay.json'),ollamaUrl});
+const server=createServer(app);
+server.requestTimeout=600000;
+server.on('error',error=>{console.error(`启动失败：${error.message}`);process.exitCode=1;});
+server.listen(port,'127.0.0.1',async()=>{
+ await mkdir(join(root,'data','runtime'),{recursive:true});
+ await writeFile(join(root,'data','runtime','server.pid'),String(process.pid));
+ console.log(`端侧 API 实验室已启动 http://127.0.0.1:${port}`);
+ console.log(`Ollama: ${ollamaUrl} | 业务接口: MOCK | Jev: ${process.env.JEV_URL?'已配置桥接':'预留'}`);
+});
+for(const signal of ['SIGINT','SIGTERM'])process.on(signal,()=>{server.close(()=>process.exit(0));setTimeout(()=>process.exit(0),3000).unref();});
