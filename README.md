@@ -2,6 +2,8 @@
 
 端侧小模型驱动的语义 API 调用验证工程，以及智能生成业务的研究与规划材料。
 
+项目理念、完整流程、参数溯源设计，以及第三方能力与主动／预测式服务的判断和建议，见 [项目 Wiki](WIKI.md)。Wiki 明确区分当前实现与未来设想。
+
 当前及未来一段时间均处于可行性验证阶段。第一阶段只验证一个领域、一个 API 的单服务请求：中文提示词 → 领域 / API 选择 → 显式参数提取 → 确定性原文核对 → 缺失系统参数读取 → 契约检查 → 伪 API 回执。组合服务留待第二阶段；Jev 预留逐次替换模型调用的 HTTP 桥接接口。
 
 ## 当前阶段（2026-10-11）
@@ -50,6 +52,7 @@ ollama pull qwen2.5:7b
 
 | 目录 / 文件 | 内容 |
 |---|---|
+| [项目 Wiki](WIKI.md) | 项目理念、处理流程、参数溯源、扩展方向与主动／预测式服务建议 |
 | [edge-api-lab/README.md](edge-api-lab/README.md) | 工程使用、契约、参数补全、评测和 Jev 说明 |
 | [edge-api-lab/src/](edge-api-lab/src/) / [public/](edge-api-lab/public/) | 后端、API 目录、提示词、规则处理、评分和网页 |
 | [edge-api-lab/tests/](edge-api-lab/tests/) / [scripts/](edge-api-lab/scripts/) | 自动检查、批量实测、证据核验和规则回放 |
