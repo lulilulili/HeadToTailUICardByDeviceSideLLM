@@ -269,8 +269,9 @@ function locationPlan(capability, args, resolvedLocation, context) {
   if (coordinateValid(args.coordinates)) { plan.effective = { ...args.coordinates, source: 'user' }; plan.precision = 'coordinates'; return plan; }
   if (resolvedLocation && typeof resolvedLocation === 'object') {
     plan.effective = structuredClone(resolvedLocation);
-    plan.precision = resolvedLocation.precision ?? (resolvedLocation.accuracyMeters > 1000 ? 'coarse' : 'coordinates');
-    if (['coarse', 'city', 'district', 'region'].includes(plan.precision) || resolvedLocation.accuracyMeters > 1000) plan.fallback = { applied: true, reason: `${resolvedLocation.source === 'fixture' ? '固定实验位置仅表示城市/区域代表点' : '设备仅提供粗位置'}${resolvedLocation.accuracyMeters ? `，误差约 ${resolvedLocation.accuracyMeters} 米` : ''}，保留位置精度限制` };
+    const accuracyMeters = resolvedLocation.accuracyMeters ?? resolvedLocation.accuracy;
+    plan.precision = accuracyMeters > 1000 ? 'coarse' : resolvedLocation.precision ?? 'coordinates';
+    if (['coarse', 'city', 'district', 'region'].includes(plan.precision) || accuracyMeters > 1000) plan.fallback = { applied: true, reason: `${resolvedLocation.source === 'fixture' ? '固定实验位置仅表示城市/区域代表点' : '设备仅提供粗位置'}${accuracyMeters ? `，误差约 ${accuracyMeters} 米` : ''}，保留位置精度限制` };
     return plan;
   }
   if (typeof resolvedLocation !== 'string') return plan;
@@ -283,10 +284,10 @@ function locationPlan(capability, args, resolvedLocation, context) {
   }
   const fixtures = context.geocodes ?? {};
   const entry = fixtures[resolvedLocation] ?? fixtures[resolvedLocation.replace(/市$/, '')];
-  if (coordinateValid(entry) && entry.source === 'fixture') {
+  if (coordinateValid(entry) && ['fixture', 'harmony'].includes(entry.source)) {
     plan.effective = structuredClone(entry); plan.precision = entry.precision ?? 'city';
-    plan.geocoding = { source: 'fixture', query: resolvedLocation, simulated: true };
-    plan.fallback = { applied: plan.precision !== 'coordinates', reason: '固定实验地理编码返回区域代表点，保留原始地点约束' };
+    plan.geocoding = { source: entry.source, query: resolvedLocation, simulated: entry.source === 'fixture' };
+    plan.fallback = { applied: plan.precision !== 'coordinates', reason: entry.source === 'fixture' ? '固定实验地理编码返回区域代表点，保留原始地点约束' : '系统地理编码返回地点代表点，保留位置精度' };
   } else if (capability.support?.requiresGeocoding) plan.fallback.reason = `地点/区域“${resolvedLocation}”缺少可核验地理编码，不能猜坐标`;
   else { plan.effective = { name: resolvedLocation, kind: 'named_place', coordinatesResolved: false }; plan.precision = /地区|区域|华东|华南|西北|附近/.test(resolvedLocation) ? 'region' : 'named_place'; plan.geocoding = { source: null, pending: true }; }
   return plan;
@@ -337,13 +338,32 @@ export function resolveArguments(capability, args = {}, providedContext = {}) {
       value = types[extension] ?? ''; source = value ? 'context' : 'default';
       result.resolution.context.push({ field: path, source, reason: value ? `根据用户文件 URI 后缀 .${extension} 推导 MIME` : '文件 URI 没有可识别后缀；保留空 MIME 供 SDK 根据 URI 判断', inferredFrom: 'file_id' });
     }
+    if (value === undefined && ['system_default_network', 'system_audio_stream', 'system_media_session'].includes(field.resolver)) {
+      const entry = context.systemValues?.[name];
+      if (entry && ['harmony', 'fixture'].includes(entry.source) && validateValue(field, entry.value).valid) {
+        value = structuredClone(entry.value); source = 'system_capability';
+        result.resolution.context.push({ field: path, source: entry.source, reason: '用户未提供该参数，通过系统能力获取本机当前值' });
+      } else {
+        result.resolution.context.push({ field: path, source: 'pending_system', resolver: field.resolver, reason: '系统当前对象读取尚待宿主提供；未填入模型猜测值' });
+        if (field.required) { missing(path); environmentFailed = true; result.issues.push(`${path}: 系统当前参数尚不可用，需宿主读取或用户明确提供`); }
+      }
+    }
+    if (value === undefined && field.resolver === 'system_coordinates') {
+      if (coordinateValid(context.location) && ['browser', 'fixture', 'harmony'].includes(context.location.source)) {
+        value = { latitude: context.location.latitude, longitude: context.location.longitude }; source = 'system_location';
+        result.resolution.context.push({ field: path, source: context.location.source, reason: '未提供坐标，使用手机当前位置（PC 实验阶段为模拟位置，真实手机由内部系统桥提供）' });
+      } else { missing(path); environmentFailed = true; result.issues.push('未提供坐标且手机当前位置不可用；PC 实验阶段请提供模拟手机位置'); return; }
+    }
+    if (field.resolver === 'system_coordinates' && value !== undefined && !coordinateValid(value)) {
+      missing(path); result.issues.push(`${path}: 显式坐标不完整或越界，不能用当前位置替换`); return;
+    }
     if (field.resolver === 'system_location' && (value === undefined || /^(这里|当地|附近|本地|当前位置|此地|current|current_location)$/.test(value))) {
       const location = context.location;
-      if (location && ['browser', 'fixture'].includes(location.source) && Number.isFinite(location.latitude) && Math.abs(location.latitude) <= 90 && Number.isFinite(location.longitude) && Math.abs(location.longitude) <= 180) {
+      if (location && ['browser', 'fixture', 'harmony'].includes(location.source) && Number.isFinite(location.latitude) && Math.abs(location.latitude) <= 90 && Number.isFinite(location.longitude) && Math.abs(location.longitude) <= 180) {
         value = structuredClone(location); source = 'system_location';
       } else {
         delete target[name]; missing(path); environmentFailed = true;
-        result.issues.push(`当前位置获取失败：${context.locationError ?? '未提供浏览器授权位置或固定位置夹具'}。请提供地点或授权定位。`);
+        result.issues.push(`手机当前位置不可用：${context.locationError ?? '未提供模拟手机位置 fixture 或内部手机定位结果'}。PC 实验阶段请提供模拟手机位置或明确地点，不读取电脑位置。`);
         return;
       }
     }

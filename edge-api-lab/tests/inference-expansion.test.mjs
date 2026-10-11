@@ -292,7 +292,7 @@ test('unified prompts teach sparse explicit extraction and only present relevant
   assert.ok(weather.includes('minute仅降水'));
   assert.ok(weather.includes('二选一'));
   assert.ok(!weather.includes('phone号码'));
-  assert.ok(weather.length < 1200, `weather chars=${weather.length}`);
+  assert.ok(weather.length < 2000, `weather chars=${weather.length}`);
   const calendar = prompts.buildUnifiedPrompt('这个日程的地点', { objects: { event_id: { value: 'private_event_id', trusted: true, source: 'user_selection' } } }).messages[0].content;
   assert.ok(calendar.includes('指代不是ID'));
   assert.ok(calendar.includes('不输出ID'));
@@ -364,8 +364,8 @@ test('new leaf scenarios prefer the explicit field while preserving the compact 
       assert.equal(selected[0].id, item.expected.api, `${id} ${mode} must prefer the explicit leaf`);
     }
     const prompt = prompts.buildUnifiedPrompt(item.text, item.context ?? {});
-    assert.equal(prompt.promptMeta.version, 'sparse-v6');
-    assert.ok(prompt.promptMeta.systemChars < 1200, `${id} chars=${prompt.promptMeta.systemChars}`);
+    assert.equal(prompt.promptMeta.version, 'explicit-v7');
+    assert.ok(prompt.promptMeta.systemChars < 2000, `${id} chars=${prompt.promptMeta.systemChars}`);
   }
 });
 

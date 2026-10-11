@@ -117,10 +117,10 @@ test('system experiment controls never create a trusted object without explicit 
   const coarse=buildContext({locationMode:'coarse'}).location;
   assert.equal(coarse.source,'fixture');assert.equal(coarse.precision,'city');assert.equal(coarse.accuracyMeters,20000);
 });
-test('browser accuracy is sent in resolver units so coarse device location is not overstated', () => {
+test('legacy browser inputs cannot become the simulated phone current position', () => {
   const context=buildContext({now:'2026-10-10T01:30:00Z',locationMode:'browser',browserLocation:{source:'browser',latitude:31,longitude:121,accuracy:12000,capturedAt:'2026-10-10T01:29:30Z'}});
-  assert.equal(context.location.accuracyMeters,12000);
-  assert.equal(context.location.precision,'coarse');
+  assert.equal(context.location,null);
+  assert.match(context.locationError,/模拟手机位置|不读取电脑位置/);
 });
 test('evaluation exposes resolution scores without assigning failure to unscored historical runs', () => {
   assert.match(renderCaseScores({resolution:false,plan:false}),/× 补全精度/);

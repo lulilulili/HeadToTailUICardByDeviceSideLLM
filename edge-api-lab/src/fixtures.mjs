@@ -7,3 +7,5 @@ export const geocodes={
  南京:city('南京市（地理编码夹具）',32.0603,118.7969),武汉:city('武汉市（地理编码夹具）',30.5928,114.3055)
 };
 export const experimentDefaults={geocodes,weatherAvailability:{current:true,hourly:true,daily:true,minute:true,alerts:true,indices:true,tides:true,city:true},weatherAvailabilitySource:'fixture',weatherRegion:'CN'};
+/** Evaluation only. Never installed as defaults in the interactive workbench. */
+export const evaluationSystemDefaults={systemValues:{net_id:{value:23,source:'fixture'},stream_type:{value:'MUSIC',source:'fixture'}}};

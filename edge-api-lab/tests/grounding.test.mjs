@@ -136,7 +136,7 @@ test('pipeline keeps the one model response, raw extracted slots and determinist
  let calls=0;
  const run=await runPipeline({text:'广州当前的气压',mode:'unified',model:'fixture',context},{providers:{ollama:{async invoke(request){calls++;return {value:{domain:'weather',api:'weather.current.pressure',arguments:{}},trace:{stage:request.stage,raw:'{"domain":"weather","api":"weather.current.pressure","arguments":{}}',wallMs:3}};}}}});
  assert.equal(calls,1);assert.equal(run.status,'ready_mock');assert.deepEqual(run.extractedArguments,{});assert.deepEqual(run.modelArguments,{});
- assert.equal(run.groundedArguments.location,'广州');assert.equal(run.ruleVersion,'deterministic-grounding-v1');assert.ok(run.deterministicMs>=0);assert.equal(run.traces.length,1);
+ assert.equal(run.groundedArguments.location,'广州');assert.equal(run.ruleVersion,'deterministic-grounding-v2');assert.ok(run.deterministicMs>=0);assert.equal(run.traces.length,1);
 });
 test('an opaque ID inside explicit JSON remains grounded without requiring a domain-specific prefix',()=>{
  const r=plan('读取联系人电话；参数{"contact_id":"customer-x9"}','contacts.phone',{});

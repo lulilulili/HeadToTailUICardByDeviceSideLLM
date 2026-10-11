@@ -7,7 +7,7 @@ import {createApplication} from './src/application.mjs';
 import {createProviders} from './src/providers.mjs';
 import {runPipeline} from './src/pipeline.mjs';
 import {domains,capabilities} from './src/registry.mjs';
-import {experimentDefaults} from './src/fixtures.mjs';
+import {experimentDefaults,evaluationSystemDefaults} from './src/fixtures.mjs';
 import {loadCases} from './src/corpus.mjs';
 
 const root=dirname(fileURLToPath(import.meta.url));
@@ -17,11 +17,12 @@ if(!Number.isInteger(port)||port<1024||port>65535)throw new Error('PORT 必须�
 const address=new URL(ollamaUrl);
 if(!['localhost','127.0.0.1','[::1]'].includes(address.hostname)||address.protocol!=='http:')throw new Error('本工程仅接入本机 HTTP Ollama 服务');
 const store=await new RuntimeStore(join(root,'data','runtime')).init();
-const docs=JSON.parse(await readFile(join(root,'docs','guide.json'),'utf8'));
+const [currentGuide,historicalGuide]=await Promise.all(['current-feasibility.json','guide.json'].map(async file=>JSON.parse(await readFile(join(root,'docs',file),'utf8'))));
+const docs=[currentGuide,...historicalGuide.filter(section=>section.id!==currentGuide.id).map(section=>({...section,html:`<p>历史说明快照（2026-10-10）；当前范围与配置以“当前可行性验证”页签为准。</p>${section.html}`}))];
 const cases=await loadCases(root);
-const baseContext={...experimentDefaults,now:'2026-10-10T08:00:00+08:00',timezone:'Asia/Shanghai',location:{latitude:31.2304,longitude:121.4737,label:'上海（固定实验位置）',precision:'coordinate',source:'fixture'}};
+const baseContext={...experimentDefaults,...evaluationSystemDefaults,now:'2026-10-10T08:00:00+08:00',timezone:'Asia/Shanghai',location:{latitude:31.2304,longitude:121.4737,label:'模拟手机当前位置（上海固定坐标）',precision:'coordinate',source:'fixture'}};
 const providers=createProviders({ollamaUrl,jevUrl:process.env.JEV_URL});
-const app=createApplication({store,providers,runPipeline,catalog:{version:'object-fields-v2',domains,capabilities},docs,cases,baseContext,contextDefaults:experimentDefaults,publicDirectory:join(root,'public'),groundingReportPath:join(root,'docs','grounding-replay.json'),ollamaUrl});
+const app=createApplication({store,providers,runPipeline,catalog:{version:'single-service-v3',domains,capabilities},docs,cases,baseContext,contextDefaults:{...experimentDefaults,location:baseContext.location},publicDirectory:join(root,'public'),groundingReportPath:join(root,'docs','grounding-replay-v2-final3.json'),singleService100ReportPath:join(root,'docs','single-service-100-v1-results.json'),singleService100StatePath:join(root,'data/runtime','single-service-100-suite.json'),singleService100EvidenceDirectory:join(root,'evidence','single-service-100-v1'),ollamaUrl});
 const server=createServer(app);
 server.requestTimeout=600000;
 server.on('error',error=>{console.error(`启动失败：${error.message}`);process.exitCode=1;});

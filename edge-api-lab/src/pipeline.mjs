@@ -1,11 +1,12 @@
 import { getCapability, domains } from './registry.mjs';
 import { buildDomainPrompt, buildIntentPrompt, buildArgumentsPrompt, buildUnifiedPrompt } from './prompts.mjs';
-import {finalizePlan,GROUNDING_VERSION} from './grounding.mjs';
+import {finalizePlan,groundArguments,GROUNDING_VERSION} from './grounding.mjs';
+import {prepareSystemContext} from './system-context.mjs';
 import { validateValue } from './providers.mjs';
 
 const omitProtocolNulls = value => Array.isArray(value) ? value.map(omitProtocolNulls) : value && typeof value === 'object' ? Object.fromEntries(Object.entries(value).filter(([, child]) => child !== null).map(([key, child]) => [key, omitProtocolNulls(child)])) : value;
 
-export async function runPipeline({ text, mode = 'staged', model, stages = {}, context = {}, options = {} }, { providers, signal, onTrace } = {}) {
+export async function runPipeline({ text, mode = 'staged', model, stages = {}, context = {}, options = {} }, { providers, systemContextProvider, signal, onTrace } = {}) {
   const start = performance.now();
   const traces = [];
   const result = { domain: null, api: null, modelArguments: {}, extractedArguments: {}, groundedArguments: null, grounding: null, ruleVersion: GROUNDING_VERSION, resolved: null, status: 'error', traces, totalMs: 0, text, mode, model, context, options: structuredClone(options), stages: structuredClone(stages), candidates: {}, mock: null };
@@ -60,7 +61,12 @@ export async function runPipeline({ text, mode = 'staged', model, stages = {}, c
     } else {
       const capability = getCapability(result.api);
       if (!capability || capability.domain !== result.domain || !domains.some(domain => domain.id === result.domain)) throw new Error('领域与 API 不一致');
-      Object.assign(result,finalizePlan({text,domain:result.domain,api:result.api,extractedArguments:result.extractedArguments,context}));
+      // Recover explicit omissions first, then ask the system only for genuinely absent state.
+      const grounded = groundArguments(capability, text, result.extractedArguments, context);
+      const prepared = await prepareSystemContext(capability, grounded.groundedArguments, context, systemContextProvider, signal, grounded.grounding.blockers.map(item => item.field));
+      result.context = prepared.context;
+      result.systemRequests = prepared.requests;
+      Object.assign(result,finalizePlan({text,domain:result.domain,api:result.api,extractedArguments:result.extractedArguments,context:prepared.context}));
     }
   } catch (error) {
     result.error = error.message;

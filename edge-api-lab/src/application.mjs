@@ -8,8 +8,15 @@ import {scoreCase,summarize} from './evaluation.mjs';
 import {buildDomainReport} from './domain-report.mjs';
 import {GROUNDING_VERSION} from './grounding.mjs';
 import {scoreExecutionSemantics} from './semantic-evaluation.mjs';
+import {getCapability,validateArguments} from './registry.mjs';
 
 const recommended=['qwen2.5:0.5b','qwen2.5:1.5b','qwen2.5:3b','qwen2.5:7b'];
+// Public HTTP inputs may supply experimental fixtures, never native-host provenance.
+// Use the same field definitions as the resolver instead of a second type/enum list.
+const fixtureSystemFields=new Map([
+ ['net_id','connectivity.network.capabilities'],
+ ['stream_type','media.volume.level']
+]);
 function bad(message,status=400) { const error=new Error(message);error.statusCode=status;return error; }
 function json(res,value,status=200) {res.writeHead(status,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store'});res.end(JSON.stringify(value));}
 async function body(req) {
@@ -26,11 +33,20 @@ function csv(rows) {
  const cell=value=>{let text=String(typeof value==='object'?JSON.stringify(value):value??'');if(/^[=+@\-\t\r]/.test(text))text="'"+text;return '"'+text.replaceAll('"','""')+'"';};
  return '\ufeff'+[keys.map(cell).join(','),...rows.map(row=>keys.map(key=>cell(row[key])).join(','))].join('\r\n');
 }
-export function createApplication({store,runPipeline,providers,catalog,docs,cases,baseContext,contextDefaults={},publicDirectory,groundingReportPath,ollamaUrl='http://127.0.0.1:11434',fetchImpl=fetch}) {
+export function createApplication({store,runPipeline,providers,systemContextProvider,catalog,docs,cases,baseContext,contextDefaults={},publicDirectory,groundingReportPath,singleService100ReportPath,singleService100StatePath,singleService100EvidenceDirectory,ollamaUrl='http://127.0.0.1:11434',fetchImpl=fetch}) {
  const inferenceQueue=new SerialQueue(), controllers=new Map(),liveJobs=new Map();
  let healthCache=null,healthAt=0;
+ async function benchmarkState(){
+  if(!singleService100StatePath)return null;
+  try{const state=JSON.parse(await readFile(singleService100StatePath,'utf8'));const updated=Date.parse(state.updatedAt),age=Date.now()-updated;
+   if(state.status!=='running'||!Number.isFinite(updated)||age<0||age>300000)return null;
+   if(!Number.isInteger(state.runner?.pid)||state.runner.pid<1)return null;
+   try{process.kill(state.runner.pid,0);}catch{return null;}
+   return {id:state.id,status:state.status,progress:state.progress,active:state.active};
+  }catch(error){if(error.code==='ENOENT')return null;throw error;}
+ }
  async function health(force=false) {
-  if(!force&&healthCache&&Date.now()-healthAt<5000)return {...healthCache,lab:{id:'edge-api-lab',catalogVersion:catalog.version},queueDepth:inferenceQueue.pending};
+  if(!force&&healthCache&&Date.now()-healthAt<5000)return {...healthCache,lab:{id:'edge-api-lab',catalogVersion:catalog.version,exclusiveBenchmark:await benchmarkState()},queueDepth:inferenceQueue.pending,activeJobs:controllers.size};
   try {
    const [tags,version]=await Promise.all([fetchImpl(`${ollamaUrl}/api/tags`,{signal:AbortSignal.timeout(4000)}),fetchImpl(`${ollamaUrl}/api/version`,{signal:AbortSignal.timeout(4000)})]);
    if(!tags.ok)throw new Error('Ollama 模型列表读取失败');
@@ -38,7 +54,7 @@ export function createApplication({store,runPipeline,providers,catalog,docs,case
    const models=(list.models??[]).map(item=>{const count=parameterB(item.details?.parameter_size);return {name:item.name,digest:item.digest,parameterSize:item.details?.parameter_size,parameterB:count,quantization:item.details?.quantization_level,size:item.size,eligible:count!==null&&count<10,recommended:recommended.includes(item.name)};});
    healthCache={ollama:{ok:true,url:ollamaUrl,version:info.version},models,recommendedModels:recommended.filter(name=>models.some(m=>m.name===name&&m.eligible)),jev:{configured:Boolean(process.env.JEV_URL)}};
   }catch(error){healthCache={ollama:{ok:false,url:ollamaUrl,error:error.message},models:[],recommendedModels:[],jev:{configured:Boolean(process.env.JEV_URL)}};}
-  healthAt=Date.now();return {...healthCache,lab:{id:'edge-api-lab',catalogVersion:catalog.version},queueDepth:inferenceQueue.pending};
+  healthAt=Date.now();return {...healthCache,lab:{id:'edge-api-lab',catalogVersion:catalog.version,exclusiveBenchmark:await benchmarkState()},queueDepth:inferenceQueue.pending,activeJobs:controllers.size};
  }
  async function validateInput(input) {
   if(!input||typeof input!=='object'||Array.isArray(input))throw bad('请求必须是对象');
@@ -49,14 +65,23 @@ export function createApplication({store,runPipeline,providers,catalog,docs,case
   if(options.num_predict!==undefined&&(!Number.isInteger(options.num_predict)||options.num_predict<16||options.num_predict>1024))throw bad('输出上限 num_predict 必须为 16 至 1024');
   if(options.temperature!==undefined&&options.temperature!==0)throw bad('本实验固定 temperature=0，避免隐式改变对照条件');
   const state=await health();if(!state.ollama.ok)throw bad(state.ollama.error,503);
+  if(state.lab.exclusiveBenchmark)throw bad('千题单服务对照正在独占串行推理；请在“千题单服务实测”查看进度，完成后再发起其他调用。',409);
   const requested=[input.model,...Object.values(input.stages??{}).filter(stage=>(stage.provider??'ollama')==='ollama').map(stage=>stage.model).filter(Boolean)];
   for(const name of requested) {const model=state.models.find(m=>m.name===name);if(!model)throw bad(`模型未安装：${name??'未选择'}`);if(!model.eligible)throw bad(`仅允许参数量小于 10B 且规格可识别的本地模型：${name}`);}
   for(const stage of Object.values(input.stages??{}))if(!['ollama','jev'].includes(stage.provider??'ollama'))throw bad('未知模型提供方');
   if(input.context?.now&&!Number.isFinite(Date.parse(input.context.now)))throw bad('系统时间无效');
   if(input.context?.timezone)try{new Intl.DateTimeFormat('zh',{timeZone:input.context.timezone});}catch{throw bad('时区无效');}
-  const location=input.context?.location;if(location&&(!Number.isFinite(location.latitude)||Math.abs(location.latitude)>90||!Number.isFinite(location.longitude)||Math.abs(location.longitude)>180||!['browser','fixture'].includes(location.source)))throw bad('位置必须为有效经纬度，且标注 browser 或 fixture 来源');
+  const location=input.context?.location;if(location!==undefined&&location!==null&&(typeof location!=='object'||Array.isArray(location)||!Number.isFinite(location.latitude)||Math.abs(location.latitude)>90||!Number.isFinite(location.longitude)||Math.abs(location.longitude)>180||location.source!=='fixture'))throw bad('HTTP 位置仅允许有效经纬度的模拟手机位置 fixture；不读取电脑浏览器位置，harmony 只能由内部手机系统桥提供');
   if(location?.accuracyMeters!==undefined&&(!Number.isFinite(location.accuracyMeters)||location.accuracyMeters<0))throw bad('位置精度必须为非负米数');
   const context=input.context??{};
+  if(context.systemValues!==undefined){
+   if(!context.systemValues||typeof context.systemValues!=='object'||Array.isArray(context.systemValues))throw bad('系统参数夹具必须为对象表');
+   for(const [key,entry]of Object.entries(context.systemValues)){
+    if(!fixtureSystemFields.has(key)||!entry||typeof entry!=='object'||Array.isArray(entry)||entry.source!=='fixture')throw bad('HTTP 系统参数仅允许已知字段的 fixture 来源；harmony 只能由内部系统桥提供');
+    const validation=validateArguments(getCapability(fixtureSystemFields.get(key)),{[key]:entry.value});
+    if(!validation.valid)throw bad(`系统参数夹具 ${key} 类型无效：${validation.issues.join('；')}`);
+   }
+  }
   if(context.weatherRegion!==undefined&&!['CN','outside_CN'].includes(context.weatherRegion))throw bad('天气区划须为 CN 或 outside_CN 实验策略');
   const objectKeys=['event_id','contact_id','file_id','material_id','service','url','calendar_id','cloud_path','record_id','zone','resource'];
   if(context.objects!==undefined){
@@ -76,13 +101,18 @@ export function createApplication({store,runPipeline,providers,catalog,docs,case
  }
  async function execute(input,signal,{save=true,warmup=false}={}) {
   const requestStart=performance.now(),traces=[];
-  const context={...structuredClone(contextDefaults),now:new Date().toISOString(),timezone:Intl.DateTimeFormat().resolvedOptions().timeZone,...input.context};
+  // A connected native host owns environmental time; PC defaults must not suppress its reads.
+  const clockContext=systemContextProvider?{now:null,timezone:null}:{now:new Date().toISOString(),timezone:Intl.DateTimeFormat().resolvedOptions().timeZone};
+  const context={...structuredClone(contextDefaults),...clockContext,...input.context};
   if(input.context?.weatherAvailability!==undefined)context.weatherAvailabilitySource='provided_experiment';
   let result,queueWaitMs=0;
   try {
    result=await inferenceQueue.run(async()=>{
+    // Recheck at actual invocation, not only HTTP validation: an accepted request
+    // may have waited in the queue while the exclusive CLI runner acquired it.
+    if(await benchmarkState())throw bad('千题单服务对照正在独占串行推理；该调用未发给模型。',409);
     queueWaitMs=performance.now()-requestStart;
-    try {return {...await runPipeline({...input,context},{providers,signal,onTrace:trace=>traces.push(trace)}),queueWaitMs};}
+    try {return {...await runPipeline({...input,context},{providers,systemContextProvider,signal,onTrace:trace=>traces.push(trace)}),queueWaitMs};}
     catch(error) {
      if(signal?.aborted)throw error;
      if(error.trace&&!traces.includes(error.trace))traces.push(error.trace);
@@ -138,6 +168,21 @@ export function createApplication({store,runPipeline,providers,catalog,docs,case
    if(path==='/api/health'&&req.method==='GET')return json(res,await health(true));
    if(path==='/api/catalog')return json(res,catalog);
    if(path==='/api/docs')return json(res,{sections:docs});
+   if(path==='/api/single-service-100-report'&&req.method==='GET'){
+    if(!singleService100ReportPath)return json(res,{status:'not_started',progress:{done:0,total:3000},summary:[],cells:[],examples:[]});
+    try{return json(res,JSON.parse(await readFile(singleService100ReportPath,'utf8')));}catch(error){if(error.code!=='ENOENT')throw error;return json(res,{status:'not_started',progress:{done:0,total:3000},summary:[],cells:[],examples:[]});}
+   }
+   if(path==='/api/single-service-100-results'&&req.method==='GET'){
+    if(!singleService100EvidenceDirectory)return json(res,{rows:[]});
+    let index;try{index=JSON.parse(await readFile(resolve(singleService100EvidenceDirectory,'index.json'),'utf8'));}catch(error){if(error.code!=='ENOENT')throw error;return json(res,{rows:[]});}
+    const model=url.searchParams.get('model'),domain=url.searchParams.get('domain'),failed=url.searchParams.get('failed')==='true';
+    return json(res,{...index,rows:index.rows.filter(r=>(!model||r.model===model)&&(!domain||r.testDomain===domain)&&(!failed||r.primary!=='correct'))});
+   }
+   if(path.startsWith('/api/single-service-100-run/')&&req.method==='GET'){
+    const parts=path.split('/');const model=parts[3],caseId=parts[4];
+    if(!singleService100EvidenceDirectory||parts.length!==5||!['qwen2.5-0.5b','qwen2.5-1.5b','qwen2.5-3b'].includes(model)||!/^e100-(weather|calendar|contacts|files|services|cloud|device|connectivity|location|media)-\d{3}$/.test(caseId))throw bad('未知千题评测记录',404);
+    try{return json(res,JSON.parse(await readFile(resolve(singleService100EvidenceDirectory,model,`${caseId}.json`),'utf8')));}catch(error){if(error.code!=='ENOENT')throw error;throw bad('该调用尚未完成或记录不存在',404);}
+   }
    if(path==='/api/cases')return json(res,{cases,context:baseContext});
    if(path==='/api/domain-report') {
     let manifest={};

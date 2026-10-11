@@ -273,7 +273,7 @@ test('extraction prompts teach omission without leaking sample IDs or business d
   const search = buildArgumentsPrompt('查日程', getCapability('calendar.search')).messages[0].content;
   assert.ok(search.includes('→{"time_ref":"后天"}'));
   assert.ok(!search.includes('安排/有哪些会'));
-  assert.equal(PROMPT_VERSION, 'sparse-v6');
+  assert.equal(PROMPT_VERSION, 'explicit-v7');
 });
 
 test('abort propagates after retaining each partial trace once', async () => {

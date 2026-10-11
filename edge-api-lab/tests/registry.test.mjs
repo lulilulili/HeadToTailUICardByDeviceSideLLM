@@ -4,8 +4,8 @@ import { readFile } from 'node:fs/promises';
 import { domains, capabilities, getCapability, listCapabilities, schemaFor, validateArguments } from '../src/registry.mjs';
 import { resolveArguments } from '../src/resolver.mjs';
 
-test('catalog preserves six domains and the fifteen original business capabilities', () => {
-  assert.deepEqual(domains.map(d => d.id), ['weather', 'calendar', 'contacts', 'files', 'services', 'cloud']);
+test('catalog preserves six legacy domains and adds four single-service system domains', () => {
+  assert.deepEqual(domains.map(d => d.id), ['weather', 'calendar', 'contacts', 'files', 'services', 'cloud', 'device', 'connectivity', 'location', 'media']);
   assert.ok(capabilities.length >= 15);
   assert.equal(new Set(capabilities.map(c => c.id)).size, capabilities.length);
   assert.ok(listCapabilities('calendar').length >= 4);
@@ -138,7 +138,7 @@ test('frozen benchmark covers every domain and its gold arguments satisfy extrac
   const cases = JSON.parse(await readFile(new URL('../data/cases.json', import.meta.url), 'utf8'));
   assert.ok(cases.length >= 48);
   assert.equal(new Set(cases.map(item => item.id)).size, cases.length);
-  assert.deepEqual(new Set(cases.slice(0, 6).map(item => item.expected.domain)), new Set(domains.map(domain => domain.id)));
+  assert.deepEqual(new Set(cases.slice(0, 6).map(item => item.expected.domain)), new Set(['weather', 'calendar', 'contacts', 'files', 'services', 'cloud']));
   for (const category of ['explicit', 'default', 'relative', 'ambiguity', 'unsupported', 'injection', 'missing']) assert.ok(cases.some(item => item.category === category));
   for (const item of cases) {
     const expected = item.expected;

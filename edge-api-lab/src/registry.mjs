@@ -1,5 +1,6 @@
 import { weatherCapabilities, weatherInputs, weatherFieldNames, weatherInputAlternatives } from './weather-capabilities.mjs';
 import { extendedCapabilities } from './extended-capabilities.mjs';
+import { systemDomains, systemCapabilities } from './system-capabilities.mjs';
 /** Business contracts for a semantic-call experiment. No capability invokes a real service. */
 export const domains = [
   { id: 'weather', name: '天气', description: '天气、降水、气温、天气预警；时间和位置可按规则补全。' },
@@ -7,7 +8,8 @@ export const domains = [
   { id: 'contacts', name: '联系人', description: '查询、创建、更新通讯录联系人；不打电话、不发消息。' },
   { id: 'files', name: '文件', description: '查找本地文件、预览明确文件；会议云资料归 cloud。' },
   { id: 'services', name: '服务入口', description: '明确要求打开已注册服务页面；查询服务内容归对应领域。' },
-  { id: 'cloud', name: '云端业务', description: '会议资料、云文件、云数据库字段与统计、云函数调用、云端资源预加载的具体业务壳子。' }
+  { id: 'cloud', name: '云端业务', description: '会议资料、云文件、云数据库字段与统计、云函数调用、云端资源预加载的具体业务壳子。' },
+  ...systemDomains
 ];
 
 const str = (description, extra = {}) => ({ type: 'string', description, minLength: 1, ...extra });
@@ -103,7 +105,8 @@ export const capabilities = [
     inputs: { material_id: str('明确资料 ID', { required: true }), contact_id: str('明确接收联系人 ID', { required: true }) }
   },
   ...weatherCapabilities,
-  ...extendedCapabilities
+  ...extendedCapabilities,
+  ...systemCapabilities
 ];
 
 const capabilityById = new Map(capabilities.map(cap => [cap.id, cap]));

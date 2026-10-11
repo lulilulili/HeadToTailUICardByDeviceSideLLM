@@ -9,7 +9,7 @@ const statuses = {
 };
 export const statusInfo = status => { const [label,tone] = statuses[status] || [status || '未知状态','neutral']; return {label,tone}; };
 export const stageName = stage => ({domain:'领域识别',intent:'API 选择',arguments:'参数提取',unified:'一次调用',warmup:'模型预热'}[stage] || stage || '调用');
-export const domainName = domain => ({weather:'天气',calendar:'日历',contacts:'联系人',files:'文件',services:'服务入口',cloud:'云端业务',unsupported:'不支持'}[domain] || domain || '—');
+export const domainName = domain => ({weather:'天气',calendar:'日历',contacts:'联系人',files:'文件',services:'服务入口',cloud:'云端业务',device:'设备与电量',connectivity:'网络连接',location:'位置',media:'媒体与音频',unsupported:'不支持'}[domain] || domain || '—');
 export const pretty = value => escapeHtml(JSON.stringify(value ?? {}, null, 2));
 export const badge = status => { const info = statusInfo(status); return `<span class="badge ${info.tone}">${escapeHtml(info.label)}</span>`; };
 export const dateTime = value => value ? new Date(value).toLocaleString('zh-CN',{hour12:false}) : '—';
@@ -26,7 +26,18 @@ export async function api(path,options={}) {
 }
 export const notice = (message,tone='danger') => `<div class="notice ${tone}" role="status">${escapeHtml(message)}</div>`;
 export const empty = (title,description='') => `<div class="empty"><span class="empty-mark">⌁</span><h3>${escapeHtml(title)}</h3><p>${escapeHtml(description)}</p></div>`;
-export const selectCaseIds = (ids,limit) => ids.slice(0,Math.max(1,Number(limit) || ids.length));
+export const isSingleServiceSuite = suite => ['single-service-v1','single-service-100-v1'].includes(suite);
+export const caseMatchesScope = (suite,scope) => scope==='all' || (scope==='history'?!isSingleServiceSuite(suite):suite===scope);
+export const defaultEvaluationModelChecked = name => ['qwen2.5:0.5b','qwen2.5:1.5b','qwen2.5:3b'].includes(name);
+export const exclusiveBenchmarkMessage = benchmark => benchmark ? `独立千题实测独占推理中${benchmark.progress?` · ${benchmark.progress.done ?? 0}/${benchmark.progress.total ?? 3000}`:''}。实验台和批量启动暂不可用；可查看“千题单服务实测”结果，不会重复启动模型。` : '';
+export const selectCaseIds = (ids,limit,cases=[]) => {
+  const count=Math.max(1,Math.floor(Number(limit) || ids.length)),byId=new Map(cases.map(c=>[c.id,c]));
+  if(!ids.length||!ids.every(id=>isSingleServiceSuite(byId.get(id)?.suite)))return ids.slice(0,count);
+  const groups=new Map(),selected=[];
+  for(const id of ids){const domain=byId.get(id).testDomain;if(!groups.has(domain))groups.set(domain,[]);groups.get(domain).push(id);}
+  for(let index=0;selected.length<Math.min(count,ids.length);index++)for(const group of groups.values())if(group[index]&&selected.length<count)selected.push(group[index]);
+  return selected;
+};
 export function flattenInputs(inputs,prefix='') {
   return Object.entries(inputs || {}).flatMap(([name,field])=>{
     const path=prefix?`${prefix}.${name}`:name;
