@@ -293,7 +293,7 @@ function locationPlan(capability, args, resolvedLocation, context) {
   return plan;
 }
 
-export function resolveArguments(capability, args = {}, providedContext = {}) {
+export function resolveArguments(capability, args = {}, providedContext = {}, {blockedFields=[]} = {}) {
   const context = { now: new Date().toISOString(), timezone: Intl.DateTimeFormat().resolvedOptions().timeZone, ...providedContext };
   const parseContext = args.timezone ? { ...context, timezone: args.timezone } : context;
   const result = { arguments: structuredClone(args), sources: {}, missing: [], issues: [], warnings: [], resolution: { context: [] }, status: 'ready_mock' };
@@ -309,6 +309,10 @@ export function resolveArguments(capability, args = {}, providedContext = {}) {
   function resolveField(name, field, target, path, inheritedDay) {
     let value = target[name];
     let source = Object.hasOwn(target, name) ? 'user' : undefined;
+    // Cached context is not an escape hatch around unresolved explicit user evidence.
+    if (value === undefined && blockedFields.some(blocked => path === blocked || path.startsWith(`${blocked}.`) || blocked.startsWith(`${path}.`))) {
+      delete target[name]; missing(path); return;
+    }
     if (value === undefined && field.resolver === 'selected_object' && capability.risk === 'read' && !(name === 'contact_id' && target.query !== undefined)) {
       const selected = context.objects?.[field.contextKey ?? name];
       const rule = schemaFor({ inputs: { value: field } }).properties.value;

@@ -14,6 +14,14 @@ const bindings = {
 const currentPlace = value => value === undefined || typeof value === 'string' && /^(这里|当地|附近|本地|当前位置|此地|current|current_location)$/.test(value);
 const validPoint = value => value && Number.isFinite(value.latitude) && Math.abs(value.latitude) <= 90 && Number.isFinite(value.longitude) && Math.abs(value.longitude) <= 180;
 const trustedPoint = value => validPoint(value) && ['browser','fixture','harmony'].includes(value.source);
+const auditTimes = response => {
+  const metadata={};
+  for(const key of ['observedAt','expiresAt']) if(response[key]!==undefined) {
+    if(typeof response[key]!=='string'||!Number.isFinite(Date.parse(response[key]))) throw new Error(`系统 ${key} 必须为有效时间字符串`);
+    metadata[key]=response[key];
+  }
+  return metadata;
+};
 
 /** Recover explicit slots before calling this function. Missing model output alone is never default evidence. */
 export async function prepareSystemContext(capability, args, providedContext = {}, adapter, signal, blockedFields = []) {
@@ -32,11 +40,12 @@ export async function prepareSystemContext(capability, args, providedContext = {
           signal?.throwIfAborted();
           const response=await adapter.read({capability:request.capability,field:'location',arguments:request.arguments,signal});
           if (!response || !['harmony','fixture'].includes(response.source)) throw new Error('地理编码须标记 harmony 或 fixture 来源');
+          const metadata=auditTimes(response);
           const value=Array.isArray(response.value) ? response.value.length===1 ? response.value[0] : null : response.value;
           if (!validPoint(value)) throw new Error('指定地点未得到唯一可核验坐标，不能使用当前位置代替');
           context.geocodes ??= {};
-          context.geocodes[place]={...value,precision:value.precision??'city',source:response.source};
-          Object.assign(request,{status:'resolved',executed:true,source:response.source,method:response.method??null});
+          context.geocodes[place]={...value,...metadata,precision:value.precision??'city',source:response.source};
+          Object.assign(request,{status:'resolved',executed:true,source:response.source,method:response.method??null,...metadata});
         } catch (error) {
           if (signal?.aborted) throw error;
           Object.assign(request,{status:'failed',executed:true,error:error.message});
@@ -69,13 +78,14 @@ export async function prepareSystemContext(capability, args, providedContext = {
       signal?.throwIfAborted();
       const response = await adapter.read({ capability: binding.capability, field, sdkMethod:binding.sdkMethod??null, signal });
       if (!response || !['harmony', 'fixture'].includes(response.source)) throw new Error('系统读取须标记 harmony 或 fixture 来源');
+      const metadata=auditTimes(response);
       const value = binding.contextKey === 'now' && typeof response.value === 'number' && Number.isFinite(response.value) ? new Date(response.value).toISOString() : response.value;
       if (binding.contextKey === 'location') {
         if (!validPoint(value)) throw new Error('系统定位没有返回有效经纬度');
         // LocationKit names this field accuracy (metres); browser context uses accuracyMeters.
         const accuracyMeters = value.accuracyMeters ?? value.accuracy;
         if (accuracyMeters !== undefined && (!Number.isFinite(accuracyMeters) || accuracyMeters < 0)) throw new Error('系统定位精度必须为非负米数');
-        context.location = { ...value, ...(accuracyMeters !== undefined ? {accuracyMeters} : {}), source: response.source };
+        context.location = { ...value, ...metadata, ...(accuracyMeters !== undefined ? {accuracyMeters} : {}), source: response.source };
       } else if (binding.contextKey === 'now') {
         if (typeof value !== 'string' || !Number.isFinite(Date.parse(value))) throw new Error('系统时钟无效');
         context.now = value;
@@ -86,9 +96,9 @@ export async function prepareSystemContext(capability, args, providedContext = {
       } else {
         if (!validateValue(definition, value).valid) throw new Error('系统参数不符合能力类型');
         context.systemValues ??= {};
-        context.systemValues[field] = { value, source: response.source };
+        context.systemValues[field] = { value, source: response.source, ...metadata };
       }
-      Object.assign(request, { status: 'resolved', executed: true, source: response.source, method: response.method ?? null });
+      Object.assign(request, { status: 'resolved', executed: true, source: response.source, method: response.method ?? null, ...metadata });
     } catch (error) {
       if (signal?.aborted) throw error;
       Object.assign(request, { status: 'failed', executed: true, error: error.message });

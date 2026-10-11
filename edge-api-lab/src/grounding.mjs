@@ -2,6 +2,7 @@ import {isDeepStrictEqual} from 'node:util';
 import {getCapability,schemaFor} from './registry.mjs';
 import {resolveArguments} from './resolver.mjs';
 import {validateValue} from './providers.mjs';
+import {buildParameterProvenance} from './parameter-provenance.mjs';
 
 export const GROUNDING_VERSION='deterministic-grounding-v2';
 const idPrefixes={event_id:'ev',calendar_id:'cal',contact_id:'ct',file_id:'file',material_id:'ma',meeting_id:'mt',record_id:'(?:rec|record|invoice)'};
@@ -502,13 +503,14 @@ export function groundArguments(capability,text,args={},context={}){
  return {groundedArguments,grounding};
 }
 
-export function finalizePlan({text='',domain,api,extractedArguments={},context={}}){
+export function finalizePlan({text='',domain,api,extractedArguments={},context={},systemRequests=[]}){
  const started=performance.now();
  if(domain==='unsupported'||!api)return {domain:'unsupported',api:null,groundedArguments:{},grounding:{version:GROUNDING_VERSION,checks:[],identity:[],blockers:[],repairs:[],coverage:[]},resolved:{arguments:{},sources:{},missing:[],issues:['请求不属于单个已注册业务能力，或包含多个独立动作。'],status:'unsupported'},status:'unsupported',mock:null,deterministicMs:performance.now()-started};
  const capability=getCapability(api);if(!capability||capability.domain!==domain)throw new Error('领域与 API 不一致');
  const {groundedArguments,grounding}=groundArguments(capability,text,extractedArguments,context);
- const resolved=resolveArguments(capability,groundedArguments,context);
+ const resolved=resolveArguments(capability,groundedArguments,context,{blockedFields:grounding.blockers.map(item=>item.field)});
  if(grounding.blockers.length){resolved.status='needs_clarification';resolved.issues.push(...grounding.blockers.map(x=>`${x.field}: ${x.message}`));for(const x of grounding.blockers)if(!resolved.missing.includes(x.field))resolved.missing.push(x.field);}
+ resolved.provenance=buildParameterProvenance({capability,text,groundedArguments,grounding,resolved,context,systemRequests});
  const status=resolved.status;const effective=getCapability(resolved.resolution?.time?.effective?.api)??capability;
  const mock={executed:false,simulated:status==='ready_mock',api:effective.id,requestedApi:capability.id,requestedProjection:capability.projection??null,arguments:resolved.arguments,projection:effective.projection??null,outputContract:effective.returns??null,value:null,message:status==='ready_mock'?'契约校验完成，已生成模拟回执。业务 API 未接入。':'参数未就绪，需要澄清或补全系统状态。',risk:capability.risk};
  return {domain,api,groundedArguments,grounding,resolved,status,mock,deterministicMs:performance.now()-started};

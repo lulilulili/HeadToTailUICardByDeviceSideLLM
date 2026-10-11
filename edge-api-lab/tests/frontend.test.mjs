@@ -40,7 +40,7 @@ test('catalogue exposes nested editable fields and array enum constraints', () =
 });
 test('run detail explains explicit extraction and preserves legacy null output for inspection', () => {
   const html=renderRun({text:'查天气',status:'ready_mock',modelArguments:{location:null},extractedArguments:{},context:{location:{source:'fixture'}},traces:[{stage:'arguments',promptVersion:'compact-v3',options:{num_predict:160},truncated:true,wallMs:0}]});
-  assert.match(html,/模型仅提取用户明确提供的信息；其余由系统规则补全/);
+  assert.match(html,/模型仅提取用户明确提供的信息；确实缺省且契约允许的环境参数才由系统补全/);
   assert.match(html,/&quot;location&quot;: null/);
   assert.doesNotMatch(html,/原始空槽 null 已省略|模型原始参数 · 包含空槽/);
   assert.match(html,/实际推理配置与版本/);
@@ -260,7 +260,7 @@ test('all frozen three hundred case scenario codes have Chinese labels', async (
 });
 test('sparse parameter extraction is explained even when raw argument metadata is absent', () => {
   const html=renderRun({text:'查上海湿度',status:'ready_mock',extractedArguments:{location:'上海'},resolved:{arguments:{location:'上海',time_ref:'现在'}},traces:[]});
-  assert.match(html,/模型仅提取用户明确提供的信息；其余由系统规则补全/);
+  assert.match(html,/模型仅提取用户明确提供的信息；确实缺省且契约允许的环境参数才由系统补全/);
   assert.doesNotMatch(html,/包含空槽/);
 });
 test('terminal domain report states preserve partial results and stop automatic polling', async () => {

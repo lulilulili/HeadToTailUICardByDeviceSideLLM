@@ -24,6 +24,8 @@ const lockPath=join(root,'data/runtime/single-service-100.lock');
 const snapshotDirectory='data/benchmark-single-service-100-v1';
 const options={num_ctx:2048,num_predict:224,timeoutMs:180000,temperature:0};
 const sourcePaths=['src/registry.mjs','src/weather-capabilities.mjs','src/extended-capabilities.mjs','src/system-capabilities.mjs','src/prompts.mjs','src/providers.mjs','src/pipeline.mjs','src/resolver.mjs','src/grounding.mjs','src/system-context.mjs','src/fixtures.mjs','src/evaluation.mjs','src/semantic-evaluation.mjs','src/runtime.mjs','src/corpus.mjs','src/application.mjs','src/single-service-100.mjs','src/single-service-100-report.mjs','data/single-service-core.mjs','data/cases-system-single.json',...SINGLE_SERVICE_100_FILES,'scripts/benchmark-single-service-100.mjs','scripts/replay-grounding.mjs','server.mjs','package.json','public/app.js','public/index.html','public/context-builder.mjs','public/evaluation-view.mjs','public/ui-utils.mjs','public/single-service-100-view.mjs','tests/single-service-100-report.test.mjs','tests/single-service-100-http.test.mjs','tests/single-service-100-view.test.mjs','tests/single-service-ui.test.mjs'];
+// New snapshots must also freeze the host-generated parameter audit and its UI.
+sourcePaths.push('src/parameter-provenance.mjs','public/provenance-view.mjs','public/run-view.mjs','tests/parameter-provenance.test.mjs');
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 const same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
 const sampleHost=()=>({at:new Date().toISOString(),freeMemoryBytes:freemem(),runnerRssBytes:process.memoryUsage().rss,cpuTicks:cpus().map(c=>c.times)});

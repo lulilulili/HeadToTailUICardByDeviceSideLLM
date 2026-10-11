@@ -66,7 +66,7 @@ export async function runPipeline({ text, mode = 'staged', model, stages = {}, c
       const prepared = await prepareSystemContext(capability, grounded.groundedArguments, context, systemContextProvider, signal, grounded.grounding.blockers.map(item => item.field));
       result.context = prepared.context;
       result.systemRequests = prepared.requests;
-      Object.assign(result,finalizePlan({text,domain:result.domain,api:result.api,extractedArguments:result.extractedArguments,context:prepared.context}));
+      Object.assign(result,finalizePlan({text,domain:result.domain,api:result.api,extractedArguments:result.extractedArguments,context:prepared.context,systemRequests:prepared.requests}));
     }
   } catch (error) {
     result.error = error.message;
