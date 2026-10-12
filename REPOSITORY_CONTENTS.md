@@ -1,6 +1,6 @@
 # 项目发布范围与证据说明
 
-发布日期：2026-10-10。目标仓库：<https://github.com/lulilulili/HeadToTailUICardByDeviceSideLLM>。
+初始发布日期：2026-10-10；本轮结果更新：2026-10-12。目标仓库：<https://github.com/lulilulili/HeadToTailUICardByDeviceSideLLM>。
 
 本仓库保留工作区中的工程源码、网页、脚本、自动检查、原始方案材料、图片、案例、提示词与源码冻结快照、评测报告、完整回放审计、全部已有 JSON 运行记录和验收证据。
 
@@ -9,6 +9,19 @@
 `智能生成业务/` 包含：材料包使用说明、智能生成业务全景图、天气场景端侧智能调用 PoC 技术方案、六个月路线图、HarmonyOS 应用服务 Kit API 扁平化与主动服务可行性报告，以及两张原始图片。它们是规划与研究材料；实现现状和真实成绩以 `edge-api-lab/README.md`、`docs/VERIFICATION.md` 和绑定版本的原始记录为准。
 
 ## 历史实验与当前结果
+
+2026-10-12 本轮 `single-service-100-20261012-17ad2cee-68f0-4700-ab84-97cd89343965` 已完成十领域四模型共 4,000 次正式调用，另保存 4 次预热。发布完整原始调用、索引、审核、公开清单、报告，以及推理前冻结的 57 个源码 / 语料文件：
+
+- `edge-api-lab/evidence/single-service-100/<id>/`：4,000 个逐条 JSON、4 个预热 JSON、`index.json`、`audit.json` 和 `public-manifest.json`。
+- `edge-api-lab/docs/single-service-100/<id>/results.json`：四模型总体、40 个领域 / 模型组合、示例、环境和计时统计。
+- `edge-api-lab/data/benchmark-single-service-100/<id>/`：57 个绑定 SHA-256 的冻结文件。
+- `edge-api-lab/docs/RETEST_2026-10-12.md` 与 `TEST_ENVIRONMENT_2026-10-12.md`：完成说明、逐领域比较、硬件及固定模拟手机上下文。
+
+完整离线审核为 `verified_completed`，确认 4,000 条唯一记录、归属、顺序、原始哈希、重新计算的评分、索引与报告一致；审核没有调用模型。结果文件包含原始请求、候选、消息、JSON Schema、响应、模型 digest、token、耗时和资源采样，预热不计正式分母。
+
+为使克隆后的页面直接显示本轮，显式纳入 `edge-api-lab/data/runtime/single-service-100-active.json` 与该批次的 `manifest.json`。发布完成清单与 `public-manifest.json` 一致，移除本机 runner / active / updatedAt 元数据。本地完整进程清单另留在忽略目录，不上传日志或 PID。默认 runtime 忽略规则保持有效。
+
+以下为初始发布的历史记录，不与本轮 4,000 次混算。
 
 `edge-api-lab/data/runtime/` 初始发布包含 2,109 个 `run-*.json`、49 个 `eval-*.json` 以及 3 份 `domain-suite*.json` 清单。记录包含早期尝试、被中断的旧评测、最终正式评测、独立预热和交互 / 验收运行；不能把整个运行历史混成一个准确率分母。
 
@@ -22,7 +35,7 @@
 
 ## 文件完整性
 
-`PROJECT_MANIFEST.json` 使用相对路径记录发布文件的字节数和 SHA-256。清单不递归包含自身；Git 元数据也不计入。`.gitattributes` 禁止 Git 自动转换行尾，确保绑定源码哈希的冻结证据在 Windows 与其他平台之间保持原始字节。
+`PROJECT_MANIFEST.json` 按本次待发布的全部 Git 跟踪文件重新生成，使用相对路径记录字节数和 SHA-256。清单不递归包含自身；Git 元数据也不计入。`.gitattributes` 禁止 Git 自动转换行尾，确保绑定源码哈希的冻结证据在 Windows 与其他平台之间保持原始字节。
 
 可以使用文件 SHA-256 检查下载副本，也可以执行 `node scripts/verify-domain-run.mjs` 核验正式评测中实际提示词、冻结源码、分数和运行副本的一致性。该脚本更新本机核验文档，建议在独立副本中运行。
 

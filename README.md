@@ -10,7 +10,18 @@
 
 已扩展为天气、日历、联系人、文件、服务入口、云端业务、设备状态、网络连接、位置服务和音频媒体 **10 个领域、417 个伪 API**。当前默认题组 `single-service-100-v1` 为每领域 100 条、共 1000 条中文单服务用例，原 100 条与新增 900 条分层统计；全部语料共 1578 条，旧题组独立保留，默认题组不包含组合服务。
 
-本轮用户明确选择 **0.5B → 1.5B → 3B → 7B** 各测试 1000 条，计划 **4000 次正式调用**。网页“批量评测 → 千题单服务实测”同步展示真实进度、逐领域成绩及原始调用，未跑到的模型不计为失败。每轮使用独立批次目录，由 `edge-api-lab/data/runtime/single-service-100-active.json` 指向当前清单、报告和证据；旧 final3、三模型计划及历史回放不覆盖。工程冻结代码、提示词、模型 digest、用例和固定手机 mock 后测试，运行中不调规则。
+本轮按 **0.5B → 1.5B → 3B → 7B** 各完成 1000 条，合计 **4000 次正式调用**。2026-10-12 北京时间 09:52:16 启动、15:35:54 完成，墙钟总用时约 5 小时 44 分；另有 4 次预热，不计正式分数。完整离线审核为 `verified_completed`：4000 条唯一原始记录、索引、报告、评分和 57 个冻结源码 / 语料文件的哈希均核验通过，审核没有调用模型。
+
+| 模型 | API 正确率 | 最终执行语义正确率 | 单次请求 P50 / P95 |
+|---|---:|---:|---:|
+| 0.5B | 68.3% | 60.4% | 1.64 / 3.25 秒 |
+| 1.5B | 78.4% | 70.9% | 2.63 / 4.95 秒 |
+| 3B | 75.5% | 69.0% | 4.83 / 9.32 秒 |
+| 7B | 83.8% | 77.1% | 11.09 / 21.30 秒 |
+
+7B 本轮最终语义最高；1.5B 的最终语义高于 3B，且耗时更低。这是同一固定开发题组的一次调用比较，不证明所有场景或参数量之间的普遍排序。语义评分含正确澄清 / 解析失败；业务执行为 mock。各领域成绩、原始参数、可执行请求子集与错误分析见 [本轮完整结果](edge-api-lab/docs/RETEST_2026-10-12.md)。
+
+网页“批量评测 → 千题单服务实测”展示本轮完成结果、逐领域成绩及原始调用。每轮使用独立批次目录，由 `edge-api-lab/data/runtime/single-service-100-active.json` 指向当前清单、报告和证据；本次发布仅显式纳入该指针及去掉本机进程元数据的完成清单，使克隆后可以直接查看。旧 final3、三模型计划及历史回放保留。工程冻结代码、提示词、模型 digest、用例和固定手机 mock 后测试，运行中未调规则。
 
 当前提示词为 `explicit-v8-cloud`，目录为 `single-service-v3`，原文核对版本随批次绑定。补充云端字段读取 / 统计、路径与存储实例、预加载模式的参数说明，并修正无依据可选会议 ID 的额外阻塞。优化重点是准确保留用户明确给出的搜索词、标题、正文、目标 ID、路径、时间和结构化参数；只有用户未提供可补的系统参数时，才按接口读取当前系统状态。关键业务信息缺失或系统读取不可用时保留澄清 / 失败，不猜测。
 
@@ -20,7 +31,7 @@
 
 用户明确指定地点而夹具未登记时，`system-context` 已支持请求 `location.geocode` 原生依赖，由宿主调用 `geoLocationManager.getAddressesFromLocationName()` 解析该地点；这不是读取当前位置。未知“漠河”未得到可信地理编码时保留地点并报告解析失败，不得改用本机坐标。
 
-优先阅读 [当前阶段说明](edge-api-lab/docs/current-feasibility.json)、[本轮启动记录](edge-api-lab/docs/RETEST_2026-10-12.md) 和 [工程使用说明](edge-api-lab/README.md)。其他机器的历史 final3 与规则回放仍分别另存；历史同输出回放为 959/1,200，旧 i5 机器前三档各完成 40 条主样本，7B 受内存压力限制，整轮明确标记部分完成，不作为本轮 i7 环境或其路由能力证据。初始推理、final1、final2、旧 1,200 次调用及 v1 回放不覆盖。当前样本属于开发集，尚不能证明盲测泛化、真机执行或量化影响。
+优先阅读 [当前阶段说明](edge-api-lab/docs/current-feasibility.json)、[本轮结果与运行记录](edge-api-lab/docs/RETEST_2026-10-12.md) 和 [工程使用说明](edge-api-lab/README.md)。其他机器的历史 final3 与规则回放仍分别另存；历史同输出回放为 959/1,200，旧 i5 机器前三档各完成 40 条主样本，7B 受内存压力限制，整轮明确标记部分完成，不作为本轮 i7 环境或其路由能力证据。初始推理、final1、final2、旧 1,200 次调用及 v1 回放不覆盖。当前样本属于开发集，尚不能证明盲测泛化、真机执行或量化影响。
 
 全球地点仅测试中文名称或中文译名，不测试多语言。独立分层采样 60 城、六洲各 10 城，并以其中预先固定的 8 城对前三档完成 24 次真实推理；[结果](edge-api-lab/docs/global-cities-final3.json)保留原始输出与错误。城市样本不作为运行时白名单；中文标签可用性造成采样偏倚，低人口只是“冷门”的代理，不代表全球识别率。疑似有地点但未核验时要求澄清，不能当成用户没说而使用当前位置。
 
@@ -59,7 +70,7 @@ ollama pull qwen2.5:7b
 | [edge-api-lab/data/](edge-api-lab/data/) | 1578 条案例，含当前默认 1000 条单服务题组；冻结源码 / 语料快照、原始模型调用与批次记录 |
 | [当前阶段说明](edge-api-lab/docs/current-feasibility.json) | 十领域单服务范围、当前版本、模型存储和系统接口边界 |
 | [问题与实测分析](edge-api-lab/docs/PARAMETER_CAUSE_ANALYSIS.md) | 原文校对定义、参数与 API 错因、受控提示词对照及下一步 |
-| [grounding-replay-v2-final3.json](edge-api-lab/docs/grounding-replay-v2-final3.json) / [feasibility-final3.json](edge-api-lab/docs/feasibility-final3.json) | 最终规则回放 / 当前本机部分实测；原推理与各版本证据独立保留 |
+| [grounding-replay-v2-final3.json](edge-api-lab/docs/grounding-replay-v2-final3.json) / [feasibility-final3.json](edge-api-lab/docs/feasibility-final3.json) | 历史规则回放 / 旧 i5 机器部分实测；原推理与各版本证据独立保留 |
 | [global-cities-final3.json](edge-api-lab/docs/global-cities-final3.json) / [中文城市样本](edge-api-lab/data/global-city-samples.json) | 全球中文冷门城市专项；24 次真实推理与规则回归分开 |
 | [edge-api-lab/docs/VERIFICATION.md](edge-api-lab/docs/VERIFICATION.md) | 当前与历史验收口径、真实调用和页面证据 |
 | [edge-api-lab/docs/DOMAIN_EVALUATION_RESULTS.md](edge-api-lab/docs/DOMAIN_EVALUATION_RESULTS.md) | 六领域 × 四模型的准确率、耗时与错误分析 |

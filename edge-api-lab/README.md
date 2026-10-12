@@ -6,7 +6,9 @@
 
 默认题组为 `single-service-100-v1`：10 个领域各 100 条，共 1000 条中文单服务用例。原 100 条开发用例与新增 900 条分别统计；原小题组和历史 478 条独立保留，服务总语料 1578 条。跨服务/组合服务不在本轮范围。优先查看批量评测的“千题单服务实测”和详细说明首个“当前可行性验证”页签，其他 13 个说明页签标明历史快照。
 
-用户要求同步最新工程后按同一套千题全领域重测，并明确加入 7B。当前计划按 0.5B → 1.5B → 3B → 7B 串行，各运行 1000 条，共 4000 条正式调用；预热单独保存、不计分。网页从报告 `conditions.models` / `conditions.totalCalls` 读取顺序与计划，成绩只用已完成调用，未执行不算 0 分。历史三模型 3000 次计划及其证据保留，不改成四模型报告。
+用户要求的 0.5B → 1.5B → 3B → 7B 千题重测已于 2026-10-12 北京时间 15:35:54 完成，各模型 1000 条，共 4000 条正式调用；另有 4 次预热，不计分。完整离线审核 `verified_completed` 核验了全部原始记录、评分、索引、报告与 57 个冻结文件。四档 API 正确率为 68.3% / 78.4% / 75.5% / 83.8%，最终语义为 60.4% / 70.9% / 69.0% / 77.1%，请求 P50 为 1.64 / 2.63 / 4.83 / 11.09 秒。详见 [完整结果与逐领域比较](docs/RETEST_2026-10-12.md)。网页读取本轮独立清单及报告，历史三模型 3000 次计划和证据保留。
+
+本次发布显式纳入当前指针 `data/runtime/single-service-100-active.json` 和本轮完成清单；清单内容与证据目录的 `public-manifest.json` 一致，去掉本机 runner / active / updatedAt 元数据。克隆后启动页面即可查看本轮结果，无需重新调用模型。日志、PID 和其他未发布本机运行文件继续忽略。
 
 新建冻结清单：`node scripts/benchmark-single-service-100.mjs --new --initialize`；运行或恢复使用 `node scripts/benchmark-single-service-100.mjs --manifest <path>`，只重导出已有证据再加 `--export-only`。当前批次由 `data/runtime/single-service-100-active.json` 定位：清单在 `data/runtime/single-service-100/<id>/manifest.json`，报告在 `docs/single-service-100/<id>/results.json`，原始证据在 `evidence/single-service-100/<id>/`，源码快照在 `data/benchmark-single-service-100/<id>/`。页面 API 路由保持不变；无新指针时可读取历史 v1 报告。评测期间工作台禁止其他调用，以免改变推理条件。同一冻结条件恢复已保存 key，不覆写正式原始记录；代码/语料/模型 digest 改变时拒绝混合版本恢复。
 
