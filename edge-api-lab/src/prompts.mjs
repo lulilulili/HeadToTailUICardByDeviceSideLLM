@@ -15,7 +15,7 @@ const hints = {
 };
 const describeFields = capability => Object.entries(capability.inputs).map(([name, field]) => `${name}:${shortType(field)} ${hints[name] ?? (field.description ?? '').replace(/，?如[^，。；\n]*/g, '').replace(/；?未(?:提|明确)[^。；\n]*/g, '')}`).join('\n');
 const describeApi = cap => `${cap.id} ${cap.name}${cap.risk === 'write' ? '[写]' : '[读]'}${cap.field && cap.field !== '*' ? `→${cap.field}` : cap.aggregate ? '→整体/多字段' : ''}(${Object.keys(cap.inputs).join(',')})`;
-export const PROMPT_VERSION = 'explicit-v7';
+export const PROMPT_VERSION = 'explicit-v8-cloud';
 const compactSchema = value => Array.isArray(value) ? value.map(compactSchema) : value && typeof value === 'object' ? Object.fromEntries(Object.entries(value).filter(([key, child]) => key !== 'description' || typeof child !== 'string').map(([key, child]) => [key, compactSchema(child)])) : value;
 const packagePrompt = (system, text, schema, metadata = {}) => ({ messages: messages(system, text), schema: compactSchema(schema), promptMeta: { version: PROMPT_VERSION, systemChars: system.length, inputChars: text.length, ...metadata } });
 
@@ -249,8 +249,10 @@ function relevantSlotRules(selected) {
   if (fields.has('service')) notes.push('服务本身的状态/链接/入口归services。service:天气weather/日历calendar/通讯录contacts/文件files/资料materials。parameters.query是页面搜索词，不能放顶层query。');
   if (fields.has('starts_at')) notes.push('starts_at/ends_at=开始/结束时间原文，duration_minutes/reminder_minutes=分钟，changes=明确变更，value=明确新值。');
   if (selected.some(cap => cap.id === 'cloud.function.call')) notes.push('云函数function_name=函数名，data完整复制正文（含花括号），version/timeout_ms未明说不输出。');
-  if (fields.has('collection')) notes.push('collection=表名，record_id=记录ID，field_name=查询字段名；operation:计数count/求和sum/平均average/最大maximum/最小minimum。');
-  if (fields.has('cloud_path')) notes.push('cloud_path=云对象路径，bucket=明确的存储桶名；带斜杠的云文件路径不能填入bucket。local_path=本地完整路径；没给本地位置就省略。');
+  if (fields.has('collection')) notes.push('cloud.database.field读取单记录字段；cloud.database.calculate做计数/求和/均值/极值统计。collection=表名，record_id=记录ID，field_name=原字段名，不写表达式；zone=明确数据库区域。operation:计数count/求和sum/平均average/最大maximum/最小minimum。');
+  if (fields.has('cloud_path')) notes.push('cloud.storage.download_url只取下载地址；cloud.storage.download下载文件到本地；cloud.storage.upload上传本地文件。cloud_path=云对象路径，bucket=明确的存储桶/实例名；带斜杠的云文件路径不能填入bucket。local_path=本地完整路径；路径原样复制，不补前导/或尾部/；没给本地位置就省略。');
+  if (selected.some(cap => cap.id.startsWith('cloud.prefetch.') && Object.hasOwn(cap.inputs,'mode'))) notes.push('预加载mode:安装→install，周期→periodic，跳链→link；link仅明确的跳链地址，未指定模式就省略，由代码取默认值。');
+  if (selected.some(cap => cap.id.startsWith('materials.'))) notes.push('会议资料内容/字段归cloud，不按本地文件读取。materials.get取完整资料对象；只要正文/标题/更新时间等选对应字段API。keyword=明确搜索关键词，meeting_id=明确会议ID，两者可替代或并用；保存资料的关联meeting_id可选，不能用标题代替。');
   if (fields.has('file_type')) notes.push('file_type仅明确类型：PDF→pdf/Word→docx/表格→xlsx/演示→pptx/图片→image/纯文本→text；类型不能并入keyword。');
   if (selected.some(cap => ['device','connectivity','location','media'].includes(cap.domain))) notes.push('查电量/温度/联网状态/定位/音量是查询输出，不能把所查数值填作入参。括号空的API输出arguments:{}。电池温度归device，气温归weather；音量归media。');
   if (fields.has('stream_type')) notes.push('stream_type:音乐MUSIC/通话VOICE_COMMUNICATION/语音助手VOICE_ASSISTANT/闹钟ALARM/铃声RINGTONE/通知NOTIFICATION/电影MOVIE/游戏GAME/有声书AUDIOBOOK。');

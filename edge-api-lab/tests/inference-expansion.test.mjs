@@ -364,7 +364,7 @@ test('new leaf scenarios prefer the explicit field while preserving the compact 
       assert.equal(selected[0].id, item.expected.api, `${id} ${mode} must prefer the explicit leaf`);
     }
     const prompt = prompts.buildUnifiedPrompt(item.text, item.context ?? {});
-    assert.equal(prompt.promptMeta.version, 'explicit-v7');
+    assert.equal(prompt.promptMeta.version, 'explicit-v8-cloud');
     assert.ok(prompt.promptMeta.systemChars < 2000, `${id} chars=${prompt.promptMeta.systemChars}`);
   }
 });

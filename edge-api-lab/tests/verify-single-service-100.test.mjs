@@ -68,12 +68,29 @@ test('schema errors, timeouts and postprocessing errors remain three formal scor
  assert.deepEqual(verified.map(row=>row.providerError),[true,true,false]);
 });
 
-test('a 7B or other model in run/trace, trace omission or extra call is rejected',()=>{
+test('a different record model in run/trace, trace omission or extra call is rejected',()=>{
  assert.throws(()=>verify(stub({model:'qwen2.5:7b'})),/run.model/);
  assert.throws(()=>verify(stub({traces:[{stage:'unified',model:'qwen2.5:7b',raw:''}]})),/trace.model/);
  assert.throws(()=>verify(stub({traces:[]})),/one formal unified model trace/);
  const record=stub();record.run.traces.push(structuredClone(record.run.traces[0]));assert.throws(()=>verify(record),/one formal unified model trace/);
  assert.throws(()=>verify(stub({stages:{unified:{model:'qwen2.5:7b'}}})),/stage model override/);
+});
+
+test('manifest-selected 7B records and 4000-count publication are valid without changing legacy 3000 audit',()=>{
+ const chosen=structuredClone(manifest);chosen.conditions.models=models;chosen.conditions.modelOrder=models;
+ const record=stub();record.model=models[3];record.run.model=models[3];record.run.traces[0].model=models[3];
+ const result=verifyStoredRecord({bytes:bytes(record),model:models[3],caseDefinition:definition,manifest:chosen});
+ assert.equal(result.row.model,'qwen2.5:7b');assert.equal(result.row.primary,'correct');
+ const legacy={...chosen,conditions:{...chosen.conditions,models:models.slice(0,3),modelOrder:models.slice(0,3)}};
+ assert.throws(()=>verifyStoredRecord({bytes:bytes(record),model:models[3],caseDefinition:definition,manifest:legacy}),/outside manifest/);
+ assert.deepEqual(verifyPublicationWindow({savedCount:4000,indexedCount:4000,reportedDone:4000,manifestDone:4000,complete:true,plannedTotal:4000}),{unindexed:0,unpublishedInReport:0});
+ assert.throws(()=>verifyPublicationWindow({savedCount:3000,indexedCount:3000,reportedDone:3000,manifestDone:3000,complete:true,plannedTotal:4000}),/all 4000/);
+});
+
+test('run context cannot differ from the frozen record phone fixture even if derived scores were rewritten',()=>{
+ const record=stub();record.run.context={...record.context,now:'2030-01-01T00:00:00Z'};
+ record.execution=scoreExecutionSemantics(definition.expected,record.run,record.run.context);
+ assert.throws(()=>verify(record),/run.context/);
 });
 
 test('an unindexed partial stub still requires ownership and independently correct scores',()=>{

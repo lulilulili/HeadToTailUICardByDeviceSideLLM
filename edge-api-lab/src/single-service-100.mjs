@@ -4,10 +4,29 @@ import {coreSingleServiceCases} from '../data/single-service-core.mjs';
 import {experimentDefaults,evaluationSystemDefaults} from './fixtures.mjs';
 
 export const SINGLE_SERVICE_100_SUITE='single-service-100-v1';
-export const SINGLE_SERVICE_100_MODELS=['qwen2.5:1.5b','qwen2.5:3b','qwen2.5:0.5b'];
+export const SINGLE_SERVICE_100_MODELS=['qwen2.5:0.5b','qwen2.5:1.5b','qwen2.5:3b','qwen2.5:7b'];
 export const SINGLE_SERVICE_100_DOMAINS=['weather','calendar','contacts','files','services','cloud','device','connectivity','location','media'];
 export const SINGLE_SERVICE_100_CONTEXT={...experimentDefaults,...evaluationSystemDefaults,now:'2026-10-10T08:00:00+08:00',timezone:'Asia/Shanghai',location:{latitude:31.2304,longitude:121.4737,precision:'coordinate',source:'fixture',label:'模拟手机当前位置（上海固定坐标）'}};
 export const SINGLE_SERVICE_100_FILES=['data/single-service-100-weather-calendar-contacts.json','data/single-service-100-files-services-cloud.json','data/single-service-100-system.json'];
+
+/** The saved manifest controls each report/audit, including historical three-model runs. */
+export function singleService100Plan(manifest){
+ const conditions=manifest?.conditions??{},models=conditions.models;
+ if(!Array.isArray(models)||!models.length||new Set(models).size!==models.length)throw new Error('Manifest models missing or duplicate');
+ if(models.some(model=>!SINGLE_SERVICE_100_MODELS.includes(model)))throw new Error('Manifest contains an unapproved model');
+ if(manifest.version==='single-service-100-batch-v2'&&JSON.stringify(models)!==JSON.stringify(SINGLE_SERVICE_100_MODELS))throw new Error('New batch requires the approved four-model order');
+ const modelOrder=conditions.modelOrder??models;
+ if(JSON.stringify(models)!==JSON.stringify(modelOrder))throw new Error('Manifest model order differs from declared models');
+ const domains=conditions.domains??SINGLE_SERVICE_100_DOMAINS;
+ if(JSON.stringify(domains)!==JSON.stringify(SINGLE_SERVICE_100_DOMAINS))throw new Error('Manifest domain set/order differs');
+ const callsPerModel=manifest.corpus?.total??1000,perDomain=manifest.corpus?.perDomain??100;
+ if(callsPerModel!==domains.length*perDomain||callsPerModel!==1000||perDomain!==100)throw new Error('Manifest corpus plan differs from 10 × 100');
+ const totalCalls=models.length*callsPerModel;
+ if(conditions.totalCalls!==undefined&&conditions.totalCalls!==totalCalls)throw new Error('Manifest totalCalls differs from model plan');
+ if(conditions.callsPerModel!==undefined&&conditions.callsPerModel!==callsPerModel)throw new Error('Manifest callsPerModel differs');
+ if(conditions.repeats!==undefined&&conditions.repeats!==1)throw new Error('Manifest repeats must be one');
+ return {models:[...models],modelOrder:[...modelOrder],domains:[...domains],callsPerModel,perDomain,totalCalls};
+}
 
 /** Hand-authored expectations are evaluation data; never supplied to model prompts. */
 export async function loadSingleService100Cases(root,{allowMissing=false}={}){

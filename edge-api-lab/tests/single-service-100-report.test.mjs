@@ -39,8 +39,8 @@ function record(patch={}){
 
 test('empty reports keep null accuracies and fixed planned denominators, not zero percent',()=>{
  const result=buildSingleService100Report(manifest({warmups:[{model:models[0]}]}),[]);
- assert.deepEqual(result.progress,{done:0,total:3000});assert.equal(result.warmupCount,1);
- assert.equal(result.summary.length,3);assert.equal(result.cells.length,30);
+ assert.deepEqual(result.progress,{done:0,total:4000});assert.equal(result.warmupCount,1);
+ assert.equal(result.summary.length,4);assert.equal(result.cells.length,40);
  assert.deepEqual(result.summary.map(c=>c.model),models);
  for(const cell of [...result.summary,...result.cells]){
   assert.equal(cell.planned,cell.testDomain===null?1000:100);assert.equal(cell.total,0);assert.equal(cell.complete,false);
@@ -56,7 +56,7 @@ test('partial rates use completed calls including failures while planned counts 
  const rows=[row(),row({caseId:'failed',error:'bad schema',providerError:true,
   rawScore:{domain:false,api:false,arguments:false},execution:{plan:false}})];
  const result=buildSingleService100Report(manifest(),rows),model=result.summary[0],cell=result.cells[0];
- assert.deepEqual(result.progress,{done:2,total:3000});
+ assert.deepEqual(result.progress,{done:2,total:4000});
  assert.equal(model.planned,1000);assert.equal(cell.planned,100);assert.equal(model.total,2);assert.equal(cell.total,2);
  assert.equal(model.complete,false);assert.deepEqual(model.api,metric(1,2));assert.deepEqual(model.semantics,metric(1,2));
  assert.deepEqual(result.summary[1].api,metric(0,0));assert.deepEqual(result.cells[1].api,metric(0,0));
@@ -70,7 +70,7 @@ test('completion is separate from correctness and requires the entire planned ce
  const thousand=domains.flatMap(testDomain=>hundred.map(r=>({...r,testDomain})));
  const result=buildSingleService100Report(manifest({status:'partial'}),thousand);
  assert.equal(result.summary[0].complete,true);assert.equal(result.summary[0].planned,1000);
- assert.equal(result.summary[1].complete,false);assert.deepEqual(result.progress,{done:1000,total:3000});
+ assert.equal(result.summary[1].complete,false);assert.deepEqual(result.progress,{done:1000,total:4000});
  assert.ok(result.cells.filter(c=>c.model===models[0]).every(c=>c.complete));
 });
 
@@ -160,6 +160,8 @@ test('compact records retain raw, extracted, and grounded roles without classify
  assert.equal(value.contractBoundary,'datetime grammar');assert.equal(value.userGoalStatus,'ready_mock');assert.equal(value.recordSha256,'test-digest');
  assert.equal(value.detailPath,`/api/single-service-100-run/${modelKey(models[0])}/synthetic-weather`);
  assert.equal(summarize([value]).providerErrors,0);assert.equal(summarize([value]).ruleErrors,1);
+ const batchBound=compactRecord({...input,manifestId:'new-batch'});
+ assert.equal(batchBound.detailPath,`/api/single-service-100-run/${modelKey(models[0])}/synthetic-weather?manifestId=new-batch`);
 });
 
 test('compact records handle unparseable raw and absent trace/candidates explicitly',()=>{
@@ -202,7 +204,7 @@ test('all 1000 cases are deterministic and every block of ten contains every dom
  const before=cases.map(c=>c.id),ordered=orderedCases(cases),ids=ordered.map(c=>c.id);
  assert.equal(ordered.length,1000);assert.equal(new Set(ids).size,1000);assert.deepEqual(cases.map(c=>c.id),before);
  assert.deepEqual(orderedCases([...cases].reverse()).map(c=>c.id),ids);
- assert.deepEqual(models,['qwen2.5:1.5b','qwen2.5:3b','qwen2.5:0.5b']);
+ assert.deepEqual(models,['qwen2.5:0.5b','qwen2.5:1.5b','qwen2.5:3b','qwen2.5:7b']);
  for(let i=0;i<1000;i+=10)assert.deepEqual(ordered.slice(i,i+10).map(c=>c.testDomain),domains,`block ${i/10}`);
  const perModel=models.map(model=>({model,ids:orderedCases(cases).map(c=>c.id)}));
  assert.ok(perModel.every(entry=>JSON.stringify(entry.ids)===JSON.stringify(ids)));
@@ -236,6 +238,16 @@ test('manifest evidence identity, corpus provenance, active case, and partial st
  const before=structuredClone(input),result=buildSingleService100Report(input,[row()]);
  assert.deepEqual(input,before);assert.equal(result.id,input.id);assert.equal(result.status,'partial');assert.equal(result.completedAt,null);
  assert.deepEqual(result.active,input.active);assert.deepEqual(result.corpus,input.corpus);assert.equal(result.sourceSnapshot,input.sourceSnapshot);
- assert.equal(result.error,input.error);assert.equal(result.warmupCount,1);assert.deepEqual(result.progress,{done:1,total:3000});
+ assert.equal(result.error,input.error);assert.equal(result.warmupCount,1);assert.deepEqual(result.progress,{done:1,total:4000});
  assert.equal(Number.isFinite(Date.parse(result.updatedAt)),true);
+});
+
+
+test('historical three-model manifests still produce 3000 planned calls while new offload is observed only from samples',()=>{
+ const legacy=['qwen2.5:1.5b','qwen2.5:3b','qwen2.5:0.5b'],legacyReport=buildSingleService100Report(manifest({conditions:{models:legacy,modelOrder:legacy,totalCalls:3000}}),[]);
+ assert.equal(legacyReport.progress.total,3000);assert.equal(legacyReport.summary.length,3);assert.equal(legacyReport.cells.length,30);assert.match(legacyReport.notes[0],/7B不参与/);
+ const sample={at:'sample-time',models:[{name:models[3],contextLength:2048,offload:{status:'observed',cpuBytes:1000,gpuBytes:0,gpuFraction:0}}]};
+ const report=buildSingleService100Report(manifest(),[row({model:models[3],performance:{ollamaSamples:[sample],hostSamples:[{freeMemoryBytes:10},{freeMemoryBytes:3}]}})]);
+ assert.equal(report.inferenceEnvironment.models[3].gpuFraction,0);assert.equal(report.inferenceEnvironment.models[3].status,'observed');assert.equal(report.inferenceEnvironment.models[0].status,'unknown');assert.equal(report.summary[3].performance.minSampledFreeMemoryBytes,3);
+ assert.throws(()=>buildSingleService100Report(manifest({conditions:{models:legacy}}),[row({model:models[3]})]),/outside manifest/);
 });

@@ -40,9 +40,8 @@ test('both single-service suites support balanced manual selection but historica
   assert.ok(chosen.every(id=>selected.includes(id)));
 });
 
-test('default comparison models exclude installed seven billion and exclusive status explains the lock',()=>{
-  for(const name of ['qwen2.5:0.5b','qwen2.5:1.5b','qwen2.5:3b'])assert.equal(defaultEvaluationModelChecked(name),true);
-  assert.equal(defaultEvaluationModelChecked('qwen2.5:7b'),false);
+test('default comparison includes all four requested gradients and exclusive status explains the lock',()=>{
+  for(const name of ['qwen2.5:0.5b','qwen2.5:1.5b','qwen2.5:3b','qwen2.5:7b'])assert.equal(defaultEvaluationModelChecked(name),true);
   assert.equal(defaultEvaluationModelChecked('another:3b'),false);
   assert.equal(exclusiveBenchmarkMessage(null),'');
   assert.match(exclusiveBenchmarkMessage({progress:{done:12,total:3000}}),/12\/3000/);

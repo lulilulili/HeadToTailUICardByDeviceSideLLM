@@ -9,6 +9,8 @@ import {buildDomainReport} from './domain-report.mjs';
 import {GROUNDING_VERSION} from './grounding.mjs';
 import {scoreExecutionSemantics} from './semantic-evaluation.mjs';
 import {getCapability,validateArguments} from './registry.mjs';
+import {resolveBenchmarkSelection,assertBenchmarkOwnership} from './benchmark-selection.mjs';
+import {SINGLE_SERVICE_100_MODELS} from './single-service-100.mjs';
 
 const recommended=['qwen2.5:0.5b','qwen2.5:1.5b','qwen2.5:3b','qwen2.5:7b'];
 // Public HTTP inputs may supply experimental fixtures, never native-host provenance.
@@ -18,6 +20,10 @@ const fixtureSystemFields=new Map([
  ['stream_type','media.volume.level']
 ]);
 function bad(message,status=400) { const error=new Error(message);error.statusCode=status;return error; }
+function checkBenchmarkView(url,currentId){
+ const expected=url.searchParams.get('manifestId');
+ if(expected&&currentId&&expected!==currentId)throw bad('当前展示批次已切换，请刷新本轮报告再查看记录。',409);
+}
 function json(res,value,status=200) {res.writeHead(status,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store'});res.end(JSON.stringify(value));}
 async function body(req) {
  let data='';for await(const chunk of req) {data+=chunk;if(Buffer.byteLength(data)>131072) throw bad('请求过大',413);}
@@ -33,12 +39,13 @@ function csv(rows) {
  const cell=value=>{let text=String(typeof value==='object'?JSON.stringify(value):value??'');if(/^[=+@\-\t\r]/.test(text))text="'"+text;return '"'+text.replaceAll('"','""')+'"';};
  return '\ufeff'+[keys.map(cell).join(','),...rows.map(row=>keys.map(key=>cell(row[key])).join(','))].join('\r\n');
 }
-export function createApplication({store,runPipeline,providers,systemContextProvider,catalog,docs,cases,baseContext,contextDefaults={},publicDirectory,groundingReportPath,singleService100ReportPath,singleService100StatePath,singleService100EvidenceDirectory,ollamaUrl='http://127.0.0.1:11434',fetchImpl=fetch}) {
+export function createApplication({store,runPipeline,providers,systemContextProvider,catalog,docs,cases,baseContext,contextDefaults={},publicDirectory,groundingReportPath,singleService100ReportPath,singleService100StatePath,singleService100EvidenceDirectory,singleService100ActivePath,singleService100Root,ollamaUrl='http://127.0.0.1:11434',fetchImpl=fetch}) {
  const inferenceQueue=new SerialQueue(), controllers=new Map(),liveJobs=new Map();
  let healthCache=null,healthAt=0;
+ const selectedBenchmark=()=>resolveBenchmarkSelection({root:singleService100Root,activePath:singleService100ActivePath,legacy:{statePath:singleService100StatePath,reportPath:singleService100ReportPath,evidenceDirectory:singleService100EvidenceDirectory}});
  async function benchmarkState(){
-  if(!singleService100StatePath)return null;
-  try{const state=JSON.parse(await readFile(singleService100StatePath,'utf8'));const updated=Date.parse(state.updatedAt),age=Date.now()-updated;
+  const selection=await selectedBenchmark();if(!selection.statePath)return null;
+  try{const state=selection.manifest??JSON.parse(await readFile(selection.statePath,'utf8'));const updated=Date.parse(state.updatedAt),age=Date.now()-updated;
    if(state.status!=='running'||!Number.isFinite(updated)||age<0||age>300000)return null;
    if(!Number.isInteger(state.runner?.pid)||state.runner.pid<1)return null;
    try{process.kill(state.runner.pid,0);}catch{return null;}
@@ -169,19 +176,26 @@ export function createApplication({store,runPipeline,providers,systemContextProv
    if(path==='/api/catalog')return json(res,catalog);
    if(path==='/api/docs')return json(res,{sections:docs});
    if(path==='/api/single-service-100-report'&&req.method==='GET'){
-    if(!singleService100ReportPath)return json(res,{status:'not_started',progress:{done:0,total:3000},summary:[],cells:[],examples:[]});
-    try{return json(res,JSON.parse(await readFile(singleService100ReportPath,'utf8')));}catch(error){if(error.code!=='ENOENT')throw error;return json(res,{status:'not_started',progress:{done:0,total:3000},summary:[],cells:[],examples:[]});}
+    const selection=await selectedBenchmark();
+    const conditions=selection.manifest?.conditions??(singleService100ActivePath?{models:SINGLE_SERVICE_100_MODELS,totalCalls:1000*SINGLE_SERVICE_100_MODELS.length}:null);
+    const pending={status:selection.manifest?.status??'not_started',progress:selection.manifest?.progress??{done:0,total:conditions?.totalCalls??3000},summary:[],cells:[],examples:[],...(conditions?{conditions}:{}),...(selection.manifest?{id:selection.id,corpus:selection.manifest.corpus,notes:['当前批次报告尚在生成，统计指标暂不显示。']}: {})};
+    if(!selection.reportPath)return json(res,pending);
+    try{const report=JSON.parse(await readFile(selection.reportPath,'utf8'));assertBenchmarkOwnership(selection,report);return json(res,report);}catch(error){if(error.code!=='ENOENT')throw error;return json(res,pending);}
    }
    if(path==='/api/single-service-100-results'&&req.method==='GET'){
-    if(!singleService100EvidenceDirectory)return json(res,{rows:[]});
-    let index;try{index=JSON.parse(await readFile(resolve(singleService100EvidenceDirectory,'index.json'),'utf8'));}catch(error){if(error.code!=='ENOENT')throw error;return json(res,{rows:[]});}
+    const selection=await selectedBenchmark();if(!selection.evidenceDirectory)return json(res,{rows:[]});
+    if(selection.active)checkBenchmarkView(url,selection.id);
+    let index;try{index=JSON.parse(await readFile(resolve(selection.evidenceDirectory,'index.json'),'utf8'));assertBenchmarkOwnership(selection,index,{kind:'index'});}catch(error){if(error.code!=='ENOENT')throw error;return json(res,{rows:[]});}
+    checkBenchmarkView(url,index.manifestId);
     const model=url.searchParams.get('model'),domain=url.searchParams.get('domain'),failed=url.searchParams.get('failed')==='true';
     return json(res,{...index,rows:index.rows.filter(r=>(!model||r.model===model)&&(!domain||r.testDomain===domain)&&(!failed||r.primary!=='correct'))});
    }
    if(path.startsWith('/api/single-service-100-run/')&&req.method==='GET'){
     const parts=path.split('/');const model=parts[3],caseId=parts[4];
-    if(!singleService100EvidenceDirectory||parts.length!==5||!['qwen2.5-0.5b','qwen2.5-1.5b','qwen2.5-3b'].includes(model)||!/^e100-(weather|calendar|contacts|files|services|cloud|device|connectivity|location|media)-\d{3}$/.test(caseId))throw bad('未知千题评测记录',404);
-    try{return json(res,JSON.parse(await readFile(resolve(singleService100EvidenceDirectory,model,`${caseId}.json`),'utf8')));}catch(error){if(error.code!=='ENOENT')throw error;throw bad('该调用尚未完成或记录不存在',404);}
+    const selection=await selectedBenchmark(),modelName=selection.models.find(name=>name.replace(':','-')===model);
+    if(selection.active)checkBenchmarkView(url,selection.id);
+    if(!selection.evidenceDirectory||parts.length!==5||!modelName||!/^e100-(weather|calendar|contacts|files|services|cloud|device|connectivity|location|media)-\d{3}$/.test(caseId))throw bad('未知千题评测记录',404);
+    try{const record=JSON.parse(await readFile(resolve(selection.evidenceDirectory,model,`${caseId}.json`),'utf8'));assertBenchmarkOwnership(selection,record,{kind:'record',model:modelName,caseId});checkBenchmarkView(url,record.manifestId);return json(res,record);}catch(error){if(error.code!=='ENOENT')throw error;throw bad('该调用尚未完成或记录不存在',404);}
    }
    if(path==='/api/cases')return json(res,{cases,context:baseContext});
    if(path==='/api/domain-report') {

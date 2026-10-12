@@ -314,25 +314,37 @@ export function groundArguments(capability,text,args={},context={}){
   if(capability.inputs.value.type==='array'&&key==='reminders')recover('value',unquoted(/提醒(?:提前)?分钟数(?:为|是|[:：])\s*(\d+(?:\s*(?:和|、|,)\s*\d+)*)/g).map(item=>({...item,value:item.value.split(/和|、|,/).map(x=>Number(x.trim()))})));
  }
  if(capability.domain==='cloud'){
-  if(has('cloud_path'))recover('cloud_path',unquoted(/(?:云文件|到云端|云端路径(?:是|为|[:：])?)\s*((?:[A-Za-z0-9_.-]+\/)+[A-Za-z0-9_.-]+)/g));
-  if(has('local_path'))recover('local_path',unquoted(/((?:[A-Za-z]:[\\/]|file:\/\/\/)[^，,；;。！？\s“”"'\r\n]+?)(?=上传|到云端|，|,|；|;|\s|$)/g));
-  if(has('bucket'))recover('bucket',unquoted(/(?:存储实例|实例)(?:是|为|[:：])?\s*([A-Za-z0-9_.-]+)/g));
-  if(has('function_name'))recover('function_name',unquoted(/(?:调用云函数|函数名(?:是|为|[:：])?)\s*([A-Za-z_$][A-Za-z0-9_$.-]*)/g));
-  if(has('version'))recover('version',unquoted(/版本(?:是|为|[:：])?\s*([A-Za-z0-9_$.-]+)/g));
-  if(has('timeout_ms'))recover('timeout_ms',unquoted(/超时(?:是|为|[:：])?\s*(\d+)毫秒/g).map(item=>({...item,value:Number(item.value)})));
-  if(has('collection'))recover('collection',unquoted(/云数据库\s*([A-Za-z_][A-Za-z0-9_]*)表/g));
-  if(has('field_name'))recover('field_name',unquoted(/(?:的)?([A-Za-z_][A-Za-z0-9_]*)字段/g));
-  if(has('zone'))recover('zone',unquoted(/(?:数据库区域|区域)(?:是|为|[:：])?\s*([A-Za-z0-9_.-]+)/g));
+  const cloudEvidence=(regex,group=1)=>unquoted(regex,group).filter(item=>!negatedEvidence(text,item));
+  const cloudQuoted=prefix=>quotedAfter(text,prefix).filter(item=>!labelInside(item,[...quotedEvidence(text),...literals])&&!negatedEvidence(text,item));
+  if(has('cloud_path')){
+   recover('cloud_path',cloudQuoted(/(?:云文件|到云端|云端路径(?:是|为|[:：])?)\s*/));
+   recover('cloud_path',cloudEvidence(/(?:云文件|到云端|云端路径(?:是|为|[:：])?)\s*((?:[A-Za-z0-9_.-]+\/)+[A-Za-z0-9_.-]+)/g));
+  }
+  if(has('local_path')){
+   recover('local_path',cloudQuoted(/(?:上传(?:本地)?(?:文件)?|到本地|本地路径(?:是|为|[:：])?)\s*/));
+   recover('local_path',cloudEvidence(/((?:[A-Za-z]:[\\/]|file:\/\/\/)[^，,；;。！？\s“”"'\r\n]+?)(?=上传|到云端|，|,|；|;|\s|$)/g));
+  }
+  if(has('bucket'))recover('bucket',cloudEvidence(/(?:存储实例|实例)(?:是|为|[:：])?\s*([A-Za-z0-9_.-]+)/g));
+  if(has('function_name'))recover('function_name',cloudEvidence(/(?:调用云函数|函数名(?:是|为|[:：])?)\s*([A-Za-z_$][A-Za-z0-9_$.-]*)/g));
+  if(has('version'))recover('version',cloudEvidence(/版本(?:是|为|[:：])?\s*([A-Za-z0-9_$.-]+)/g));
+  if(has('timeout_ms'))recover('timeout_ms',cloudEvidence(/超时(?:是|为|[:：])?\s*(\d+)毫秒/g).map(item=>({...item,value:Number(item.value)})));
+  if(has('collection'))recover('collection',cloudEvidence(/云数据库\s*([A-Za-z_][A-Za-z0-9_]*)表/g));
+  if(has('field_name'))recover('field_name',cloudEvidence(/(?:的)?([A-Za-z_][A-Za-z0-9_]*)字段/g));
+  if(has('zone'))recover('zone',cloudEvidence(/(?:数据库区域|区域)(?:是|为|[:：])?\s*([A-Za-z0-9_.-]+)/g));
   if(has('operation')){
    const operations={计数:'count',求和:'sum',平均值:'average',最大值:'maximum',最小值:'minimum'};
-   recover('operation',unquoted(/(计数|求和|平均值|最大值|最小值)/g).map(item=>({...item,value:operations[item.value]})));
+   recover('operation',cloudEvidence(/(计数|求和|平均值|最大值|最小值)/g).map(item=>({...item,value:operations[item.value]})));
   }
-  if(has('resource'))recover('resource',unquoted(/注册资源\s*([A-Za-z0-9_.-]+)/g));
+  if(has('resource'))recover('resource',cloudEvidence(/注册资源\s*([A-Za-z0-9_.-]+)/g));
   if(has('mode')){
    const modes={安装:'install',周期:'periodic',跳链:'link'};
-   recover('mode',unquoted(/(安装|周期|跳链)预加载/g).map(item=>({...item,value:modes[item.value]})));
+   const items=unquoted(/(安装|周期|跳链)预加载/g).map(item=>({...item,value:modes[item.value]}));
+   recover('mode',items.filter(item=>!negatedEvidence(text,item)));
+   const effective=verifiedFields.has('mode')?groundedArguments.mode:capability.inputs.mode.default;
+   const excluded=items.find(item=>negatedEvidence(text,item)&&item.value===effective);
+   if(excluded)check('mode','excluded_prefetch_mode','block','用户明确排除该预加载模式，不能通过模型猜测或契约默认值启用；请明确使用的模式。',excluded);
   }
-  if(has('link'))recover('link',unquoted(/链接(?:是|为|[:：])\s*([A-Za-z][A-Za-z0-9+.-]*:\/\/[^，,；;。！？\s“”"'\r\n]+)/g));
+  if(has('link'))recover('link',cloudEvidence(/链接(?:是|为|[:：])\s*([A-Za-z][A-Za-z0-9+.-]*:\/\/[^，,；;。！？\s“”"'\r\n]+)/g));
  }
  if(capability.domain==='services'&&has('service')){
   const names={天气:'weather',日历:'calendar',通讯录:'contacts',文件:'files',会议资料:'materials'};
@@ -399,7 +411,8 @@ export function groundArguments(capability,text,args={},context={}){
   }
   if(groundedArguments[field]===undefined&&trusted){value=selected.value;status='selected';source='user_selection';message='缺省只读目标使用可信用户选择；未证明SDK对象存在。';}
   const directory=context.identityDirectory?.[field];
-  if(directory?.source==='fixture'&&directory.complete===true&&Array.isArray(directory.ids)&&value!==undefined&&!directory.ids.includes(value)){
+  // A rejected model value is audit evidence, not a remaining lookup target.
+  if(status!=='rejected'&&directory?.source==='fixture'&&directory.complete===true&&Array.isArray(directory.ids)&&value!==undefined&&!directory.ids.includes(value)){
    status='rejected';message='目标ID不在当前完整实验目录中，夹具报告该目标不存在；这不是SDK验证。';
    check(field,'identity_fixture_not_found','block',message,undefined,undefined);
   }
@@ -428,7 +441,7 @@ export function groundArguments(capability,text,args={},context={}){
  }
  const strictOptional=capability.domain==='calendar'&&capability.risk==='write'?['ends_at','duration_minutes','reminder_minutes','description','is_all_day','recurrence','attendees']:
   capability.domain==='contacts'&&capability.risk==='write'?[...(capability.inputs.name&&!capability.inputs.name.required?['name']:[]),'phone','email','organization','address','birthday','nickname','note','website']:
-  capability.domain==='cloud'?['bucket','version','timeout_ms','zone']:capability.domain==='files'?['file_type']:[];
+  capability.domain==='cloud'?['bucket','version','timeout_ms','zone','mode']:capability.domain==='files'?['file_type']:[];
  for(const name of strictOptional){
   const field=has('changes')&&capability.inputs.changes.properties?.[name]?`changes.${name}`:name;
   if(!verifiedFields.has(field))remove(field,'unmentioned_business_parameter','原文没有可核验的该槽位值，移除模型自行补出的业务参数。');
@@ -464,10 +477,11 @@ export function groundArguments(capability,text,args={},context={}){
   const candidateLiteral=typeof pathGet(groundedArguments,field)==='string'&&text.includes(value);
   if((idEvidence(text,identity).length||selectedReference)&&!/(?:关键词|查询词|搜索词|标题含|号码含|组织含|keyword\s*[:：=]|query\s*[:：=])/.test(text)||!candidateLiteral||temporalEvidence(value).some(item=>item.span.start===0&&item.span.end===value.length))remove(field,'output_label_not_query','目标已由ID/明确选择指代，输出字段或日期不能自动成为搜索条件。');
  }
- for(const name of ['service','url','cloud_path','resource','zone'])if(has(name)&&!verifiedFields.has(name)&&groundedArguments[name]!==undefined){
+ for(const name of ['service','url','cloud_path','local_path','resource','zone'])if(has(name)&&!verifiedFields.has(name)&&groundedArguments[name]!==undefined){
   const value=groundedArguments[name],selected=context.objects?.[capability.inputs[name].contextKey??name];
   const trusted=capability.risk==='read'&&selected?.trusted===true&&selected.source==='user_selection'&&isDeepStrictEqual(value,selected.value);
   let literal=typeof value==='string'&&text.includes(value)&&!placeholder.test(value)&&!/(?:当前|已选|选中|这个|那个|未定|还没|未给)/.test(value);
+  if(['cloud_path','local_path'].includes(name)&&literal)literal=unquoted(new RegExp(escape(value),'g'),0).some(item=>!negatedEvidence(text,item));
   if(name==='url')literal=literal&&/^[A-Za-z][A-Za-z0-9+.-]*:/.test(value);
   if(name==='cloud_path'&&literal){
    const localSpans=grounding.checks.filter(item=>item.field==='local_path'&&item.span).map(item=>item.span);

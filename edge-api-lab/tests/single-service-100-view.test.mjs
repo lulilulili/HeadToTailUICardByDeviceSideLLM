@@ -15,7 +15,7 @@ test('active-only polling stops on every terminal or not-started status',()=>{
 
 test('not started has no fabricated zero accuracy even with stale summary values',()=>{
   const html=renderSingleService100Report({...report(),status:'not_started',progress:{done:0,total:3000},active:null});
-  assert.match(html,/尚无实测数据/);assert.match(html,/0 \/ 3000/);assert.match(html,/7B 明确排除/);
+  assert.match(html,/尚无实测数据/);assert.match(html,/0 \/ 3000/);assert.match(html,/3 模型/);
   assert.doesNotMatch(html,/50\.0%|100\.0%|0\.0%|模型对照/);
 });
 
@@ -43,10 +43,28 @@ test('compact rows show expected actual API and original versus grounded args wi
   assert.match(renderSingleService100Rows([row(undefined,{modelArguments:null,extractedArguments:null,groundedArguments:null})]),/未取得/);
 });
 
-test('detail paths are restricted to the three-model same-origin read-only route',()=>{
+test('detail paths accept all four requested models and reject unsafe or unknown routes',()=>{
   assert.equal(safeSingleService100DetailPath(row().detailPath),row().detailPath);
   assert.equal(safeSingleService100DetailPath('/api/single-service-100-run/qwen2.5-3b/e100-calendar-100'),'/api/single-service-100-run/qwen2.5-3b/e100-calendar-100');
-  for(const path of ['https://evil.test/api/single-service-100-run/qwen2.5-1.5b/e100-weather-011','//evil.test/path','/api/runs','/api/single-service-100-run/qwen2.5-7b/e100-weather-011','/api/single-service-100-run/qwen2.5-3b/../../secret','/api/single-service-100-run/qwen2.5-3b/%65%31%30%30-weather-011','/api/single-service-100-run/qwen2.5-3b/e100-weather-011?x=1','\\api\\single-service-100-run\\qwen2.5-3b\\e100-weather-011'])assert.equal(safeSingleService100DetailPath(path),null,path);
+  assert.equal(safeSingleService100DetailPath('/api/single-service-100-run/qwen2.5-7b/e100-weather-011'),'/api/single-service-100-run/qwen2.5-7b/e100-weather-011');
+  for(const path of ['https://evil.test/api/single-service-100-run/qwen2.5-1.5b/e100-weather-011','//evil.test/path','/api/runs','/api/single-service-100-run/qwen2.5-14b/e100-weather-011','/api/single-service-100-run/qwen2.5-3b/../../secret','/api/single-service-100-run/qwen2.5-3b/%65%31%30%30-weather-011','/api/single-service-100-run/qwen2.5-3b/e100-weather-011?x=1','\\api\\single-service-100-run\\qwen2.5-3b\\e100-weather-011'])assert.equal(safeSingleService100DetailPath(path),null,path);
+});
+
+test('four-model plan and table order come from report conditions without claiming future scores',()=>{
+  const data=report();data.conditions.models=['qwen2.5:7b','qwen2.5:1.5b','qwen2.5:3b','qwen2.5:0.5b'];data.conditions.totalCalls=4000;data.corpus.total=1000;data.corpus.perDomain=100;
+  data.progress={done:2,total:4000};data.summary.unshift(cell('qwen2.5:7b'));
+  const html=renderSingleService100Report(data),matrix=html.slice(html.indexOf('模型对照'));
+  assert.match(html,/2 \/ 4000/);assert.match(html,/10 领域 × 每领域 100 条 × 4 模型/);assert.match(html,/7B → 1\.5B → 3B → 0\.5B/);
+  assert.ok(matrix.indexOf('qwen2.5:7b')<matrix.indexOf('qwen2.5:1.5b'));
+  assert.doesNotMatch(html,/7B 明确排除|7B 不参加|× 3 模型/);
+  const pending=renderSingleService100Report({...data,status:'not_started',progress:{done:0,total:4000}});
+  assert.match(pending,/0 \/ 4000/);assert.doesNotMatch(pending,/50\.0%|100\.0%|0\.0%|模型对照/);
+});
+
+test('explicit planned calls take precedence while legacy three-model reports stay at 3000',()=>{
+  const current=report();current.conditions={models:['qwen2.5:1.5b','qwen2.5:3b','qwen2.5:0.5b','qwen2.5:7b'],totalCalls:4000};
+  assert.match(renderSingleService100Report(current),/2 \/ 4000/);
+  assert.match(renderSingleService100Report(report()),/2 \/ 3000/);
 });
 
 test('model domain and failure filters preserve audited execution-pass raw mismatch and paginate after filtering',()=>{
@@ -63,6 +81,13 @@ test('read-only index requests encode filters and do not need a model inference 
   assert.equal(singleService100ResultsPath({}),'/api/single-service-100-results?failed=true');
   const path=singleService100ResultsPath({model:'qwen2.5:1.5b',domain:'weather',failed:false}),url=new URL(path,'http://127.0.0.1');
   assert.equal(url.pathname,'/api/single-service-100-results');assert.equal(url.searchParams.get('model'),'qwen2.5:1.5b');assert.equal(url.searchParams.get('domain'),'weather');assert.equal(url.searchParams.has('failed'),false);
+  assert.equal(new URL(singleService100ResultsPath({manifestId:'batch-a'}),'http://127.0.0.1').searchParams.get('manifestId'),'batch-a');
+});
+
+test('detail paths allow one valid batch identity and reject arbitrary or duplicate query inputs',()=>{
+  const path='/api/single-service-100-run/qwen2.5-7b/e100-cloud-011';
+  assert.equal(safeSingleService100DetailPath(path+'?manifestId=batch-a'),path+'?manifestId=batch-a');
+  for(const query of ['?manifestId=..','?manifestId=batch-a&manifestId=batch-b','?manifestId=batch-a&other=x','?manifestId=%2Foutside','?manifestId=batch-a#fragment','?manifestId='])assert.equal(safeSingleService100DetailPath(path+query),null,query);
 });
 
 test('report and row content escape HTML including source metadata and error messages',()=>{

@@ -6,7 +6,7 @@ import { getCapability } from '../src/registry.mjs';
 import { validateValue } from '../src/providers.mjs';
 
 test('v7 exposes optional display arguments without changing frozen v6 evidence', () => {
-  assert.equal(PROMPT_VERSION, 'explicit-v7');
+  assert.equal(PROMPT_VERSION, 'explicit-v8-cloud');
   const frozen = readFileSync(new URL('../data/benchmark-sparse-v6/src/prompts.mjs', import.meta.url), 'utf8');
   assert.match(frozen, /PROMPT_VERSION = 'sparse-v6'/);
   const prompt = buildUnifiedPrompt('预览file:///D:/demo/figure.png，窗口标题为结果图');

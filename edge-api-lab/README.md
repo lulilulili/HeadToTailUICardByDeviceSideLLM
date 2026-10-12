@@ -2,25 +2,29 @@
 
 当前及未来一段时间为可行性验证阶段。第一阶段只处理一个领域、一个 API 的单服务请求：中文提示词 → 领域 / 字段或操作 API → 显式参数 → 原文核对 → 系统补全与时间归一化 / 精度降级 → 模拟回执。当前 10 个领域共 417 个伪 API，包含原六领域以及设备状态、网络连接、位置服务、音频媒体。回执显示输出契约与字段投影，真实值为 null；组合服务留待第二阶段。
 
-## 当前阶段导航（2026-10-11）
+## 当前阶段导航（2026-10-12）
 
 默认题组为 `single-service-100-v1`：10 个领域各 100 条，共 1000 条中文单服务用例。原 100 条开发用例与新增 900 条分别统计；原小题组和历史 478 条独立保留，服务总语料 1578 条。跨服务/组合服务不在本轮范围。优先查看批量评测的“千题单服务实测”和详细说明首个“当前可行性验证”页签，其他 13 个说明页签标明历史快照。
 
-本轮按 1.5B → 3B → 0.5B 串行各运行 1000 条，计划 3000 条正式调用，7B 不参与。实时报告为 `docs/single-service-100-v1-results.json`，独立原始证据在 `evidence/single-service-100-v1/`；网页读取实际进度，未跑模型不算 0 分。评测期间工作台禁止发起其他调用，以免改变推理条件。入口 `npm run benchmark:single:100`，只初始化冻结清单可附加 `-- --initialize`，只重导出已有证据可用 `-- --export-only`。同一冻结条件恢复已保存 key，不覆写正式原始记录；代码/语料/模型 digest 改变时拒绝混合版本恢复。
+用户要求同步最新工程后按同一套千题全领域重测，并明确加入 7B。当前计划按 0.5B → 1.5B → 3B → 7B 串行，各运行 1000 条，共 4000 条正式调用；预热单独保存、不计分。网页从报告 `conditions.models` / `conditions.totalCalls` 读取顺序与计划，成绩只用已完成调用，未执行不算 0 分。历史三模型 3000 次计划及其证据保留，不改成四模型报告。
+
+新建冻结清单：`node scripts/benchmark-single-service-100.mjs --new --initialize`；运行或恢复使用 `node scripts/benchmark-single-service-100.mjs --manifest <path>`，只重导出已有证据再加 `--export-only`。当前批次由 `data/runtime/single-service-100-active.json` 定位：清单在 `data/runtime/single-service-100/<id>/manifest.json`，报告在 `docs/single-service-100/<id>/results.json`，原始证据在 `evidence/single-service-100/<id>/`，源码快照在 `data/benchmark-single-service-100/<id>/`。页面 API 路由保持不变；无新指针时可读取历史 v1 报告。评测期间工作台禁止其他调用，以免改变推理条件。同一冻结条件恢复已保存 key，不覆写正式原始记录；代码/语料/模型 digest 改变时拒绝混合版本恢复。
 
 本轮覆盖 248 个不同伪 API（目录共 417 个），不是全 API 穷举或人类独立盲测。模型原始参数与工程后完整语义分列；正确澄清/解析失败不能等同执行成功，期望可执行的 901 条另有指标。77 条预期澄清、22 条预期解析失败，以及 20 条已知时间解析/夹具边界明确披露。手机位置、时钟、网络句柄及音频场景均采用固定实验 fixture，不读电脑定位。
 
-当前版本为 `explicit-v7` 提示词、`single-service-v3` 目录、`deterministic-grounding-v2` 原文核对。候选显示字段 / 对象 / 整体查询及允许入参，并补充参数语义；模型先保留本句明确值，代码再核对原文字串及缺失信息，最后读取可以补全的系统参数。原始模型提取与修复参数分开保存，规则不重选 API，也不在运行时读取金标。
+当前提示词版本为 `explicit-v8-cloud`，目录为 `single-service-v3`。提示词补充云端安装模式、周期、跳链等模式映射，区分单记录与统计查询、下载地址与文件传输、会议资料字段与完整对象；模型先保留本句明确值，代码再核对原文字串及缺失信息，最后读取可以补全的系统参数。原始模型提取与修复参数分开保存，规则不重选 API，也不在运行时读取金标。原文核对版本及本次冻结的最终版本组合以报告 `conditions` 为准，历史 `explicit-v7` 不改写成新版本。
 
-当前结果入口为 [阶段说明](docs/current-feasibility.json)、[问题与实测分析](docs/PARAMETER_CAUSE_ANALYSIS.md)、[最终 v2 规则回放](docs/grounding-replay-v2-final3.json)、[本机部分实测](docs/feasibility-final3.json) 及 [全球中文城市专项](docs/global-cities-final3.json)。本机前三档完成各 40 条主样本、12 条提示词对照和 4 条守卫；7B 受硬件限制，整轮按实际记录明确标记部分完成，不虚构缺失成绩。初始推理、final1 / final2 和各版本派生结果、历史 1,200 次输出及 v1 回放保持独立，不覆盖。本轮仍为开发集，缺乏独立盲测、真机执行以及同模型不同量化规格对照。
+当前重测结果请查看“千题单服务实测”，测试设计见 [千题设计与环境边界](docs/SINGLE_SERVICE_100_TEST_DESIGN.md)。[阶段说明](docs/current-feasibility.json)、[问题与实测分析](docs/PARAMETER_CAUSE_ANALYSIS.md)、[最终 v2 规则回放](docs/grounding-replay-v2-final3.json)、[历史部分实测](docs/feasibility-final3.json) 及 [全球中文城市专项](docs/global-cities-final3.json) 保留为各自版本的证据。旧机器前三档完成各 40 条主样本、12 条提示词对照和 4 条守卫；7B 当时受硬件限制，历史报告按实际记录标明部分完成。这些既有成绩与超时不能替代本机新一轮实测，也不能预判当前 7B 结果。初始推理、final1 / final2 和各版本派生结果、历史 1,200 次输出及 v1 回放独立保留。本轮仍为开发集，缺乏独立盲测、真机业务执行以及同模型不同量化规格对照。
 
 ## 启动
 
 保持 Ollama 运行并准备 Node.js 22 或更新版本，双击工作区的 `启动API验证工程.bat`，或项目内的 `启动实验室.bat`，浏览器自动打开 http://127.0.0.1:3210。重复双击复用已运行服务。停止本项目服务用 `stop.ps1`；故障日志在 `data/runtime/server-error.log`。工程无第三方安装依赖。
 
-已安装四档 `qwen2.5:0.5b`、`qwen2.5:1.5b`、`qwen2.5:3b`、`qwen2.5:7b`，均为 Q4_K_M。当前机器 CPU 为 Intel Core i5-8265U；与历史报告中的机器分开记录。权重存放 `D:\OllamaModels`，用户级 `OLLAMA_MODELS` 指向 D 盘，原 `C:\Users\huzimo\.ollama\models` 通过目录联接指向该目录。选择器仅允许已安装且规格可识别、参数量小于 10B 的本地模型；模型权重不提交仓库。
+本次已核对的推理电脑为 Intel Core i7-10700（8 核 / 16 线程），内存 `34125086720` 字节（31.8 GiB，约 32 GiB），Windows 11 专业版 release `10.0.28000` / Build 28000 / x64，Node.js 25.2.1、Ollama 0.35.0。检测到 Intel UHD Graphics 630，驱动 `31.0.101.2140`；存在显卡不证明 GPU 推理，CPU/GPU 分担以正式调用期间的 Ollama `/api/ps` 实际采样为准，未采样显示未知。结果页有环境摘要，以及可展开的采集来源、版本、推理参数、模型参数量、量化和 digest。
 
-权重安装不等于本机可顺畅推理：约 8GB 内存的本机运行 7B 时出现内存压力和连续 180 秒超时，因此未完成其当前能力验证。超时是硬件可用性证据，不作为 API 选择或参数抽取能力的 0% 成绩。
+比较的四档为 `qwen2.5:0.5b`、`qwen2.5:1.5b`、`qwen2.5:3b`、`qwen2.5:7b`；安装与实际规格由当前 Ollama 校验、冻结，不按名称猜参数量或量化。进程级和用户级 `OLLAMA_MODELS` 均未设置，不沿用旧机器 D 盘权重目录或目录联接声明。选择器仅允许已安装且规格可识别、参数量小于 10B 的本地模型；模型权重不提交仓库。
+
+历史 i5-8265U / 约 8GB 机器运行 7B 时曾出现内存压力和连续 180 秒超时，未完成当时的能力验证。这是旧环境的硬件可用性证据，不是当前 i7 / 32 GiB 机器的测试结论，也不作为 API 选择或参数抽取能力的 0% 成绩。当前正式推理结果、耗时与资源采样按新批次原始记录呈现。
 
 ## 页面
 
@@ -50,7 +54,7 @@
 
 冻结历史评测的提示词为 `sparse-v6`，目录为 `object-fields-v2`，不是当前运行版本。模型仅输出用户明确提供的参数，未知字段省略；没有坐标表达就不提供坐标提取槽，明确经纬度时用坐标替代地点文字。代码补全默认时间、系统位置和策略，并保存来源。分层最多三次调用、意图最多六个候选；一次调用最多十二个候选。运行保留候选、原始消息/响应、每次模型耗时、加载/生成时间和 token 数。兼容旧 null 输出，不用金标改写模型结果。历史默认上下文 2048；当前调用的有效上下文、预算及实际 token 数以每次 trace 为准。
 
-历史有 178 条在 `data/cases.json`，六领域各 50 条、共 300 条在 `data/cases-domain-core.json` 和 `data/cases-domain-other.json`，当时合计 478 条。当前另有 `data/single-service-core.mjs` 的 60 条和 `data/cases-system-single.json` 的 40 条，合计 578 条；当前默认只使用新增 100 条单服务用例。旧 65 条快照在 `data/cases-v1.json`。显式参数、状态、来源和已标注的精度条件共同决定完整计划分数。历史冻结评测时间为 2026-10-10 08:00 Asia/Shanghai。错误保留在分母，预热独立保存，取消保留已完成结果与部分 trace。运行历史及导出存放本机 `data/runtime`。
+历史有 178 条在 `data/cases.json`，六领域各 50 条、共 300 条在 `data/cases-domain-core.json` 和 `data/cases-domain-other.json`，当时合计 478 条。另有 `data/single-service-core.mjs` 的 60 条和 `data/cases-system-single.json` 的 40 条，组成既有 100 条单服务题；新增固定 900 条后，当前默认单服务题组共 1000 条，服务总语料为 1578 条。旧 65 条快照在 `data/cases-v1.json`。显式参数、状态、来源和已标注的精度条件共同决定完整计划分数。历史冻结评测时间为 2026-10-10 08:00 Asia/Shanghai。错误保留在分母，预热独立保存，取消保留已完成结果与部分 trace。各次运行历史、清单及导出独立存放本机。
 
 历史题组 `domain-50-v1` 固定四模型、一次调用模式、每题一次，共 1,200 条模型真实调用；业务执行仍为伪 API，各历史题组不混算。P50 为典型耗时（中位数）、P95 为较慢耗时。完整结果与不同场景的问题来源见 `docs/DOMAIN_EVALUATION_RESULTS.md` 及历史页签“领域模型实测”。该历史题组的首次运行命令为 `npm run benchmark:domains`；已有清单使用 `node scripts/benchmark-domains.mjs --resume`，不会自动覆盖结果或混入改过的用例 / 源码。仅导出用 `--export-only`，不能作为当前默认单服务题组的重测入口。
 

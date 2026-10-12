@@ -28,7 +28,7 @@ export const notice = (message,tone='danger') => `<div class="notice ${tone}" ro
 export const empty = (title,description='') => `<div class="empty"><span class="empty-mark">⌁</span><h3>${escapeHtml(title)}</h3><p>${escapeHtml(description)}</p></div>`;
 export const isSingleServiceSuite = suite => ['single-service-v1','single-service-100-v1'].includes(suite);
 export const caseMatchesScope = (suite,scope) => scope==='all' || (scope==='history'?!isSingleServiceSuite(suite):suite===scope);
-export const defaultEvaluationModelChecked = name => ['qwen2.5:0.5b','qwen2.5:1.5b','qwen2.5:3b'].includes(name);
+export const defaultEvaluationModelChecked = name => ['qwen2.5:0.5b','qwen2.5:1.5b','qwen2.5:3b','qwen2.5:7b'].includes(name);
 export const exclusiveBenchmarkMessage = benchmark => benchmark ? `独立千题实测独占推理中${benchmark.progress?` · ${benchmark.progress.done ?? 0}/${benchmark.progress.total ?? 3000}`:''}。实验台和批量启动暂不可用；可查看“千题单服务实测”结果，不会重复启动模型。` : '';
 export const selectCaseIds = (ids,limit,cases=[]) => {
   const count=Math.max(1,Math.floor(Number(limit) || ids.length)),byId=new Map(cases.map(c=>[c.id,c]));

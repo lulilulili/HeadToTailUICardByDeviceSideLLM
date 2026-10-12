@@ -130,7 +130,7 @@ test('the source ledger never expands either unified or per-API extraction promp
   for(const prompt of [unified,argumentsPrompt]) {
     assert.ok(!JSON.stringify(prompt.schema).includes('provenance'));
     assert.ok(!prompt.messages.some(message=>message.content.includes('PARAMETER_SOURCE_TAGS')||message.content.includes('U 原文')));
-    assert.equal(prompt.promptMeta.version,'explicit-v7');
+    assert.equal(prompt.promptMeta.version,'explicit-v8-cloud');
   }
   assert.ok(unified.schema.oneOf.every(branch=>Object.keys(branch.properties).join(',')==='domain,api,arguments'));
 });
