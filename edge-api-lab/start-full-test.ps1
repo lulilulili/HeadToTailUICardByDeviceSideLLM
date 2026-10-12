@@ -1,4 +1,4 @@
-param([switch]$NewRun,[switch]$NoOpen)
+﻿param([switch]$NewRun,[switch]$NoOpen)
 $ErrorActionPreference = 'Stop'
 $projectPath = $PSScriptRoot
 $nodePath = (Get-Command node -ErrorAction Stop).Source

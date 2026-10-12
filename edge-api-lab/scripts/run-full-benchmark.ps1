@@ -1,4 +1,4 @@
-param([Parameter(Mandatory=$true)][string]$ManifestPath)
+﻿param([Parameter(Mandatory=$true)][string]$ManifestPath)
 $ErrorActionPreference = 'Stop'
 $projectPath = Split-Path -Parent $PSScriptRoot
 $manifestFullPath = [IO.Path]::GetFullPath($ManifestPath)
