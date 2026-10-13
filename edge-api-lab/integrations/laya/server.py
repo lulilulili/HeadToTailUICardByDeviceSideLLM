@@ -1,12 +1,13 @@
 """Managed loopback launcher for the author's unmodified Laya HTTP application.
 
-Only adds installed version/deployment facts to health; prediction is handled by
-laya.serve, including its observable tournament metadata and token diagnostics.
+Adds deployment facts and optional batch-bound exact-request reuse. New inference
+is handled by laya.serve; reused native answers disclose their first observation.
 """
 import json
 import os
 import sys
 from importlib.metadata import version
+from pathlib import Path
 
 DEFAULTS = {
     "LAYA_HOST": "127.0.0.1", "LAYA_PORT": "8765", "LAYA_DEVICE": "cpu",
@@ -48,9 +49,23 @@ except ValueError as error:
 if __name__ == "__main__" and "--check-config" in sys.argv:
     raise SystemExit(0)
 
+from reusable_cache import ReuseMiddleware, load_reuse_from_config  # noqa: E402
 from laya.serve import create_app  # noqa: E402
 from starlette.responses import JSONResponse  # noqa: E402
 import uvicorn  # noqa: E402
+
+runtime_root = Path(__file__).resolve().parents[2] / 'data' / 'runtime'
+try:
+    reuse_cache = load_reuse_from_config(runtime_root / 'laya-reuse-config.json', runtime_root, {
+        'modelRevision': os.environ['LAYA_REVISION'], 'layaVersion': version('laya'),
+        'threads': int(os.environ['LAYA_THREADS']),
+        'model': os.environ['LAYA_DEFAULT_MODEL'], 'device': os.environ['LAYA_DEVICE'],
+        'tournamentGroup': int(os.environ['LAYA_TOURNAMENT_GROUP']), 'maxChoices': 255,
+        **REQUEST_DEFAULTS,
+    })
+except (ValueError, OSError, KeyError) as error:
+    print('Laya benchmark reuse configuration: ' + str(error), file=sys.stderr)
+    raise SystemExit(2)
 
 app = create_app()
 
@@ -64,8 +79,12 @@ async def deployment_health(request, call_next):
     payload = json.loads(body)
     if "loaded" in payload:
         payload["deployment"] = deployment_facts(os.environ, version("laya"))
+    if reuse_cache is None:
+        payload['benchmarkReuse'] = {'enabled': False, 'configured': False, 'active': False}
     return JSONResponse(payload)
 
+if reuse_cache is not None:
+    app = ReuseMiddleware(app, reuse_cache)
 
 if __name__ == "__main__":
     uvicorn.run(app, host="127.0.0.1", port=int(os.environ["LAYA_PORT"]), log_level="info")
