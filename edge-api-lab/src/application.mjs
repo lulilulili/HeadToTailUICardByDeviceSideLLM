@@ -11,6 +11,7 @@ import {scoreExecutionSemantics} from './semantic-evaluation.mjs';
 import {getCapability,validateArguments} from './registry.mjs';
 import {resolveBenchmarkSelection,assertBenchmarkOwnership} from './benchmark-selection.mjs';
 import {SINGLE_SERVICE_100_MODELS} from './single-service-100.mjs';
+import {stageSelection,validateRoutingOverrides} from './adaptive-routing.mjs';
 
 const recommended=['qwen2.5:0.5b','qwen2.5:1.5b','qwen2.5:3b','qwen2.5:7b'];
 // Public HTTP inputs may supply experimental fixtures, never native-host provenance.
@@ -54,28 +55,46 @@ export function createApplication({store,runPipeline,providers,systemContextProv
  }
  async function health(force=false) {
   if(!force&&healthCache&&Date.now()-healthAt<5000)return {...healthCache,lab:{id:'edge-api-lab',catalogVersion:catalog.version,exclusiveBenchmark:await benchmarkState()},queueDepth:inferenceQueue.pending,activeJobs:controllers.size};
+  const layaStatus=Promise.resolve().then(()=>providers.laya?.getStatus?.()??{provider:'laya',configured:true,ready:false,ok:false,local:true,cloud:false,model:'multilingual'}).catch(error=>({provider:'laya',configured:true,ready:false,ok:false,local:true,cloud:false,error:error.message}));
   try {
    const [tags,version]=await Promise.all([fetchImpl(`${ollamaUrl}/api/tags`,{signal:AbortSignal.timeout(4000)}),fetchImpl(`${ollamaUrl}/api/version`,{signal:AbortSignal.timeout(4000)})]);
    if(!tags.ok)throw new Error('Ollama 模型列表读取失败');
    const list=await tags.json(),info=version.ok?await version.json():{};
    const models=(list.models??[]).map(item=>{const count=parameterB(item.details?.parameter_size);return {name:item.name,digest:item.digest,parameterSize:item.details?.parameter_size,parameterB:count,quantization:item.details?.quantization_level,size:item.size,eligible:count!==null&&count<10,recommended:recommended.includes(item.name)};});
-   healthCache={ollama:{ok:true,url:ollamaUrl,version:info.version},models,recommendedModels:recommended.filter(name=>models.some(m=>m.name===name&&m.eligible)),jev:{configured:Boolean(process.env.JEV_URL)}};
-  }catch(error){healthCache={ollama:{ok:false,url:ollamaUrl,error:error.message},models:[],recommendedModels:[],jev:{configured:Boolean(process.env.JEV_URL)}};}
+   healthCache={ollama:{ok:true,url:ollamaUrl,version:info.version},models,recommendedModels:recommended.filter(name=>models.some(m=>m.name===name&&m.eligible)),jev:providers.jev?.getStatus?.()??{configured:false,official:true,cloud:true,model:'jev-latest'}};
+  }catch(error){healthCache={ollama:{ok:false,url:ollamaUrl,error:error.message},models:[],recommendedModels:[],jev:providers.jev?.getStatus?.()??{configured:false,official:true,cloud:true,model:'jev-latest'}};}
+  healthCache.laya=await layaStatus;
   healthAt=Date.now();return {...healthCache,lab:{id:'edge-api-lab',catalogVersion:catalog.version,exclusiveBenchmark:await benchmarkState()},queueDepth:inferenceQueue.pending,activeJobs:controllers.size};
  }
  async function validateInput(input) {
   if(!input||typeof input!=='object'||Array.isArray(input))throw bad('请求必须是对象');
   if(typeof input.text!=='string'||!input.text.trim()||input.text.length>4000)throw bad('请输入 1 至 4000 字的提示词');
-  if(input.mode&&!['staged','unified'].includes(input.mode))throw bad('未知调用模式');
+  if(input.mode!==undefined&&!['adaptive','laya','jev','staged','unified'].includes(input.mode))throw bad('未知调用模式');
+  const mode=input.mode??'adaptive',stages=input.stages??{};
+  if(typeof stages!=='object'||Array.isArray(stages))throw bad('阶段配置必须为对象');
+  for(const [name,stage]of Object.entries(stages)){
+   if(!['domain','intent','arguments','unified','intent_arguments'].includes(name))throw bad('未知推理阶段');
+   if(!stage||typeof stage!=='object'||Array.isArray(stage))throw bad('阶段配置必须为对象');
+   if(stage.provider!==undefined&&!['ollama','laya','jev','jev-bridge'].includes(stage.provider))throw bad('未知模型提供方');
+   if(stage.model!==undefined&&(typeof stage.model!=='string'||!stage.model.trim()||stage.model.length>200))throw bad('阶段模型必须为非空字符串');
+   if(stage.provider==='jev'&&!['domain','intent'].includes(name))throw bad('官方 Jev 仅用于领域/API Choice 选择；自由填参使用 Ollama');
+   if(stage.provider==='laya'&&!['domain','intent'].includes(name))throw bad('Laya 仅用于领域/API Choice 选择；自由填参使用 Ollama');
+  }
+  try{validateRoutingOverrides(mode,stages);}catch(error){throw bad(error.message);}
+  if(mode==='jev'){
+   for(const name of ['domain','intent'])if(stages[name]?.provider&&stages[name].provider!=='jev')throw bad('Jev 模式的领域/API 必须使用官方 Jev');
+   if(stages.arguments?.provider&&stages.arguments.provider!=='ollama')throw bad('Jev 模式的填参必须使用 Ollama');
+  }
   const options=input.options??{};
   if(options.num_ctx!==undefined&&(!Number.isInteger(options.num_ctx)||options.num_ctx<512||options.num_ctx>8192))throw bad('上下文窗口 num_ctx 必须为 512 至 8192');
   if(options.num_predict!==undefined&&(!Number.isInteger(options.num_predict)||options.num_predict<16||options.num_predict>1024))throw bad('输出上限 num_predict 必须为 16 至 1024');
   if(options.temperature!==undefined&&options.temperature!==0)throw bad('本实验固定 temperature=0，避免隐式改变对照条件');
   const state=await health();if(!state.ollama.ok)throw bad(state.ollama.error,503);
+  if((mode==='jev'||Object.values(stages).some(stage=>stage.provider==='jev'))&&!state.jev.configured)throw bad('官方 Jev 尚未配置 TYPESAFE_API_KEY；配置后重新启动服务',503);
+  if((mode==='laya'||Object.values(stages).some(stage=>stage.provider==='laya'))&&!state.laya.ready)throw bad('本机 Laya 尚未就绪，请先运行“安装启动Laya.bat”，等待权重加载后刷新状态',503);
   if(state.lab.exclusiveBenchmark)throw bad('千题单服务对照正在独占串行推理；请在“千题单服务实测”查看进度，完成后再发起其他调用。',409);
-  const requested=[input.model,...Object.values(input.stages??{}).filter(stage=>(stage.provider??'ollama')==='ollama').map(stage=>stage.model).filter(Boolean)];
+  const requested=[input.model,...Object.keys(stages).map(stage=>stageSelection(stage,{mode,model:input.model,stages,providers})).filter(stage=>stage.provider==='ollama').map(stage=>stage.model).filter(Boolean)];
   for(const name of requested) {const model=state.models.find(m=>m.name===name);if(!model)throw bad(`模型未安装：${name??'未选择'}`);if(!model.eligible)throw bad(`仅允许参数量小于 10B 且规格可识别的本地模型：${name}`);}
-  for(const stage of Object.values(input.stages??{}))if(!['ollama','jev'].includes(stage.provider??'ollama'))throw bad('未知模型提供方');
   if(input.context?.now&&!Number.isFinite(Date.parse(input.context.now)))throw bad('系统时间无效');
   if(input.context?.timezone)try{new Intl.DateTimeFormat('zh',{timeZone:input.context.timezone});}catch{throw bad('时区无效');}
   const location=input.context?.location;if(location!==undefined&&location!==null&&(typeof location!=='object'||Array.isArray(location)||!Number.isFinite(location.latitude)||Math.abs(location.latitude)>90||!Number.isFinite(location.longitude)||Math.abs(location.longitude)>180||location.source!=='fixture'))throw bad('HTTP 位置仅允许有效经纬度的模拟手机位置 fixture；不读取电脑浏览器位置，harmony 只能由内部手机系统桥提供');
@@ -104,7 +123,7 @@ export function createApplication({store,runPipeline,providers,systemContextProv
    for(const [key,entry]of Object.entries(context.geocodes))if(key.length>80||!entry||entry.source!=='fixture'||!Number.isFinite(entry.latitude)||Math.abs(entry.latitude)>90||!Number.isFinite(entry.longitude)||Math.abs(entry.longitude)>180)throw bad('地理编码须为有效坐标并明确标记 fixture');
   }
   if(context.resolutionPolicy?.allowApproximation!==undefined&&typeof context.resolutionPolicy.allowApproximation!=='boolean')throw bad('允许降级选项必须为布尔值');
-  return {...input,mode:input.mode??'staged',text:input.text.trim()};
+  return {...input,mode,text:input.text.trim()};
  }
  async function execute(input,signal,{save=true,warmup=false}={}) {
   const requestStart=performance.now(),traces=[];
@@ -231,7 +250,7 @@ export function createApplication({store,runPipeline,providers,systemContextProv
     const repeats=input.repeats??1;if(!Number.isInteger(repeats)||repeats<1||repeats>3)throw bad('重复次数为 1 至 3');
     const limit=input.limit??cases.length;if(!Number.isInteger(limit)||limit<1||limit>cases.length)throw bad(`样本数为 1 至 ${cases.length}`);
     const selected=(input.caseIds?cases.filter(row=>input.caseIds.includes(row.id)):cases).slice(0,limit);if(!selected.length)throw bad('没有可运行的样本');
-    const job={id:randomUUID(),createdAt:new Date().toISOString(),catalogVersion:catalog.version??'legacy-v1',ruleVersion:GROUNDING_VERSION,status:'queued',models:[...new Set(input.models)],mode:input.mode??'staged',stages:input.stages,options:input.options,warmup:Boolean(input.warmup),repeats,caseIds:selected.map(c=>c.id),context:baseContext,progress:{done:0,total:selected.length*new Set(input.models).size*repeats},results:[],warmups:[]};
+    const job={id:randomUUID(),createdAt:new Date().toISOString(),catalogVersion:catalog.version??'legacy-v1',ruleVersion:GROUNDING_VERSION,status:'queued',models:[...new Set(input.models)],mode:input.mode??'adaptive',stages:input.stages,options:input.options,warmup:Boolean(input.warmup),repeats,caseIds:selected.map(c=>c.id),context:baseContext,progress:{done:0,total:selected.length*new Set(input.models).size*repeats},results:[],warmups:[]};
     if(controllers.size)throw bad('已有评测正在运行，请完成或取消后再开始',409);
     const controller=new AbortController();controllers.set(job.id,controller);liveJobs.set(job.id,job);await store.save('eval',jobView(job));
     json(res,jobView(job),202);setImmediate(()=>performJob(job,controller));return;

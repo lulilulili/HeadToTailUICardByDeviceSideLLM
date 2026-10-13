@@ -46,11 +46,20 @@ export function verifySourceBytes(path,expected,current,snapshot){
  check(sha256(snapshot)===expected.toLowerCase(),`Frozen snapshot differs from manifest: ${path}`);
  return {path,sha256:expected.toLowerCase()};
 }
-async function verifySources(root,manifest,{historical=false}={}){
+export function auditEnginePolicy(manifest){
+ const legacyFormat=manifest.version!=='single-service-100-batch-v2';
+ return {legacyFormat,useFrozenEngine:legacyFormat||manifest.status==='completed'};
+}
+export function verifyFrozenSourceBytes(path,expected,current,snapshot){
+ check(/^[a-f0-9]{64}$/i.test(expected??''),`Invalid frozen source SHA-256: ${path}`);
+ check(sha256(snapshot)===expected.toLowerCase(),`Frozen snapshot differs from manifest: ${path}`);
+ return {path,sha256:expected.toLowerCase(),currentMatches:sha256(current)===expected.toLowerCase(),historical:true};
+}
+async function verifySources(root,manifest,{legacyFormat=false,useFrozenEngine=false}={}){
  const entries=Object.entries(manifest.conditions?.sourceHashes??{});
  check(entries.length>0,'Missing manifest.conditions.sourceHashes');
  const required=['src/evaluation.mjs','src/semantic-evaluation.mjs','src/registry.mjs','src/resolver.mjs','src/grounding.mjs','src/single-service-100.mjs','src/single-service-100-report.mjs','scripts/benchmark-single-service-100.mjs','data/single-service-core.mjs','data/cases-system-single.json',...SINGLE_SERVICE_100_FILES];
- if(!historical)required.push('src/parameter-provenance.mjs','src/providers.mjs','src/pipeline.mjs','src/test-environment.mjs','src/benchmark-selection.mjs');
+ if(!legacyFormat)required.push('src/parameter-provenance.mjs','src/providers.mjs','src/pipeline.mjs','src/test-environment.mjs','src/benchmark-selection.mjs');
  for(const path of required)check(Object.hasOwn(manifest.conditions.sourceHashes,path),`Missing critical source hash: ${path}`);
  check(typeof manifest.sourceSnapshot==='string','Missing sourceSnapshot');
  const snapshot=workspacePath(root,manifest.sourceSnapshot),verified=[];
@@ -59,7 +68,7 @@ async function verifySources(root,manifest,{historical=false}={}){
   check(!isAbsolute(path)&&!path.split(/[\\/]/).includes('..'),`Invalid relative source path: ${path}`);
   const frozen=workspacePath(snapshot,path);workspacePath(root,frozen);
   const snapshotBytes=await safeRead(root,frozen),current=await safeRead(root,path);
-  if(historical){check(sha256(snapshotBytes)===expected,`Historical frozen snapshot differs: ${path}`);verified.push({path,sha256:expected,currentMatches:sha256(current)===expected,historical:true});}
+  if(useFrozenEngine)verified.push(verifyFrozenSourceBytes(path,expected,current,snapshotBytes));
   else verified.push(verifySourceBytes(path,expected,current,snapshotBytes));
  }
  return verified;
@@ -215,19 +224,19 @@ export async function auditSingleService100({root=defaultRoot,manifestPath=null,
  const initial=Object.fromEntries(await Promise.all(Object.entries(selectedPaths).map(async([key,path])=>[key,await safeRead(root,path)])));
  const manifest=JSON.parse(initial.manifest),index=JSON.parse(initial.index),report=JSON.parse(initial.report);
  const plan=verifyManifest(manifest,partial),{models,domains,callsPerModel:perModel,perDomain,totalCalls:formalTotal}=plan;
- const historical=manifest.version!=='single-service-100-batch-v2';
+ const {legacyFormat,useFrozenEngine}=auditEnginePolicy(manifest);
  const complete=manifest.status==='completed';
  if(!partial||complete){check(index.status==='completed'&&report.status==='completed','Full audit requires completed index/report');equal(manifest.progress,{done:formalTotal,total:formalTotal},'Completed manifest progress');}
  check(index.manifestId===manifest.id,'Index belongs to another manifest');check(Array.isArray(index.rows),'Missing index rows');
- const sourceFiles=await verifySources(root,manifest,{historical});
+ const sourceFiles=await verifySources(root,manifest,{legacyFormat,useFrozenEngine});
  let engine={scoreCase,scoreExecutionSemantics,compactRecord,buildSingleService100Report,loadSingleService100Cases,orderedCases};
- if(historical){
+ if(useFrozenEngine){
   const snapshot=workspacePath(root,manifest.sourceSnapshot);
   const load=path=>import(pathToFileURL(join(snapshot,path)).href);
   const [raw,semantic,runner,reporter,corpus]=await Promise.all([load('src/evaluation.mjs'),load('src/semantic-evaluation.mjs'),load('scripts/benchmark-single-service-100.mjs'),load('src/single-service-100-report.mjs'),load('src/single-service-100.mjs')]);
   engine={...engine,scoreCase:raw.scoreCase,scoreExecutionSemantics:semantic.scoreExecutionSemantics,compactRecord:runner.compactRecord,orderedCases:runner.orderedCases,buildSingleService100Report:reporter.buildSingleService100Report,loadSingleService100Cases:corpus.loadSingleService100Cases};
  }
- const cases=await engine.loadSingleService100Cases(historical?workspacePath(root,manifest.sourceSnapshot):root),caseMap=new Map(cases.map(c=>[c.id,c]));
+ const cases=await engine.loadSingleService100Cases(useFrozenEngine?workspacePath(root,manifest.sourceSnapshot):root),caseMap=new Map(cases.map(c=>[c.id,c]));
  equal(manifest.corpus.sha256,sha256(JSON.stringify(cases)),'Frozen corpus SHA-256');
  equal(manifest.corpus.caseOrder,engine.orderedCases(cases).map(c=>c.id),'Frozen shared case order');
  equal(manifest.corpus.contractBoundaries,cases.filter(c=>c.contractBoundary).map(c=>({id:c.id,text:c.text,expectedStatus:c.expected.status,userGoalStatus:c.userGoalStatus,boundary:c.contractBoundary})),'Corpus known contract boundaries');
@@ -271,14 +280,16 @@ export async function auditSingleService100({root=defaultRoot,manifestPath=null,
  }
  // Refuse a mixed live snapshot instead of silently attributing changing files to failures.
  for(const [key,path]of Object.entries(selectedPaths))check(sha256(await safeRead(root,path))===sha256(initial[key]),`Live ${key} changed during audit; retry --partial after publication`);
- equal(await verifySources(root,manifest,{historical}),sourceFiles,'Current/snapshot source hashes at audit end');
+ equal(await verifySources(root,manifest,{legacyFormat,useFrozenEngine}),sourceFiles,'Current/snapshot source hashes at audit end');
  const verifierHash=sha256(await readFile(fileURLToPath(import.meta.url)));
+ const currentSourceDifferences=sourceFiles.filter(item=>item.currentMatches===false).map(item=>item.path);
  const audit={version:'single-service-100-audit-v1',manifestId:manifest.id,status:complete?'verified_completed':'verified_partial',auditedAt:new Date().toISOString(),modelCalls:0,verifierSha256:verifierHash,
   formal:{planned:formalTotal,saved:saved.size,indexed:indexed.size,reported:progress.done,manifestPublished:manifest.progress.done,unindexed:unindexed.length,unpublishedInReport:saved.size-progress.done,uniqueKeys:saved.size,counts},
-  warmups,checks:{sourceFiles:sourceFiles.length,sourceAndSnapshotHashesVerified:true,corpusSha256:manifest.corpus.sha256,sharedOrderVerified:true,ownershipVerified:saved.size,rawHashesMatchedIndex:indexed.size,rawScoresRecomputed:saved.size,executionScoresRecomputed:saved.size,compactRowsMatchedIndex:indexed.size,reportSummaryAndCellsRecomputed:true,modelsMatchManifest:true,sevenBAbsent:!models.includes('qwen2.5:7b'),historicalFrozenEngine:historical},
+  warmups,checks:{sourceFiles:sourceFiles.length,sourceAndSnapshotHashesVerified:currentSourceDifferences.length===0,frozenSnapshotHashesVerified:true,currentSourceMatchesSnapshot:currentSourceDifferences.length===0,currentSourceDifferences,corpusSha256:manifest.corpus.sha256,sharedOrderVerified:true,ownershipVerified:saved.size,rawHashesMatchedIndex:indexed.size,rawScoresRecomputed:saved.size,executionScoresRecomputed:saved.size,compactRowsMatchedIndex:indexed.size,reportSummaryAndCellsRecomputed:true,modelsMatchManifest:true,sevenBAbsent:!models.includes('qwen2.5:7b'),historicalFrozenEngine:useFrozenEngine,engineSource:useFrozenEngine?'frozen_snapshot':'current_workspace'},
   primaryCounts:Object.fromEntries([...Map.groupBy(rows,row=>row.primary)].map(([primary,list])=>[primary,list.length])),
   ignoredTemporaryFiles:files.ignored,auxiliaryMetadata:{paths:files.auxiliary,excludedFromFormal:true,shaPinned:false},unindexedKeys:unindexed,derivedWrites:[],notes:[
    '独立读取已保存原始JSON并重算评分；未调用模型、重跑grounding或改写任何原始记录。',
+   '已完成批次使用其已核验SHA的冻结引擎，当前源码差异单列；运行中v2仍要求当前源码与冻结版本一致。',
    '错误/schema/timeout均保留在正式调用分母；预热与.tmp/.pending临时文件不计入正式调用。',
    '延迟分位数复核报告既有的全部调用（含失败尝试）口径，不改成仅成功调用的耗时。',
    'partial仅认证此次读取到的已保存证据；明确分列saved/indexed/reported，最多9条尚未index；不认证尚未完成的3000条。',

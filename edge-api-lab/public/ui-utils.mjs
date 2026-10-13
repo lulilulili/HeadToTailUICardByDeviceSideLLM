@@ -8,7 +8,7 @@ const statuses = {
   completed:['已完成','success'], running:['评测中','info'], queued:['排队中','info'], cancelled:['已取消','warning'],
 };
 export const statusInfo = status => { const [label,tone] = statuses[status] || [status || '未知状态','neutral']; return {label,tone}; };
-export const stageName = stage => ({domain:'领域识别',intent:'API 选择',arguments:'参数提取',unified:'一次调用',warmup:'模型预热'}[stage] || stage || '调用');
+export const stageName = stage => ({domain:'领域识别',intent:'API 选择',intent_arguments:'API 选择与参数提取',arguments:'参数提取',unified:'一次调用',warmup:'模型预热'}[stage] || stage || '调用');
 export const domainName = domain => ({weather:'天气',calendar:'日历',contacts:'联系人',files:'文件',services:'服务入口',cloud:'云端业务',device:'设备与电量',connectivity:'网络连接',location:'位置',media:'媒体与音频',unsupported:'不支持'}[domain] || domain || '—');
 export const pretty = value => escapeHtml(JSON.stringify(value ?? {}, null, 2));
 export const badge = status => { const info = statusInfo(status); return `<span class="badge ${info.tone}">${escapeHtml(info.label)}</span>`; };

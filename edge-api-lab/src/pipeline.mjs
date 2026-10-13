@@ -1,5 +1,6 @@
 import { getCapability, domains } from './registry.mjs';
-import { buildDomainPrompt, buildIntentPrompt, buildArgumentsPrompt, buildUnifiedPrompt } from './prompts.mjs';
+import { buildDomainPrompt, buildIntentPrompt, buildArgumentsPrompt, buildUnifiedPrompt, buildAdaptiveDomainPrompt, buildAdaptiveIntentPrompt, buildIntentArgumentsPrompt, buildAdaptiveArgumentsPrompt, buildJevDomainPrompt, buildJevIntentPrompt, buildLayaDomainPrompt, buildLayaIntentPrompt } from './prompts.mjs';
+import { analyzeAdaptiveRoute, validateRoutingOverrides, stageSelection, hasApiInputs, isTypedDecisionProvider } from './adaptive-routing.mjs';
 import {finalizePlan,groundArguments,GROUNDING_VERSION} from './grounding.mjs';
 import {prepareSystemContext} from './system-context.mjs';
 import { validateValue } from './providers.mjs';
@@ -10,15 +11,27 @@ export async function runPipeline({ text, mode = 'staged', model, stages = {}, c
   const start = performance.now();
   const traces = [];
   const result = { domain: null, api: null, modelArguments: {}, extractedArguments: {}, groundedArguments: null, grounding: null, ruleVersion: GROUNDING_VERSION, resolved: null, status: 'error', traces, totalMs: 0, text, mode, model, context, options: structuredClone(options), stages: structuredClone(stages), candidates: {}, mock: null };
-  const emit = async trace => { traces.push(trace); if (onTrace) await onTrace(trace); };
+  const adaptive = mode === 'adaptive' || isTypedDecisionProvider(mode);
+  if (adaptive) {
+    const route = analyzeAdaptiveRoute(text);
+    const typedIntent = isTypedDecisionProvider(mode) || isTypedDecisionProvider(stages.intent?.provider);
+    result.routing = { policy: route.policy, path: typedIntent ? 'three_step' : route.path, triggerReasons: [...route.reasons, ...(typedIntent ? ['typed_decision_requires_arguments'] : [])], priorityDomains: [], skippedStages: [], actualCallCount: 0, actualStages: [] };
+  }
+  const emit = async trace => {
+    traces.push(trace);
+    if (result.routing) { result.routing.actualCallCount = traces.length; result.routing.actualStages = traces.map(item => item.stage); }
+    if (onTrace) await onTrace(trace);
+  };
   async function call(stage, prompt) {
+    // Cancellation between stages must not create a trace for an uninvoked call.
+    signal?.throwIfAborted();
     if (prompt.promptMeta?.candidates) result.candidates[stage] = structuredClone(prompt.promptMeta.candidates);
-    const selection = { provider: 'ollama', model, ...stages[stage] };
+    if (result.routing && prompt.promptMeta?.priorityDomains) result.routing.priorityDomains = [...prompt.promptMeta.priorityDomains];
+    const selection = stageSelection(stage, { mode, model, stages, providers });
     const provider = providers?.[selection.provider];
     const callStart = performance.now();
     let emitted = false;
     try {
-      signal?.throwIfAborted();
       if (!provider?.invoke) throw new Error(`未知推理提供方：${selection.provider}`);
       const response = await provider.invoke({ stage, model: selection.model, ...prompt, options, signal });
       const validation = validateValue(prompt.schema, response.value);
@@ -37,7 +50,8 @@ export async function runPipeline({ text, mode = 'staged', model, stages = {}, c
   }
   try {
     if (!text?.trim()) throw new Error('请输入用户提示词');
-    if (!['staged', 'unified'].includes(mode)) throw new Error(`未知实验模式：${mode}`);
+    if (!['staged', 'unified', 'adaptive', 'jev', 'laya'].includes(mode)) throw new Error(`未知实验模式：${mode}`);
+    validateRoutingOverrides(mode, stages);
     if (mode === 'unified') {
       const unified = await call('unified', buildUnifiedPrompt(text, context));
       result.domain = unified.domain;
@@ -45,13 +59,29 @@ export async function runPipeline({ text, mode = 'staged', model, stages = {}, c
       result.modelArguments = unified.arguments;
       result.extractedArguments = omitProtocolNulls(unified.arguments);
     } else {
-      result.domain = (await call('domain', buildDomainPrompt(text, context))).domain;
+      const domainProvider = stageSelection('domain', { mode, model, stages, providers }).provider;
+      const domainPrompt = domainProvider === 'laya' ? buildLayaDomainPrompt(text, context) : domainProvider === 'jev' ? buildJevDomainPrompt(text, context) : adaptive ? buildAdaptiveDomainPrompt(text, context) : buildDomainPrompt(text, context);
+      result.domain = (await call('domain', domainPrompt)).domain;
       if (result.domain !== 'unsupported') {
-        const id = (await call('intent', buildIntentPrompt(text, result.domain, context))).api;
-        result.api = id === 'unsupported' ? null : id;
-        if (result.api) {
-          result.modelArguments = await call('arguments', buildArgumentsPrompt(text, getCapability(result.api)));
-          result.extractedArguments = omitProtocolNulls(result.modelArguments);
+        if (mode === 'adaptive' && result.routing.path === 'two_step') {
+          const selected = await call('intent_arguments', buildIntentArgumentsPrompt(text, result.domain, context));
+          result.api = selected.api === 'unsupported' ? null : selected.api;
+          result.modelArguments = selected.arguments;
+          result.extractedArguments = omitProtocolNulls(selected.arguments);
+        } else {
+          const intentProvider = stageSelection('intent', { mode, model, stages, providers }).provider;
+          const prompt = intentProvider === 'laya' ? buildLayaIntentPrompt(text, result.domain, context) : intentProvider === 'jev' ? buildJevIntentPrompt(text, result.domain, context) : adaptive ? buildAdaptiveIntentPrompt(text, result.domain, context) : buildIntentPrompt(text, result.domain, context);
+          const id = (await call('intent', prompt)).api;
+          result.api = id === 'unsupported' ? null : id;
+          if (result.api) {
+            const capability = getCapability(result.api);
+            if (adaptive && !hasApiInputs(capability)) result.routing.skippedStages.push({ stage: 'arguments', reason: 'api_has_no_inputs' });
+            else {
+              const prompt = adaptive ? buildAdaptiveArgumentsPrompt(text, capability, { mode }) : buildArgumentsPrompt(text, capability);
+              result.modelArguments = await call('arguments', prompt);
+              result.extractedArguments = omitProtocolNulls(result.modelArguments);
+            }
+          }
         }
       }
     }

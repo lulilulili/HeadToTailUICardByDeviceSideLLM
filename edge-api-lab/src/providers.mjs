@@ -1,4 +1,7 @@
-const budgets = { domain: 32, intent: 48, arguments: 160, unified: 224 };
+import { createJevProvider } from './jev-provider.mjs';
+import { createLayaProvider } from './laya-provider.mjs';
+
+const budgets = { domain: 32, intent: 48, arguments: 160, intent_arguments: 224, unified: 224 };
 const equal = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 const own = (object, key) => Object.hasOwn(object, key);
 
@@ -51,7 +54,7 @@ const millis = value => typeof value === 'number' && Number.isFinite(value) ? va
 const metric = value => typeof value === 'number' && Number.isFinite(value) && value >= 0 ? value : null;
 const bounded = (value, fallback, low, high) => Math.max(low, Math.min(high, Number.isFinite(Number(value)) ? Number(value) : fallback));
 
-export function createProviders({ ollamaUrl = 'http://127.0.0.1:11434', jevUrl } = {}) {
+export function createProviders({ ollamaUrl = 'http://127.0.0.1:11434', jevUrl, jev = {}, layaUrl, laya = {} } = {}) {
   function provider(name, url) {
     return {
       async invoke({ stage, model, messages, schema, promptMeta, options = {}, signal }) {
@@ -111,5 +114,5 @@ export function createProviders({ ollamaUrl = 'http://127.0.0.1:11434', jevUrl }
       }
     };
   }
-  return { ollama: provider('ollama', ollamaUrl), jev: provider('jev', jevUrl) };
+  return { ollama: provider('ollama', ollamaUrl), jev: createJevProvider({ ...jev, validateValue }), 'jev-bridge': provider('jev-bridge', jevUrl), laya: createLayaProvider({ url: layaUrl, ...laya, validateValue }) };
 }

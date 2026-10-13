@@ -1,0 +1,1438 @@
+{
+  "id": "adaptive-jev-20261013-v2-local-smoke",
+  "status": "completed",
+  "createdAt": "2026-10-13T01:44:29.099Z",
+  "mode": "adaptive",
+  "model": "qwen2.5:1.5b",
+  "modelDetails": {
+    "name": "qwen2.5:1.5b",
+    "model": "qwen2.5:1.5b",
+    "modified_at": "2026-10-10T09:21:59.9732577+08:00",
+    "size": 986061892,
+    "digest": "65ec06548149b04c096a120e4a6da9d4017ea809c91734ea5631e89f96ddc57b",
+    "details": {
+      "parent_model": "",
+      "format": "gguf",
+      "family": "qwen2",
+      "families": [
+        "qwen2"
+      ],
+      "parameter_size": "1.5B",
+      "quantization_level": "Q4_K_M",
+      "context_length": 32768,
+      "embedding_length": 1536
+    },
+    "capabilities": [
+      "completion",
+      "tools"
+    ]
+  },
+  "environment": {
+    "cpu": "Intel(R) Core(TM) i7-10700 CPU @ 2.90GHz",
+    "physicalCores": 8,
+    "logicalCores": 16,
+    "totalMemoryBytes": 34125086720,
+    "platform": "win32",
+    "os": {
+      "platform": "win32",
+      "name": "Microsoft Windows 11 专业版",
+      "release": "10.0.28000",
+      "version": "10.0.28000",
+      "build": "28000",
+      "architecture": "64 位"
+    },
+    "nodeVersion": "v25.2.1",
+    "ollamaVersion": "0.35.0",
+    "gpus": [
+      {
+        "name": "Intel(R) UHD Graphics 630",
+        "vendor": "Intel Corporation",
+        "driverVersion": "31.0.101.2140",
+        "adapterMemoryBytes": 1073741824
+      }
+    ],
+    "gpuStatus": "observed",
+    "modelDirectory": {
+      "status": "unknown",
+      "path": null,
+      "management": "Ollama默认管理，实际路径未采集",
+      "source": "process.env.OLLAMA_MODELS absent"
+    },
+    "collection": {
+      "at": "2026-10-13T01:44:32.791Z",
+      "sources": [
+        "node:os",
+        "process.version",
+        "Windows CIM: Win32_Processor/OperatingSystem/VideoController/ComputerSystem",
+        "Ollama /api/version"
+      ],
+      "errors": []
+    }
+  },
+  "sourceHashes": {
+    "src/pipeline.mjs": "86d78a9deb114d6f964b543f29bae498ba10cfb14345249639ace512681f454c",
+    "src/prompts.mjs": "c1f5229a3994fd8015e133b956e726a0fe91229c24046446a68f39b31a895109",
+    "src/adaptive-routing.mjs": "f8347b0d7a363492e9763cba08d2e2269384080cc8f23f7ad15ca7a7e8009ea8",
+    "src/providers.mjs": "0beffb47b46604324905d05fa5f195eace98e4817d0426a213a7eaf65919ede8",
+    "src/jev-provider.mjs": "5b6b48a8843a479cff8a2d49cf827d16de8338240bc7b946607599ec949b8900",
+    "src/grounding.mjs": "1e25e9a1a47d76d095b2f43d8831335f0b9f9580cf54c9ad023dec1360938ce3",
+    "src/resolver.mjs": "3c5593f65acfe788a3fec51e65df9b7684234f9f46619fd51dec0f0532df84c0",
+    "src/registry.mjs": "d4c4dd834e26a81858dea32d951b2c7fb9cb79fb56602c8280c4d293320c24d0",
+    "scripts/smoke-adaptive.mjs": "4b36cda659be94d6969a8187f28fb69f1a9104fe3afb18fede3b61884f743cb1"
+  },
+  "sourceSnapshot": "evidence/adaptive-jev-20261013-v2-local-smoke/source-snapshot",
+  "context": {
+    "geocodes": {
+      "上海": {
+        "label": "上海市（地理编码夹具）",
+        "latitude": 31.2304,
+        "longitude": 121.4737,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "北京": {
+        "label": "北京市（地理编码夹具）",
+        "latitude": 39.9042,
+        "longitude": 116.4074,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "杭州": {
+        "label": "杭州市（地理编码夹具）",
+        "latitude": 30.2741,
+        "longitude": 120.1551,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "深圳": {
+        "label": "深圳市（地理编码夹具）",
+        "latitude": 22.5431,
+        "longitude": 114.0579,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "广州": {
+        "label": "广州市（地理编码夹具）",
+        "latitude": 23.1291,
+        "longitude": 113.2644,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "成都": {
+        "label": "成都市（地理编码夹具）",
+        "latitude": 30.5728,
+        "longitude": 104.0668,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "南京": {
+        "label": "南京市（地理编码夹具）",
+        "latitude": 32.0603,
+        "longitude": 118.7969,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "武汉": {
+        "label": "武汉市（地理编码夹具）",
+        "latitude": 30.5928,
+        "longitude": 114.3055,
+        "precision": "city",
+        "source": "fixture"
+      }
+    },
+    "weatherAvailability": {
+      "current": true,
+      "hourly": true,
+      "daily": true,
+      "minute": true,
+      "alerts": true,
+      "indices": true,
+      "tides": true,
+      "city": true
+    },
+    "weatherAvailabilitySource": "fixture",
+    "weatherRegion": "CN",
+    "now": "2026-10-10T08:00:00+08:00",
+    "timezone": "Asia/Shanghai",
+    "location": {
+      "latitude": 31.2304,
+      "longitude": 121.4737,
+      "label": "模拟手机当前位置（上海固定坐标）",
+      "source": "fixture"
+    }
+  },
+  "options": {
+    "num_ctx": 2048,
+    "temperature": 0,
+    "timeoutMs": 180000
+  },
+  "cases": [
+    {
+      "id": "simple-no-input",
+      "text": "查本机电量",
+      "calls": 2,
+      "expected": {
+        "domain": "device",
+        "api": "device.battery.level",
+        "arguments": {},
+        "status": "ready_mock"
+      }
+    },
+    {
+      "id": "simple-weather",
+      "text": "上海现在气温多少？",
+      "calls": 2,
+      "expected": {
+        "domain": "weather",
+        "api": "weather.current.temperature",
+        "arguments": {
+          "location": "上海",
+          "time_ref": "现在"
+        },
+        "status": "ready_mock"
+      }
+    },
+    {
+      "id": "complex-write",
+      "text": "修改日程 ev_7，标题为设计评审，地点为A室",
+      "calls": 3,
+      "expected": {
+        "domain": "calendar",
+        "api": "calendar.update",
+        "arguments": {
+          "event_id": "ev_7",
+          "changes": {
+            "title": "设计评审",
+            "location": "A室"
+          }
+        },
+        "status": "ready_mock"
+      }
+    },
+    {
+      "id": "complex-json",
+      "text": "调用云函数 refreshIndex，正文 {\"items\":[1,2],\"force\":true}",
+      "calls": 3,
+      "expected": {
+        "domain": "cloud",
+        "api": "cloud.function.call",
+        "arguments": {
+          "function_name": "refreshIndex",
+          "data": "{\"items\":[1,2],\"force\":true}"
+        },
+        "status": "ready_mock"
+      }
+    },
+    {
+      "id": "unsupported",
+      "text": "请写一首赞美秋天的诗",
+      "calls": 1,
+      "expected": {
+        "domain": "unsupported",
+        "api": null,
+        "arguments": {},
+        "status": "unsupported"
+      }
+    },
+    {
+      "id": "no-input-skip",
+      "text": "查本机电量，返回 JSON {}",
+      "calls": 2,
+      "expected": {
+        "domain": "device",
+        "api": "device.battery.level",
+        "arguments": {},
+        "status": "ready_mock"
+      }
+    }
+  ],
+  "records": [
+    {
+      "id": "simple-no-input",
+      "status": "ready_mock",
+      "domain": "device",
+      "api": "device.battery.level",
+      "stages": [
+        "domain",
+        "intent_arguments"
+      ],
+      "actualCallCount": 2,
+      "totalMs": 8577.9657,
+      "traceTimings": [
+        {
+          "stage": "domain",
+          "wallMs": 4747.283399999999,
+          "inputTokens": 502,
+          "outputTokens": 7
+        },
+        {
+          "stage": "intent_arguments",
+          "wallMs": 3799.1280000000006,
+          "inputTokens": 576,
+          "outputTokens": 13
+        }
+      ],
+      "routingPassed": true,
+      "rawScore": {
+        "domain": true,
+        "api": true,
+        "arguments": true,
+        "status": true,
+        "sources": true,
+        "resolution": true,
+        "plan": true
+      },
+      "executionScore": {
+        "domain": true,
+        "api": true,
+        "finalArguments": true,
+        "status": true,
+        "precision": true,
+        "sources": true,
+        "blocking": {
+          "match": true,
+          "expected": {
+            "fields": [],
+            "constraints": []
+          },
+          "actual": {
+            "fields": [],
+            "constraints": []
+          }
+        },
+        "expectedResolverStatusMatchesGold": true,
+        "expectedResolved": {
+          "arguments": {},
+          "sources": {},
+          "missing": [],
+          "issues": [],
+          "warnings": [],
+          "resolution": {
+            "context": []
+          },
+          "status": "ready_mock"
+        },
+        "actualResolved": {
+          "arguments": {},
+          "sources": {},
+          "missing": [],
+          "issues": [],
+          "warnings": [],
+          "resolution": {
+            "context": []
+          },
+          "status": "ready_mock",
+          "provenance": {
+            "v": 1,
+            "p": {}
+          }
+        },
+        "expectedCanonicalArguments": {},
+        "actualCanonicalArguments": {},
+        "precisionDetails": {
+          "expected": {},
+          "actual": {}
+        },
+        "sourceDetails": {
+          "annotations": {},
+          "expected": {},
+          "actual": {}
+        },
+        "differences": [],
+        "plan": true
+      }
+    },
+    {
+      "id": "simple-weather",
+      "status": "ready_mock",
+      "domain": "weather",
+      "api": "weather.current.temperature",
+      "stages": [
+        "domain",
+        "intent_arguments"
+      ],
+      "actualCallCount": 2,
+      "totalMs": 8545.6013,
+      "traceTimings": [
+        {
+          "stage": "domain",
+          "wallMs": 2244.7489000000005,
+          "inputTokens": 503,
+          "outputTokens": 7
+        },
+        {
+          "stage": "intent_arguments",
+          "wallMs": 6272.042300000001,
+          "inputTokens": 951,
+          "outputTokens": 14
+        }
+      ],
+      "routingPassed": true,
+      "rawScore": {
+        "domain": true,
+        "api": true,
+        "arguments": false,
+        "status": true,
+        "sources": true,
+        "resolution": true,
+        "plan": false
+      },
+      "executionScore": {
+        "domain": true,
+        "api": true,
+        "finalArguments": true,
+        "status": true,
+        "precision": true,
+        "sources": true,
+        "blocking": {
+          "match": true,
+          "expected": {
+            "fields": [],
+            "constraints": []
+          },
+          "actual": {
+            "fields": [],
+            "constraints": []
+          }
+        },
+        "expectedResolverStatusMatchesGold": true,
+        "expectedResolved": {
+          "arguments": {
+            "location": "上海",
+            "time_ref": {
+              "start": "2026-10-10",
+              "end": "2026-10-10",
+              "at": "2026-10-10T08:00:00+08:00",
+              "precision": "instant",
+              "timezone": "Asia/Shanghai",
+              "expression": "现在"
+            },
+            "strict_time": false
+          },
+          "sources": {
+            "location": "user",
+            "time_ref": "system_time",
+            "strict_time": "default"
+          },
+          "missing": [],
+          "issues": [],
+          "warnings": [
+            "固定实验地理编码返回区域代表点，保留原始地点约束"
+          ],
+          "resolution": {
+            "context": [],
+            "location": {
+              "requested": {
+                "location": "上海"
+              },
+              "effective": {
+                "label": "上海市（地理编码夹具）",
+                "latitude": 31.2304,
+                "longitude": 121.4737,
+                "precision": "city",
+                "source": "fixture"
+              },
+              "precision": "city",
+              "geocoding": {
+                "source": "fixture",
+                "query": "上海",
+                "simulated": true
+              },
+              "fallback": {
+                "applied": true,
+                "reason": "固定实验地理编码返回区域代表点，保留原始地点约束"
+              }
+            },
+            "time": {
+              "requested": {
+                "dataset": "current",
+                "precision": "instant",
+                "range": {
+                  "start": "2026-10-10",
+                  "end": "2026-10-10",
+                  "at": "2026-10-10T08:00:00+08:00",
+                  "precision": "instant",
+                  "timezone": "Asia/Shanghai",
+                  "expression": "现在"
+                }
+              },
+              "effective": {
+                "dataset": "current",
+                "api": "weather.current.temperature",
+                "projection": "current.temperature",
+                "precision": "instant",
+                "range": {
+                  "start": "2026-10-10",
+                  "end": "2026-10-10",
+                  "at": "2026-10-10T08:00:00+08:00",
+                  "precision": "instant",
+                  "timezone": "Asia/Shanghai",
+                  "expression": "现在"
+                },
+                "requiresFilteringToRequestedRange": false
+              },
+              "precision": "instant",
+              "availabilitySource": "fixture",
+              "fallback": {
+                "applied": false,
+                "reason": null,
+                "requestedConstraintsPreserved": true
+              }
+            }
+          },
+          "status": "ready_mock"
+        },
+        "actualResolved": {
+          "arguments": {
+            "location": "上海",
+            "time_ref": {
+              "start": "2026-10-10",
+              "end": "2026-10-10",
+              "at": "2026-10-10T08:00:00+08:00",
+              "precision": "instant",
+              "timezone": "Asia/Shanghai",
+              "expression": "现在"
+            },
+            "strict_time": false
+          },
+          "sources": {
+            "location": "user",
+            "time_ref": "system_time",
+            "strict_time": "default"
+          },
+          "missing": [],
+          "issues": [],
+          "warnings": [
+            "固定实验地理编码返回区域代表点，保留原始地点约束"
+          ],
+          "resolution": {
+            "context": [],
+            "location": {
+              "requested": {
+                "location": "上海"
+              },
+              "effective": {
+                "label": "上海市（地理编码夹具）",
+                "latitude": 31.2304,
+                "longitude": 121.4737,
+                "precision": "city",
+                "source": "fixture"
+              },
+              "precision": "city",
+              "geocoding": {
+                "source": "fixture",
+                "query": "上海",
+                "simulated": true
+              },
+              "fallback": {
+                "applied": true,
+                "reason": "固定实验地理编码返回区域代表点，保留原始地点约束"
+              }
+            },
+            "time": {
+              "requested": {
+                "dataset": "current",
+                "precision": "instant",
+                "range": {
+                  "start": "2026-10-10",
+                  "end": "2026-10-10",
+                  "at": "2026-10-10T08:00:00+08:00",
+                  "precision": "instant",
+                  "timezone": "Asia/Shanghai",
+                  "expression": "现在"
+                }
+              },
+              "effective": {
+                "dataset": "current",
+                "api": "weather.current.temperature",
+                "projection": "current.temperature",
+                "precision": "instant",
+                "range": {
+                  "start": "2026-10-10",
+                  "end": "2026-10-10",
+                  "at": "2026-10-10T08:00:00+08:00",
+                  "precision": "instant",
+                  "timezone": "Asia/Shanghai",
+                  "expression": "现在"
+                },
+                "requiresFilteringToRequestedRange": false
+              },
+              "precision": "instant",
+              "availabilitySource": "fixture",
+              "fallback": {
+                "applied": false,
+                "reason": null,
+                "requestedConstraintsPreserved": true
+              }
+            }
+          },
+          "status": "ready_mock",
+          "provenance": {
+            "v": 1,
+            "p": {
+              "location": {
+                "s": "U",
+                "e": [
+                  {
+                    "b": 0,
+                    "e": 2,
+                    "t": "上海"
+                  }
+                ],
+                "d": [
+                  {
+                    "s": "S",
+                    "k": "geocodes.上海",
+                    "o": "fixture"
+                  }
+                ]
+              },
+              "time_ref": {
+                "s": "U",
+                "e": [
+                  {
+                    "b": 2,
+                    "e": 4,
+                    "t": "现在"
+                  }
+                ],
+                "d": [
+                  {
+                    "s": "S",
+                    "k": "now",
+                    "o": "provided_context"
+                  },
+                  {
+                    "s": "S",
+                    "k": "timezone",
+                    "o": "provided_context"
+                  }
+                ]
+              },
+              "strict_time": {
+                "s": "D"
+              }
+            }
+          }
+        },
+        "expectedCanonicalArguments": {
+          "location": {
+            "latitude": 31.2304,
+            "longitude": 121.4737
+          },
+          "time_ref": {
+            "kind": "instant",
+            "at": "2026-10-10T00:00:00.000Z",
+            "precision": "instant"
+          },
+          "strict_time": false
+        },
+        "actualCanonicalArguments": {
+          "location": {
+            "latitude": 31.2304,
+            "longitude": 121.4737
+          },
+          "time_ref": {
+            "kind": "instant",
+            "at": "2026-10-10T00:00:00.000Z",
+            "precision": "instant"
+          },
+          "strict_time": false
+        },
+        "precisionDetails": {
+          "expected": {
+            "location": {
+              "precision": "city",
+              "fallbackApplied": true
+            },
+            "time": {
+              "requested": {
+                "dataset": "current",
+                "precision": "instant",
+                "range": {
+                  "kind": "instant",
+                  "at": "2026-10-10T00:00:00.000Z",
+                  "precision": "instant"
+                }
+              },
+              "effective": {
+                "dataset": "current",
+                "precision": "instant",
+                "range": {
+                  "kind": "instant",
+                  "at": "2026-10-10T00:00:00.000Z",
+                  "precision": "instant"
+                },
+                "api": "weather.current.temperature",
+                "requiresFilteringToRequestedRange": false
+              },
+              "fallbackApplied": false
+            }
+          },
+          "actual": {
+            "location": {
+              "precision": "city",
+              "fallbackApplied": true
+            },
+            "time": {
+              "requested": {
+                "dataset": "current",
+                "precision": "instant",
+                "range": {
+                  "kind": "instant",
+                  "at": "2026-10-10T00:00:00.000Z",
+                  "precision": "instant"
+                }
+              },
+              "effective": {
+                "dataset": "current",
+                "precision": "instant",
+                "range": {
+                  "kind": "instant",
+                  "at": "2026-10-10T00:00:00.000Z",
+                  "precision": "instant"
+                },
+                "api": "weather.current.temperature",
+                "requiresFilteringToRequestedRange": false
+              },
+              "fallbackApplied": false
+            }
+          }
+        },
+        "sourceDetails": {
+          "annotations": {},
+          "expected": {
+            "location": "user",
+            "time_ref": "system_time",
+            "strict_time": "default"
+          },
+          "actual": {
+            "location": "user",
+            "time_ref": "system_time",
+            "strict_time": "default"
+          }
+        },
+        "differences": [],
+        "plan": true
+      }
+    },
+    {
+      "id": "complex-write",
+      "status": "ready_mock",
+      "domain": "calendar",
+      "api": "calendar.event.set.title",
+      "stages": [
+        "domain",
+        "intent",
+        "arguments"
+      ],
+      "actualCallCount": 3,
+      "totalMs": 9302.6951,
+      "traceTimings": [
+        {
+          "stage": "domain",
+          "wallMs": 2375.0858000000007,
+          "inputTokens": 514,
+          "outputTokens": 7
+        },
+        {
+          "stage": "intent",
+          "wallMs": 4449.0458,
+          "inputTokens": 816,
+          "outputTokens": 12
+        },
+        {
+          "stage": "arguments",
+          "wallMs": 2471.2317000000003,
+          "inputTokens": 214,
+          "outputTokens": 21
+        }
+      ],
+      "routingPassed": true,
+      "rawScore": {
+        "domain": true,
+        "api": false,
+        "arguments": false,
+        "status": true,
+        "sources": true,
+        "resolution": true,
+        "plan": false
+      },
+      "executionScore": {
+        "domain": true,
+        "api": false,
+        "finalArguments": false,
+        "status": true,
+        "precision": true,
+        "sources": true,
+        "blocking": {
+          "match": true,
+          "expected": {
+            "fields": [],
+            "constraints": []
+          },
+          "actual": {
+            "fields": [],
+            "constraints": []
+          }
+        },
+        "expectedResolverStatusMatchesGold": true,
+        "expectedResolved": {
+          "arguments": {
+            "event_id": "ev_7",
+            "changes": {
+              "title": "设计评审",
+              "location": "A室"
+            }
+          },
+          "sources": {
+            "event_id": "user",
+            "changes.title": "user",
+            "changes.location": "user",
+            "changes": "user"
+          },
+          "missing": [],
+          "issues": [],
+          "warnings": [],
+          "resolution": {
+            "context": []
+          },
+          "status": "ready_mock"
+        },
+        "actualResolved": {
+          "arguments": {
+            "event_id": "ev_7",
+            "value": "设计评审"
+          },
+          "sources": {
+            "event_id": "user",
+            "value": "user"
+          },
+          "missing": [],
+          "issues": [],
+          "warnings": [],
+          "resolution": {
+            "context": []
+          },
+          "status": "ready_mock",
+          "provenance": {
+            "v": 1,
+            "p": {
+              "event_id": {
+                "s": "U",
+                "e": [
+                  {
+                    "b": 5,
+                    "e": 9,
+                    "t": "ev_7"
+                  }
+                ]
+              },
+              "value": {
+                "s": "U",
+                "e": [
+                  {
+                    "b": 13,
+                    "e": 17,
+                    "t": "设计评审"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "expectedCanonicalArguments": {
+          "event_id": "ev_7",
+          "changes": {
+            "title": "设计评审",
+            "location": "A室"
+          }
+        },
+        "actualCanonicalArguments": {
+          "event_id": "ev_7",
+          "value": "设计评审"
+        },
+        "precisionDetails": {
+          "expected": {},
+          "actual": {}
+        },
+        "sourceDetails": {
+          "annotations": {},
+          "expected": {
+            "event_id": "user",
+            "changes.title": "user",
+            "changes.location": "user",
+            "changes": "user"
+          },
+          "actual": {
+            "event_id": "user",
+            "value": "user"
+          }
+        },
+        "differences": [
+          {
+            "path": "changes",
+            "expected": {
+              "title": "设计评审",
+              "location": "A室"
+            },
+            "actual": null,
+            "kind": "missing"
+          },
+          {
+            "path": "value",
+            "expected": null,
+            "actual": "设计评审",
+            "kind": "extra"
+          }
+        ],
+        "plan": false
+      }
+    },
+    {
+      "id": "complex-json",
+      "status": "ready_mock",
+      "domain": "cloud",
+      "api": "cloud.function.call",
+      "stages": [
+        "domain",
+        "intent",
+        "arguments"
+      ],
+      "actualCallCount": 3,
+      "totalMs": 9209.278999999999,
+      "traceTimings": [
+        {
+          "stage": "domain",
+          "wallMs": 2870.062299999998,
+          "inputTokens": 517,
+          "outputTokens": 7
+        },
+        {
+          "stage": "intent",
+          "wallMs": 4185.864600000001,
+          "inputTokens": 768,
+          "outputTokens": 11
+        },
+        {
+          "stage": "arguments",
+          "wallMs": 2146.7908000000025,
+          "inputTokens": 243,
+          "outputTokens": 20
+        }
+      ],
+      "routingPassed": true,
+      "rawScore": {
+        "domain": true,
+        "api": true,
+        "arguments": false,
+        "status": true,
+        "sources": true,
+        "resolution": true,
+        "plan": false
+      },
+      "executionScore": {
+        "domain": true,
+        "api": true,
+        "finalArguments": true,
+        "status": true,
+        "precision": true,
+        "sources": true,
+        "blocking": {
+          "match": true,
+          "expected": {
+            "fields": [],
+            "constraints": []
+          },
+          "actual": {
+            "fields": [],
+            "constraints": []
+          }
+        },
+        "expectedResolverStatusMatchesGold": true,
+        "expectedResolved": {
+          "arguments": {
+            "function_name": "refreshIndex",
+            "data": "{\"items\":[1,2],\"force\":true}",
+            "version": "$latest",
+            "timeout_ms": 70000
+          },
+          "sources": {
+            "function_name": "user",
+            "data": "user",
+            "version": "default",
+            "timeout_ms": "default"
+          },
+          "missing": [],
+          "issues": [],
+          "warnings": [],
+          "resolution": {
+            "context": []
+          },
+          "status": "ready_mock"
+        },
+        "actualResolved": {
+          "arguments": {
+            "data": "{\"items\":[1,2],\"force\":true}",
+            "function_name": "refreshIndex",
+            "version": "$latest",
+            "timeout_ms": 70000
+          },
+          "sources": {
+            "function_name": "user",
+            "data": "user",
+            "version": "default",
+            "timeout_ms": "default"
+          },
+          "missing": [],
+          "issues": [],
+          "warnings": [],
+          "resolution": {
+            "context": []
+          },
+          "status": "ready_mock",
+          "provenance": {
+            "v": 1,
+            "p": {
+              "function_name": {
+                "s": "U",
+                "e": [
+                  {
+                    "b": 6,
+                    "e": 18,
+                    "t": "refreshIndex"
+                  }
+                ]
+              },
+              "data": {
+                "s": "U",
+                "e": [
+                  {
+                    "b": 22,
+                    "e": 50,
+                    "t": "{\"items\":[1,2],\"force\":true}"
+                  }
+                ]
+              },
+              "version": {
+                "s": "D"
+              },
+              "timeout_ms": {
+                "s": "D"
+              }
+            }
+          }
+        },
+        "expectedCanonicalArguments": {
+          "function_name": "refreshIndex",
+          "data": "{\"items\":[1,2],\"force\":true}",
+          "version": "$latest",
+          "timeout_ms": 70000
+        },
+        "actualCanonicalArguments": {
+          "data": "{\"items\":[1,2],\"force\":true}",
+          "function_name": "refreshIndex",
+          "version": "$latest",
+          "timeout_ms": 70000
+        },
+        "precisionDetails": {
+          "expected": {},
+          "actual": {}
+        },
+        "sourceDetails": {
+          "annotations": {},
+          "expected": {
+            "function_name": "user",
+            "data": "user",
+            "version": "default",
+            "timeout_ms": "default"
+          },
+          "actual": {
+            "function_name": "user",
+            "data": "user",
+            "version": "default",
+            "timeout_ms": "default"
+          }
+        },
+        "differences": [],
+        "plan": true
+      }
+    },
+    {
+      "id": "unsupported",
+      "status": "ready_mock",
+      "domain": "weather",
+      "api": "weather.query",
+      "stages": [
+        "domain",
+        "intent_arguments"
+      ],
+      "actualCallCount": 2,
+      "totalMs": 9114.4588,
+      "traceTimings": [
+        {
+          "stage": "domain",
+          "wallMs": 2559.6774000000005,
+          "inputTokens": 505,
+          "outputTokens": 10
+        },
+        {
+          "stage": "intent_arguments",
+          "wallMs": 6529.999400000001,
+          "inputTokens": 966,
+          "outputTokens": 11
+        }
+      ],
+      "routingPassed": false,
+      "rawScore": {
+        "domain": false,
+        "api": false,
+        "arguments": true,
+        "status": false,
+        "sources": true,
+        "resolution": true,
+        "plan": false
+      },
+      "executionScore": {
+        "domain": false,
+        "api": false,
+        "finalArguments": false,
+        "status": false,
+        "precision": false,
+        "sources": true,
+        "blocking": {
+          "match": true,
+          "expected": {
+            "fields": [],
+            "constraints": []
+          },
+          "actual": {
+            "fields": [],
+            "constraints": []
+          }
+        },
+        "expectedResolverStatusMatchesGold": true,
+        "expectedResolved": {
+          "arguments": {},
+          "sources": {},
+          "missing": [],
+          "issues": [],
+          "resolution": {},
+          "status": "unsupported"
+        },
+        "actualResolved": {
+          "arguments": {
+            "location": {
+              "latitude": 31.2304,
+              "longitude": 121.4737,
+              "label": "模拟手机当前位置（上海固定坐标）",
+              "source": "fixture"
+            },
+            "time_ref": {
+              "start": "2026-10-10",
+              "end": "2026-10-10",
+              "precision": "day",
+              "timezone": "Asia/Shanghai",
+              "expression": "today"
+            },
+            "data_needs": [
+              "weather"
+            ],
+            "strict_time": false
+          },
+          "sources": {
+            "location": "system_location",
+            "time_ref": "system_time",
+            "data_needs": "default",
+            "strict_time": "default"
+          },
+          "missing": [],
+          "issues": [],
+          "warnings": [],
+          "resolution": {
+            "context": [],
+            "location": {
+              "requested": {},
+              "effective": {
+                "latitude": 31.2304,
+                "longitude": 121.4737,
+                "label": "模拟手机当前位置（上海固定坐标）",
+                "source": "fixture"
+              },
+              "precision": "coordinates",
+              "geocoding": null,
+              "fallback": {
+                "applied": false,
+                "reason": null
+              }
+            },
+            "time": {
+              "requested": {
+                "dataset": "daily",
+                "precision": "day",
+                "range": {
+                  "start": "2026-10-10",
+                  "end": "2026-10-10",
+                  "precision": "day",
+                  "timezone": "Asia/Shanghai",
+                  "expression": "today"
+                }
+              },
+              "effective": {
+                "dataset": "daily",
+                "api": "weather.query",
+                "projection": null,
+                "precision": "day",
+                "range": {
+                  "start": "2026-10-10",
+                  "end": "2026-10-10",
+                  "precision": "day",
+                  "timezone": "Asia/Shanghai",
+                  "expression": "today"
+                },
+                "requiresFilteringToRequestedRange": false
+              },
+              "precision": "day",
+              "availabilitySource": "fixture",
+              "fallback": {
+                "applied": false,
+                "reason": null,
+                "requestedConstraintsPreserved": true
+              }
+            }
+          },
+          "status": "ready_mock",
+          "provenance": {
+            "v": 1,
+            "p": {
+              "location": {
+                "s": "S",
+                "o": "fixture"
+              },
+              "time_ref": {
+                "s": "D",
+                "d": [
+                  {
+                    "s": "S",
+                    "k": "now",
+                    "o": "provided_context"
+                  },
+                  {
+                    "s": "S",
+                    "k": "timezone",
+                    "o": "provided_context"
+                  }
+                ]
+              },
+              "data_needs": {
+                "s": "D"
+              },
+              "strict_time": {
+                "s": "D"
+              }
+            }
+          }
+        },
+        "expectedCanonicalArguments": {},
+        "actualCanonicalArguments": {
+          "location": {
+            "latitude": 31.2304,
+            "longitude": 121.4737
+          },
+          "time_ref": {
+            "kind": "range",
+            "start": "2026-10-10",
+            "end": "2026-10-10",
+            "precision": "day"
+          },
+          "data_needs": [
+            "weather"
+          ],
+          "strict_time": false
+        },
+        "precisionDetails": {
+          "expected": {},
+          "actual": {
+            "location": {
+              "precision": "coordinates",
+              "fallbackApplied": false
+            },
+            "time": {
+              "requested": {
+                "dataset": "daily",
+                "precision": "day",
+                "range": {
+                  "kind": "range",
+                  "start": "2026-10-10",
+                  "end": "2026-10-10",
+                  "precision": "day"
+                }
+              },
+              "effective": {
+                "dataset": "daily",
+                "precision": "day",
+                "range": {
+                  "kind": "range",
+                  "start": "2026-10-10",
+                  "end": "2026-10-10",
+                  "precision": "day"
+                },
+                "api": "weather.query",
+                "requiresFilteringToRequestedRange": false
+              },
+              "fallbackApplied": false
+            }
+          }
+        },
+        "sourceDetails": {
+          "annotations": {},
+          "expected": {},
+          "actual": {
+            "location": "system_location",
+            "time_ref": "system_time",
+            "data_needs": "default",
+            "strict_time": "default"
+          }
+        },
+        "differences": [
+          {
+            "path": "location",
+            "expected": null,
+            "actual": {
+              "latitude": 31.2304,
+              "longitude": 121.4737
+            },
+            "kind": "extra"
+          },
+          {
+            "path": "time_ref",
+            "expected": null,
+            "actual": {
+              "kind": "range",
+              "start": "2026-10-10",
+              "end": "2026-10-10",
+              "precision": "day"
+            },
+            "kind": "extra"
+          },
+          {
+            "path": "data_needs",
+            "expected": null,
+            "actual": [
+              "weather"
+            ],
+            "kind": "extra"
+          },
+          {
+            "path": "strict_time",
+            "expected": null,
+            "actual": false,
+            "kind": "extra"
+          }
+        ],
+        "plan": false
+      }
+    },
+    {
+      "id": "no-input-skip",
+      "status": "ready_mock",
+      "domain": "device",
+      "api": "device.battery.level",
+      "stages": [
+        "domain",
+        "intent"
+      ],
+      "actualCallCount": 2,
+      "totalMs": 4629.154999999999,
+      "traceTimings": [
+        {
+          "stage": "domain",
+          "wallMs": 2503.2260000000024,
+          "inputTokens": 506,
+          "outputTokens": 8
+        },
+        {
+          "stage": "intent",
+          "wallMs": 2124.6126000000004,
+          "inputTokens": 445,
+          "outputTokens": 12
+        }
+      ],
+      "routingPassed": true,
+      "rawScore": {
+        "domain": true,
+        "api": true,
+        "arguments": true,
+        "status": true,
+        "sources": true,
+        "resolution": true,
+        "plan": true
+      },
+      "executionScore": {
+        "domain": true,
+        "api": true,
+        "finalArguments": true,
+        "status": true,
+        "precision": true,
+        "sources": true,
+        "blocking": {
+          "match": true,
+          "expected": {
+            "fields": [],
+            "constraints": []
+          },
+          "actual": {
+            "fields": [],
+            "constraints": []
+          }
+        },
+        "expectedResolverStatusMatchesGold": true,
+        "expectedResolved": {
+          "arguments": {},
+          "sources": {},
+          "missing": [],
+          "issues": [],
+          "warnings": [],
+          "resolution": {
+            "context": []
+          },
+          "status": "ready_mock"
+        },
+        "actualResolved": {
+          "arguments": {},
+          "sources": {},
+          "missing": [],
+          "issues": [],
+          "warnings": [],
+          "resolution": {
+            "context": []
+          },
+          "status": "ready_mock",
+          "provenance": {
+            "v": 1,
+            "p": {}
+          }
+        },
+        "expectedCanonicalArguments": {},
+        "actualCanonicalArguments": {},
+        "precisionDetails": {
+          "expected": {},
+          "actual": {}
+        },
+        "sourceDetails": {
+          "annotations": {},
+          "expected": {},
+          "actual": {}
+        },
+        "differences": [],
+        "plan": true
+      }
+    }
+  ],
+  "notes": [
+    "6条人工设计工程烟测，无预热；包含加载时间；不是准确率或速度A/B评测。",
+    "只调用本机Qwen；无TypeSafe账号密钥，官方Jev未实测。",
+    "业务执行为mock，环境为明确fixture，不修改已有4000条原始证据。"
+  ],
+  "completedAt": "2026-10-13T01:45:22.223Z"
+}

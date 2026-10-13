@@ -6,13 +6,14 @@ import {createDomainReport} from './domain-report-view.mjs';
 import {createGroundingReport} from './grounding-report-view.mjs';
 import {createSingleService100View} from './single-service-100-view.mjs';
 import {buildContext} from './context-builder.mjs';
+import {inferenceModeName,inferenceModeDescription,renderInferenceOverrides,collectInferenceOverrides,renderDecisionProviderStatus,jevCanRun,inferenceRequiresJev,layaCanRun,inferenceRequiresLaya} from './inference-mode-view.mjs';
 
 const $=selector=>document.querySelector(selector);
 let health={models:[],recommendedModels:[]},running=false,toastTimer;
 const pageNames={experiment:'实验台',evaluation:'批量评测',catalog:'能力目录',history:'运行记录',docs:'详细说明'};
 const library=createLibrary({showRun,toast});
 const getExclusiveBenchmark=()=>health.lab?.exclusiveBenchmark;
-const evaluation=createEvaluation({getModels:()=>health.models || [],getOptions,showRun,toast,getExclusiveBenchmark});
+const evaluation=createEvaluation({getModels:()=>health.models || [],getOptions,showRun,toast,getExclusiveBenchmark,getJevStatus:()=>health.jev || {},getLayaStatus:()=>health.laya || {}});
 const domainReport=createDomainReport({showRun,toast});
 const groundingReport=createGroundingReport({showRun,toast});
 const singleService100=createSingleService100View({showRun,toast,onRefresh:()=>loadHealth()});
@@ -87,7 +88,7 @@ async function loadHealth() {
     $('#base-model').value=eligible.some(model=>model.name===previous)?previous:fallback || '';
     $('#health-notice').innerHTML=(getExclusiveBenchmark()?notice(exclusiveBenchmarkMessage(getExclusiveBenchmark()),'warning'):'')+(!okay?notice(`无法连接本机 Ollama。${health.ollama?.error || '请启动 Ollama 后刷新状态。'}`,'warning'):!eligible.length?notice('Ollama 已连接，尚未发现符合 10B 以下条件的模型。请安装推荐模型后刷新。','warning'):'');
     $('#run-submit').disabled=running || !okay || !eligible.length || Boolean(getExclusiveBenchmark());
-    modelMetadata();evaluation.updateModels();
+    modelMetadata();renderOverrides();evaluation.updateModels();
   }catch(error){$('#connection-status').innerHTML='<span class="tiny-dot"></span>工程服务未连接';$('#connection-status').classList.add('error');$('#health-notice').innerHTML=notice(error.message);$('#run-submit').disabled=true;}
   finally{$('#refresh-health').disabled=false;}
 }
@@ -95,11 +96,20 @@ $('#refresh-health').addEventListener('click',loadHealth);$('#base-model').addEv
 
 const savedOverrides={};
 function renderOverrides() {
-  document.querySelectorAll('[data-stage]').forEach(row=>{savedOverrides[row.dataset.stage]={provider:row.querySelector('select').value,model:row.querySelector('input').value};});
-  const stages=$('#run-mode').value==='unified'?['unified']:['domain','intent','arguments'];
-  $('#stage-overrides').innerHTML=stages.map(stage=>`<div class="override-row" data-stage="${stage}"><label for="provider-${stage}">${stageName(stage)}</label><select id="provider-${stage}" aria-label="${stageName(stage)} 提供方"><option value="">继承基础模型</option><option value="ollama">Ollama</option><option value="jev">Jev</option></select><input id="model-${stage}" aria-label="${stageName(stage)} 模型" placeholder="模型名（可选）"></div>`).join('');
-  document.querySelectorAll('[data-stage]').forEach(row=>{const value=savedOverrides[row.dataset.stage];if(value){row.querySelector('select').value=value.provider;row.querySelector('input').value=value.model;}});
+  document.querySelectorAll('[data-stage]').forEach(row=>{if(!row.dataset.forcedProvider)savedOverrides[row.dataset.stage]={provider:row.querySelector('select').value,model:row.querySelector('input').value};});
+  $('#stage-overrides').innerHTML=renderInferenceOverrides($('#run-mode').value,savedOverrides,health.jev || {},health.laya || {});
+  updateInferenceControls();
 }
+function currentOverrides() {return Object.fromEntries([...document.querySelectorAll('[data-stage]')].map(row=>[row.dataset.stage,{provider:row.querySelector('select').value,model:row.querySelector('input').value.trim()}]));}
+function updateInferenceControls() {
+  const mode=$('#run-mode').value,stages=currentOverrides(),needsCloud=inferenceRequiresJev(mode,stages),needsLaya=inferenceRequiresLaya(mode,stages);
+  $('#run-mode-description').textContent=inferenceModeDescription(mode);
+  $('#jev-status').innerHTML=renderDecisionProviderStatus({mode,stages,jev:health.jev || {},laya:health.laya || {}});
+  $('#run-submit').disabled=running || !health.ollama?.ok || !health.models?.some(model=>model.eligible) || Boolean(getExclusiveBenchmark()) || needsCloud&&!jevCanRun(health.jev) || needsLaya&&!layaCanRun(health.laya);
+  const labels=mode==='adaptive'?['领域','API + 简单参数','复杂时独立填参']:mode==='laya'?['Laya 领域','Laya API','Qwen 参数（有输入时）']:mode==='jev'?['Jev 领域','Jev API','Qwen 参数（有输入时）']:mode==='unified'?['领域 + API + 参数']:['领域','API','参数'];
+  $('#run-pipeline').innerHTML=labels.map(label=>`<span>${esc(label)}</span>`).join('<span>→</span>')+'<span>→</span><span>原文核对</span><span>→</span><strong>规则补全 / 模拟调用</strong>';
+}
+$('#stage-overrides').addEventListener('change',event=>{if(event.target.tagName==='SELECT'){const input=event.target.closest('[data-stage]').querySelector('input');if(['jev','laya'].includes(event.target.value))input.value='';renderOverrides();}});
 $('#run-mode').addEventListener('change',renderOverrides);renderOverrides();
 document.querySelectorAll('[data-example]').forEach(button=>button.addEventListener('click',()=>{$('#prompt-text').value=button.dataset.example;$('#prompt-text').focus();}));
 
@@ -129,19 +139,20 @@ $('#run-form').addEventListener('submit',async event=>{
   if(getExclusiveBenchmark()){toast(exclusiveBenchmarkMessage(getExclusiveBenchmark()));return;}
   const text=$('#prompt-text').value.trim();
   if(!text){toast('请填写用户提示词');return;}
-  const stages={};
-  document.querySelectorAll('[data-stage]').forEach(row=>{const provider=row.querySelector('select').value,model=row.querySelector('input').value.trim();if(provider||model)stages[row.dataset.stage]={provider:provider || 'ollama',...(model?{model}:{})};});
+  let stages;try{stages=collectInferenceOverrides($('#run-mode').value,currentOverrides());}catch(error){toast(error.message);return;}
+  if(inferenceRequiresJev($('#run-mode').value,stages)&&!jevCanRun(health.jev)){toast('官方 Jev 尚未就绪，请先在本机后端配置密钥并刷新状态。');return;}
+  if(inferenceRequiresLaya($('#run-mode').value,stages)&&!layaCanRun(health.laya)){toast('Laya 尚未就绪，请先安装启动本机 Laya 服务，等待模型加载后刷新状态。');return;}
   const request={text,mode:$('#run-mode').value,model:$('#base-model').value,stages,context:getContext(),options:getOptions()};
   running=true;$('#run-submit').disabled=true;$('#run-submit').innerHTML='<span class="spinner"></span>推理中';
   const started=performance.now();
-  $('#run-result').innerHTML=`<div class="panel waiting-panel"><span class="spinner"></span><h2 style="margin-top:22px">模型正在生成调用计划</h2><p style="margin-top:7px">${esc(request.model)} · ${request.mode==='unified'?'一次调用':'领域 → API → 参数'}<br>首次调用可能包含模型冷加载。</p><p id="elapsed-time" class="mono" style="margin-top:25px">0.00 s</p></div>`;
+  $('#run-result').innerHTML=`<div class="panel waiting-panel"><span class="spinner"></span><h2 style="margin-top:22px">模型正在生成调用计划</h2><p style="margin-top:7px">${esc(request.model)} · ${esc(inferenceModeName(request.mode))}<br>${esc(inferenceModeDescription(request.mode))}<br>首次调用可能包含模型冷加载。</p><p id="elapsed-time" class="mono" style="margin-top:25px">0.00 s</p></div>`;
   const ticker=setInterval(()=>{const target=$('#elapsed-time');if(target)target.textContent=duration(performance.now()-started);},100);
   try {
     const run=await api('/api/runs',{method:'POST',body:JSON.stringify(request)});
     $('#run-result').innerHTML=renderRun(run);bindRunDownload($('#run-result'),run,downloadJson);
     $('#run-hint').textContent=run.status==='error'?'调用失败记录已保存':'本次验证记录已保存';
   }catch(error){$('#run-result').innerHTML=`<div class="panel result-panel">${notice(error.message)}<p class="helper">检查工程服务和模型状态后重试。</p></div>`;}
-  finally{clearInterval(ticker);running=false;$('#run-submit').disabled=!health.ollama?.ok || !health.models?.some(model=>model.eligible) || Boolean(getExclusiveBenchmark());$('#run-submit').innerHTML='运行验证 <span>↗</span>';}
+  finally{clearInterval(ticker);running=false;updateInferenceControls();$('#run-submit').innerHTML='运行验证 <span>↗</span>';}
 });
 navigate(locationHash() || 'experiment');if(locationHash()!=='experiment')loadHealth();
 

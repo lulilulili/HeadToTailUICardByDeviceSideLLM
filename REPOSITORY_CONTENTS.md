@@ -44,3 +44,13 @@
 排除服务日志、PID、临时文件、缓存、第三方依赖目录和环境凭据。模型权重不在工程目录中，由 Ollama 独立下载。没有上传浏览器登录状态、系统凭据或用户目录。
 
 已有运行 JSON 作为历史证据显式纳入初始提交；`data/runtime/` 的默认忽略规则仍保留，之后新增本机实验记录不会自动被 Git 收集。如需发布新实验，应先检查数据来源和内容，再显式添加对应记录及清单。
+
+## 2026-10-13 分步路由与本机 Laya
+
+- edge-api-lab/src/adaptive-routing.mjs：两次/三次路径与阶段约束。
+- edge-api-lab/src/jev-provider.mjs / laya-provider.mjs：官方云端与本机 choice 分开适配。
+- edge-api-lab/integrations/laya/：固定发布依赖和本机启动包装；权重、venv、运行日志不提交。
+- edge-api-lab/docs/ADAPTIVE_JEV.md 与 LAYA.md：页面内说明的文档版本。
+- edge-api-lab/evidence/adaptive-jev-20261013-local-smoke/、adaptive-jev-20261013-v2-local-smoke/：Qwen两版小样本与源码快照；失败保留。
+- edge-api-lab/evidence/laya-smoke-20261013024041271/：本机Laya+Qwen六条真实烟测与源码快照；不是Jev成绩或准确率改善对照。
+- edge-api-lab/evidence/laya-20261013-deployment/：实际服务健康状态和已安装作者源码的SHA。

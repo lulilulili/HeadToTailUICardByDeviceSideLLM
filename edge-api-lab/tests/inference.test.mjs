@@ -94,11 +94,11 @@ test('schema validation constrains nested arguments and union branches', async (
   for (const value of [{ api: 'b', arguments: {} }, { api: 'a', arguments: { count: 0 } }, { api: 'a', arguments: { kind: 'bad' } }, { api: 'a', arguments: { extra: 2 } }]) assert.equal(validateValue(nested, value).valid, false);
 });
 
-test('unconfigured Jev fails explicitly and preserves trace', async () => {
+test('unconfigured Jev bridge fails explicitly and preserves trace', async () => {
   const { createProviders } = await module('providers');
-  await assert.rejects(createProviders({}).jev.invoke({ stage: 'arguments', model: 'jev-test', messages, schema }), error => {
+  await assert.rejects(createProviders({})['jev-bridge'].invoke({ stage: 'arguments', model: 'jev-test', messages, schema }), error => {
     assert.match(error.message, /Jev.*未配置/i);
-    assert.equal(error.trace.provider, 'jev');
+    assert.equal(error.trace.provider, 'jev-bridge');
     assert.equal(error.trace.stage, 'arguments');
     assert.ok(error.trace.error);
     return true;
@@ -112,7 +112,7 @@ test('Jev bridge receives the same stage contract and validates its returned val
     request = JSON.parse(await Array.fromAsync(req).then(chunks => Buffer.concat(chunks).toString()));
     res.end(JSON.stringify({ value: { api: 'weather.query' }, metrics: { inputTokens: 8, outputTokens: 3, generationMs: 10 } }));
   }, async url => {
-    const result = await createProviders({ jevUrl: url }).jev.invoke({ stage: 'intent', model: 'jev-test', messages, schema, options: { num_predict: 32 } });
+    const result = await createProviders({ jevUrl: url })['jev-bridge'].invoke({ stage: 'intent', model: 'jev-test', messages, schema, options: { num_predict: 32 } });
     assert.equal(request.stage, 'intent');
     assert.deepEqual(request.schema, schema);
     assert.equal(request.model, 'jev-test');
@@ -288,7 +288,7 @@ test('abort propagates after retaining each partial trace once', async () => {
   });
 });
 
-test('staged pipeline runs three calls, permits per-stage Jev, and emits each trace once', async () => {
+test('staged pipeline runs three calls, permits per-stage Jev bridge, and emits each trace once', async () => {
   const { runPipeline } = await module('pipeline');
   const calls = [];
   const events = [];
@@ -297,8 +297,8 @@ test('staged pipeline runs three calls, permits per-stage Jev, and emits each tr
     const value = request.stage === 'domain' ? { domain: 'weather' } : request.stage === 'intent' ? { api: 'weather.query' } : { time_ref: '今天', data_needs: ['precipitation'] };
     return { value: request.stage === 'arguments' ? wireSlots(request.schema, value) : value, trace: { stage: request.stage, provider, model: request.model, wallMs: 1 } };
   };
-  const result = await runPipeline({ text: '今天下雨吗', model: 'small', mode: 'staged', stages: { arguments: { provider: 'jev', model: 'bridge' } }, context }, { providers: { ollama: { invoke: invoke('ollama') }, jev: { invoke: invoke('jev') } }, onTrace: trace => events.push(trace) });
-  assert.deepEqual(calls.map(call => [call.stage, call.provider, call.model]), [['domain', 'ollama', 'small'], ['intent', 'ollama', 'small'], ['arguments', 'jev', 'bridge']]);
+  const result = await runPipeline({ text: '今天下雨吗', model: 'small', mode: 'staged', stages: { arguments: { provider: 'jev-bridge', model: 'bridge' } }, context }, { providers: { ollama: { invoke: invoke('ollama') }, 'jev-bridge': { invoke: invoke('jev-bridge') } }, onTrace: trace => events.push(trace) });
+  assert.deepEqual(calls.map(call => [call.stage, call.provider, call.model]), [['domain', 'ollama', 'small'], ['intent', 'ollama', 'small'], ['arguments', 'jev-bridge', 'bridge']]);
   assert.equal(result.api, 'weather.query');
   assert.equal(result.status, 'ready_mock');
   assert.equal(result.traces.length, 3);

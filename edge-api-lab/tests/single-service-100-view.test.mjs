@@ -101,7 +101,7 @@ test('app wires the accessible thousand-case tab defaults and exclusive guards w
   assert.match(html,/id="single-service-100-tab"[^>]*aria-controls="single-service-100-content"[^>]*data-evaluation-view="single100"/);
   assert.match(html,/id="single-service-100-content"[^>]*role="tabpanel"[^>]*aria-labelledby="single-service-100-tab"/);
   assert.match(workbench,/<option value="single-service-100-v1">当前千题/);assert.match(workbench,/Math\.min\(1000,caseData\.cases\.length\)/);
-  assert.match(workbench,/<option value="unified" selected>/);assert.match(html,/<option value="unified" selected>/);
+  assert.match(workbench,/renderInferenceModes\('adaptive'\)/);assert.match(html,/<option value="adaptive" selected>/);
   assert.match(app,/health\.lab\?\.exclusiveBenchmark/);assert.match(app,/if\(getExclusiveBenchmark\(\)\)/);assert.match(workbench,/if\(getExclusiveBenchmark\(\)\)/);
   assert.match(app,/singleService100\.setActive/);assert.match(view,/setTimeout\(load,7000\)/);
   assert.match(view,/showRun\(record\.run,\{expected:record\.expected,score:record\.rawScore,executionScore:record\.execution\}\)/);
