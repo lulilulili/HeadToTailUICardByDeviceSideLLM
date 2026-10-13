@@ -24,7 +24,7 @@
 - Qwen adaptive-v1：六条工程烟测，实际调用路径 5/6 符合预期，API 4/6、最终计划 4/6；包含多字段 API 错选和拒识失败。
 - Qwen adaptive-v2：增加通用多字段修改与拒识边界后再次六条烟测，API/最终计划仍 4/6；没有得到这六例上的准确率收益。
 - 同版本 Qwen 3B 的两条失败案例 HTTP 复核仍失败；不能把单纯增大模型或提示说明视为已修复。
-- Laya＋Qwen 1.5B：六条真实烟测，领域 4/6、API 2/6、原始完整计划 1/6、最终计划 2/6。包括全部天气候选与分组；没有报告末轮原文截断或候选折叠，中间轮诊断仍未全量透传。
+- Laya＋Qwen 1.5B：六条真实烟测，按现有冻结评分，领域 4/6、API 2/6、原始完整计划 1/6、最终计划 2/6，四条最终计划评分未通过。天气例原选 `weather.hourly.temperature` 错误，但规则恢复“现在”后，`resolved.resolution.time.effective.api` / `mock.api` 已回退 `weather.current.temperature`；冻结 `executionScore.api` / `precision` 仍为 false。2/6 是现有评分通过数，不表示该例实际 mock 仍读小时天气；评分与原始记录未改。包括全部天气候选与分组；没有报告末轮原文截断或候选折叠，中间轮诊断仍未全量透传。
 - 页面真实提交“修改日程 ev_7，标题为设计评审，地点为A室”：得到 `calendar.update`，Laya→Laya→Qwen，三次尝试，链路 7.34 秒；模型漏 ID 由确定性原文核对恢复，业务仍 mock。
 - 既有 4000 条离线审核再次为 `verified_completed`：4000 个原始哈希、原始/执行评分、索引、报告与冻结源码通过；模型调用 0，派生写入 0。
 

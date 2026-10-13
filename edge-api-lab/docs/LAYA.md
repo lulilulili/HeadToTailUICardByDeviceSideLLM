@@ -29,18 +29,20 @@ Laya 无需 API 密钥或充值；首次安装和权重下载需要网络，推�
 
 ## 六条真实本机烟测
 
-2026-10-13 已完成六条 Laya + Qwen 1.5B 请求，固定多语言 checkpoint 在本机 CPU / 8 线程运行。领域匹配 **4/6**，API 匹配 **2/6**，原始严格完整计划 **1/6**，最终执行语义计划 **2/6**。这是小样本链路验证，证明两阶段和三阶段完整路径可运行；四条最终计划仍错误，不能视为可靠识别，更不能等价官方 Jev 质量。
+2026-10-13 已完成六条 Laya + Qwen 1.5B 请求，固定多语言 checkpoint 在本机 CPU / 8 线程运行。领域匹配 **4/6**，API 匹配 **2/6**，原始严格完整计划 **1/6**，最终执行语义计划 **2/6**，均为现有冻结评分；四条最终计划评分未通过，不等于四条实际模拟调用的接口都错误。这是小样本链路验证，证明两阶段和三阶段完整路径可运行，不能视为可靠识别，更不能等价官方 Jev 质量。
 
-| 场景 | 预期 → 实际选择 | 实际调用 | 原始严格完整计划 | 最终计划 | 链路耗时（ms） |
+| 场景 | 预期 → Laya 原选 API | 实际调用 | 原始严格完整计划评分 | 最终计划评分 | 链路耗时（ms） |
 | --- | --- | ---: | --- | --- | ---: |
 | 查本机电量 | `device.battery.level` → 同接口 | 2 | 通过 | 通过 | 1597 |
-| 上海现在气温 | `weather.current.temperature` → `weather.hourly.temperature` | 3 | 失败 | 失败 | 12128 |
+| 上海现在气温 | `weather.current.temperature` → `weather.hourly.temperature`（规则有效/mock 接口回退 current） | 3 | 未通过 | 未通过 | 12128 |
 | 修改日程多个字段 | `calendar.update` → 同接口，规则补全后匹配 | 3 | 失败 | 通过 | 5164 |
 | 云函数与 JSON 正文 | `cloud.function.call` → `services.availability` | 3 | 失败 | 失败 | 2831 |
 | 写一首秋天的诗 | `unsupported` → `calendar.event.lunar` | 3 | 失败 | 失败 | 4868 |
 | 电量请求加 JSON {} | `device.battery.level` → `device.info.device_type` | 2 | 失败 | 失败 | 1523 |
 
 耗时为整条链路，含已发生的 Laya/Qwen 请求与规则处理，不是一次 Laya 决策耗时。失败请求仍计入；诗歌本应提前拒识，却实际进入三阶段，不能把“三次调用完成”当识别正确。最终通过也不等于真实业务执行成功，回执仍为 mock。
+
+天气例中，Laya 原选 `weather.hourly.temperature` 不符合“现在”。规则恢复原文的“现在”后，`resolved.resolution.time.effective.api` 与 `mock.api` 已回退为 `weather.current.temperature`，模拟计划使用 current 温度投影；冻结 `executionScore.api` 和 `executionScore.precision` 仍为 `false`。因此 **2/6 是现有评分的通过数**，未改评分或原始记录，不能表述为该例实际 mock 仍读取小时天气。
 
 完整原文、期望、评分与每次调用证据见 [manifest.json](../evidence/laya-smoke-20261013024041271/manifest.json)；逐例文件为 [simple-no-input.json](../evidence/laya-smoke-20261013024041271/simple-no-input.json)、[simple-weather.json](../evidence/laya-smoke-20261013024041271/simple-weather.json)、[complex-write.json](../evidence/laya-smoke-20261013024041271/complex-write.json)、[complex-json.json](../evidence/laya-smoke-20261013024041271/complex-json.json)、[unsupported.json](../evidence/laya-smoke-20261013024041271/unsupported.json)、[no-input-skip.json](../evidence/laya-smoke-20261013024041271/no-input-skip.json)。证据目录为 `evidence/laya-smoke-20261013024041271/`，含独立源码快照。
 
