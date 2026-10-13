@@ -1,5 +1,13 @@
 # 项目发布范围与证据说明
 
+## 2026-10-14 最终多轮结果发布
+
+最新批次 `single-service-100-20261013-093b947a-6d72-4e9f-8ae1-d3f6b9480a2d` 已完成四模型 × 十领域 × 每领域100题，正式4000条、Qwen实际8298次模型调用，预热独立。发布本批完整raw、报告、自动审计、稳定公开清单、72文件源码冻结快照，以及Laya复用切换证据和原相对路径下完整seed/cache/service来源。模型权重、虚拟环境、密钥、当前机器的缓存启用配置、PID和临时日志不发布。
+
+216,018,118字节的原索引在本机保持原样；仓库改为发布独立 `evidence/publication-archives/<本批ID>/index.json.gz` 和双层SHA元数据。恢复指令与校验边界见该目录README，恢复后原UI和离线审核器继续读取原 `storage.indexPath`。完整[结果总结](edge-api-lab/docs/single-service-100/single-service-100-20261013-093b947a-6d72-4e9f-8ae1-d3f6b9480a2d/README.md)逐模型、逐领域呈现准确率、每阶段耗时、昨日基线与失败分布。
+
+`PROJECT_MANIFEST.json` 保留其2026-10-13启动发布快照，历史SHA不回写；最终Git发布字节与SHA另登记在 `PROJECT_FINAL_MANIFEST_2026-10-14.json`。下文为先前发布的历史说明，不能把历史快照清单视作最新文件清单。
+
 初始发布日期：2026-10-10；本轮结果更新：2026-10-12。目标仓库：<https://github.com/lulilulili/HeadToTailUICardByDeviceSideLLM>。
 
 本仓库保留工作区中的工程源码、网页、脚本、自动检查、原始方案材料、图片、案例、提示词与源码冻结快照、评测报告、完整回放审计、全部已有 JSON 运行记录和验收证据。

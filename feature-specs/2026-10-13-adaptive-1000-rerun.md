@@ -52,7 +52,7 @@
 
 ## 执行状态
 
-待实现与启动；以实际 manifest 和已保存记录更新，计划数不当完成数。
+已完成：批次 `single-service-100-20261013-093b947a-6d72-4e9f-8ae1-d3f6b9480a2d` 于 2026-10-14 01:19:53（北京时间）保存全部 4000 条正式用例，四模型各 1000 条、40 个领域/模型格各 100 条；Qwen 正式模型调用 8298 次，预热独立。最终离线审计为 `verified_completed`，4000 个唯一 key、原始哈希与评分重算均通过。完整结果、来源和环境见 `edge-api-lab/docs/single-service-100/<id>/README.md` 与对应原始证据；发布恢复方式见独立 `publication-archives/<id>/README.md`。
 
 ## 用户追加：每次调用计时与 Laya 并行选择
 
