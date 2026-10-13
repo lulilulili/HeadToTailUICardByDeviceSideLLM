@@ -7,7 +7,8 @@ import {scoreCase} from '../src/evaluation.mjs';
 import {scoreExecutionSemantics} from '../src/semantic-evaluation.mjs';
 import {buildSingleService100Report} from '../src/single-service-100-report.mjs';
 import {loadSingleService100Cases,singleService100Plan,SINGLE_SERVICE_100_MODELS as models,SINGLE_SERVICE_100_DOMAINS as domains,SINGLE_SERVICE_100_CONTEXT as baseContext,SINGLE_SERVICE_100_FILES,SINGLE_SERVICE_100_SUITE as suite} from '../src/single-service-100.mjs';
-import {compactRecord,orderedCases,modelKey,benchmarkStorage} from './benchmark-single-service-100.mjs';
+import {compactRecord,orderedCases,modelKey,benchmarkStorage,validateStoredBenchmarkRun} from './benchmark-single-service-100.mjs';
+import {verifyLayaShadowRecord} from './shadow-laya.mjs';
 
 // Offline verification only: neither this script nor its imports invoke a model.
 // Saved runs are scored as recorded, never re-grounded, repaired, or overwritten.
@@ -47,7 +48,7 @@ export function verifySourceBytes(path,expected,current,snapshot){
  return {path,sha256:expected.toLowerCase()};
 }
 export function auditEnginePolicy(manifest){
- const legacyFormat=manifest.version!=='single-service-100-batch-v2';
+ const legacyFormat=!['single-service-100-batch-v2','single-service-100-batch-v3'].includes(manifest.version);
  return {legacyFormat,useFrozenEngine:legacyFormat||manifest.status==='completed'};
 }
 export function verifyFrozenSourceBytes(path,expected,current,snapshot){
@@ -73,7 +74,8 @@ async function verifySources(root,manifest,{legacyFormat=false,useFrozenEngine=f
  }
  return verified;
 }
-function verifyRunIdentity(run,model,text,manifest,label){
+function verifyRunIdentity(run,model,text,manifest,label,validator=validateStoredBenchmarkRun){
+ if(manifest.version==='single-service-100-batch-v3')return validator(run,{model,text,manifest,label});
  check(run&&typeof run==='object',`${label}: missing run`);
  equal(run.model,model,`${label} run.model`);equal(run.text,text,`${label} run.text`);
  equal(run.mode,'unified',`${label} run.mode`);equal(run.options,manifest.conditions.options,`${label} run.options`);
@@ -87,7 +89,7 @@ function verifyRunIdentity(run,model,text,manifest,label){
  for(const stage of Object.values(run.stages??{}))if(stage?.model!==undefined)equal(stage.model,model,`${label} stage model override`);
 }
 
-export function verifyStoredRecord({bytes,model,caseDefinition:c,manifest,registeredRow=null,engine={scoreCase,scoreExecutionSemantics,compactRecord}}){
+export function verifyStoredRecord({bytes,model,caseDefinition:c,manifest,registeredRow=null,engine={scoreCase,scoreExecutionSemantics,compactRecord,validateStoredBenchmarkRun,verifyLayaShadowRecord}}){
  const digest=sha256(bytes),record=JSON.parse(bytes),label=`${model}/${c.id}`;
  if(manifest.conditions.models)check(manifest.conditions.models.includes(model),label+': record model outside manifest');
  const ownership={manifestId:manifest.id,model,caseId:c.id,testDomain:c.testDomain,scenario:c.scenario,text:c.text,origin:c.origin,
@@ -95,7 +97,8 @@ export function verifyStoredRecord({bytes,model,caseDefinition:c,manifest,regist
   context:{...structuredClone(manifest.conditions.context??baseContext),...structuredClone(c.context??{})}};
  for(const [field,expected]of Object.entries(ownership))equal(record[field],expected,`${label} ownership.${field}`);
  check(record.recordSha256===undefined,`${label}: raw record must not contain a derived/self-referential recordSha256`);
- verifyRunIdentity(record.run,model,c.text,manifest,label);
+ verifyRunIdentity(record.run,model,c.text,manifest,label,engine.validateStoredBenchmarkRun);
+ if(manifest.version==='single-service-100-batch-v3') (engine.verifyLayaShadowRecord??verifyLayaShadowRecord)(record.shadow,record.run,{expected:c.expected,text:c.text,enabled:manifest.conditions.layaShadow?.enabled===true});
  equal(record.run.context,record.context,label+' run.context');
  const rawScore=engine.scoreCase(c.expected,record.run);
  const execution=engine.scoreExecutionSemantics(c.expected,record.run,record.run.context??record.context);
@@ -177,7 +180,7 @@ async function inventory(root,{models,evidenceDirectory}){
  }
  return {byModel,warmups,ignored,auxiliary};
 }
-async function verifyWarmups(root,manifest,files,complete,{models,evidenceDirectory}){
+async function verifyWarmups(root,manifest,files,complete,{models,evidenceDirectory},engine){
  check(Array.isArray(manifest.warmups),'Missing warmup list');
  const registered=new Map(),modelCounts=Object.fromEntries(models.map(model=>[model,0])),results=[];
  for(const item of manifest.warmups){
@@ -190,7 +193,11 @@ async function verifyWarmups(root,manifest,files,complete,{models,evidenceDirect
  for(const file of files){
   const bytes=await safeRead(root,file),run=JSON.parse(bytes),item=registered.get(file);
   check(models.includes(run.model),'Warmup raw/trace uses an unapproved model (outside manifest)');
-  verifyRunIdentity(run,run.model,'手机还剩多少电',manifest,file);modelCounts[run.model]++;
+  verifyRunIdentity(run,run.model,'手机还剩多少电',manifest,file,engine?.validateStoredBenchmarkRun);modelCounts[run.model]++;
+  if(manifest.version==='single-service-100-batch-v3'){
+   (engine?.verifyLayaShadowRecord??verifyLayaShadowRecord)(run.shadow,run,{expected:{domain:'device',api:'device.battery.level',arguments:{},status:'ready_mock'},text:'手机还剩多少电',enabled:manifest.conditions.layaShadow?.enabled===true});
+   if(item){equal(item.actualCallCount,run.traces.length,`${file} warmup actual count`);equal(item.modelCallMs,run.traces.reduce((sum,trace)=>sum+trace.wallMs,0),`${file} warmup trace duration total`);}
+  }
   const warmupName=file.split('/').at(-1);
   check(warmupName===modelKey(run.model)+'.json'||warmupName.startsWith(`${modelKey(run.model)}-`),'Warmup filename/model mismatch');
   if(item){equal(item.model,run.model,`${file} warmup model`);equal(item.status,run.status,`${file} warmup status`);equal(item.totalMs,run.totalMs,`${file} warmup duration`);registered.delete(file);}
@@ -229,12 +236,13 @@ export async function auditSingleService100({root=defaultRoot,manifestPath=null,
  if(!partial||complete){check(index.status==='completed'&&report.status==='completed','Full audit requires completed index/report');equal(manifest.progress,{done:formalTotal,total:formalTotal},'Completed manifest progress');}
  check(index.manifestId===manifest.id,'Index belongs to another manifest');check(Array.isArray(index.rows),'Missing index rows');
  const sourceFiles=await verifySources(root,manifest,{legacyFormat,useFrozenEngine});
- let engine={scoreCase,scoreExecutionSemantics,compactRecord,buildSingleService100Report,loadSingleService100Cases,orderedCases};
+ let engine={scoreCase,scoreExecutionSemantics,compactRecord,buildSingleService100Report,loadSingleService100Cases,orderedCases,validateStoredBenchmarkRun,verifyLayaShadowRecord};
  if(useFrozenEngine){
   const snapshot=workspacePath(root,manifest.sourceSnapshot);
   const load=path=>import(pathToFileURL(join(snapshot,path)).href);
   const [raw,semantic,runner,reporter,corpus]=await Promise.all([load('src/evaluation.mjs'),load('src/semantic-evaluation.mjs'),load('scripts/benchmark-single-service-100.mjs'),load('src/single-service-100-report.mjs'),load('src/single-service-100.mjs')]);
-  engine={...engine,scoreCase:raw.scoreCase,scoreExecutionSemantics:semantic.scoreExecutionSemantics,compactRecord:runner.compactRecord,orderedCases:runner.orderedCases,buildSingleService100Report:reporter.buildSingleService100Report,loadSingleService100Cases:corpus.loadSingleService100Cases};
+  engine={...engine,scoreCase:raw.scoreCase,scoreExecutionSemantics:semantic.scoreExecutionSemantics,compactRecord:runner.compactRecord,orderedCases:runner.orderedCases,buildSingleService100Report:reporter.buildSingleService100Report,loadSingleService100Cases:corpus.loadSingleService100Cases,...(runner.validateStoredBenchmarkRun?{validateStoredBenchmarkRun:runner.validateStoredBenchmarkRun}:{})};
+  if(manifest.version==='single-service-100-batch-v3'&&manifest.conditions.layaShadow?.enabled)engine.verifyLayaShadowRecord=(await load('scripts/shadow-laya.mjs')).verifyLayaShadowRecord;
  }
  const cases=await engine.loadSingleService100Cases(useFrozenEngine?workspacePath(root,manifest.sourceSnapshot):root),caseMap=new Map(cases.map(c=>[c.id,c]));
  equal(manifest.corpus.sha256,sha256(JSON.stringify(cases)),'Frozen corpus SHA-256');
@@ -267,11 +275,11 @@ export async function auditSingleService100({root=defaultRoot,manifestPath=null,
  verifyPublicationWindow({savedCount:saved.size,indexedCount:indexed.size,reportedDone:progress.done,manifestDone:manifest.progress.done,complete:!partial||complete,plannedTotal:formalTotal});
  const reportedRows=rows.slice(0,progress.done);
  const rebuilt=engine.buildSingleService100Report({...manifest,status:report.status,active:report.active,completedAt:report.completedAt,error:report.error},reportedRows);
- for(const field of ['summary','cells','examples','progress','examplePolicy','notes'])equal(report[field],rebuilt[field],`Independently rebuilt report.${field}`);
+ for(const field of ['summary','cells','examples','progress','examplePolicy','notes',...(manifest.version==='single-service-100-batch-v3'?['totalTiming','executionElapsed','warmupTiming','baselineComparison','shadowComparison']:[])])equal(report[field],rebuilt[field],`Independently rebuilt report.${field}`);
  for(const field of ['id','suite','createdAt','conditions','corpus','sourceSnapshot'])equal(report[field],manifest[field],`Report/manifest ${field}`);
  equal(report.warmupCount,manifest.warmups.length,'Reported excluded warmup count');
  if(complete){equal(report.completedAt,manifest.completedAt,'Completed report time');equal(report.error,manifest.error??null,'Completed report error');equal(report.active,null,'Completed active case');}
- const warmups=await verifyWarmups(root,manifest,files.warmups,complete,{models,evidenceDirectory:directory});
+ const warmups=await verifyWarmups(root,manifest,files.warmups,complete,{models,evidenceDirectory:directory},engine);
  const counts=models.map(model=>({model,total:rows.filter(row=>row.model===model).length,
   domains:domains.map(testDomain=>({testDomain,total:rows.filter(row=>row.model===model&&row.testDomain===testDomain).length}))}));
  if(!partial||complete){

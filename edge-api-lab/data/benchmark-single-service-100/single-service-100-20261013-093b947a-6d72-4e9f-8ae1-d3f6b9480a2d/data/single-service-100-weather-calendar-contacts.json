@@ -1,0 +1,5059 @@
+[
+  {
+    "id": "e100-weather-011",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "colloquial",
+    "scenario": "实况单字段",
+    "text": "这会儿上海有多热？我只要实况温度。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.current.temperature",
+      "arguments": {
+        "location": "上海"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-012",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "negation",
+    "scenario": "否定干扰",
+    "text": "不要看北京，查广州此刻的体感温度。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.current.apparentTemperature",
+      "arguments": {
+        "location": "广州",
+        "time_ref": "此刻"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-013",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "system-omission",
+    "scenario": "手机位置补全",
+    "text": "现在空气湿不湿？给我相对湿度数值。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.current.humidity",
+      "arguments": {
+        "time_ref": "现在"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-014",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "colloquial",
+    "scenario": "实况风向",
+    "text": "杭州当前的风往哪个方向吹？",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.current.wind.direction",
+      "arguments": {
+        "location": "杭州",
+        "time_ref": "当前"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-015",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "deictic",
+    "scenario": "本地指代",
+    "text": "这里的实况风速有多快？",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.current.wind.speed",
+      "arguments": {
+        "location": "这里"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-016",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "negation",
+    "scenario": "风与阵风区分",
+    "text": "取深圳此刻的风力级别，不要阵风级别。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.current.wind.level",
+      "arguments": {
+        "location": "深圳",
+        "time_ref": "此刻"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-017",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "explicit",
+    "scenario": "阵风字段",
+    "text": "读取南京现在的阵风风向。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.current.wind.gustDirection",
+      "arguments": {
+        "location": "南京",
+        "time_ref": "现在"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-018",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "field-read",
+    "scenario": "阵风字段",
+    "text": "武汉实况的阵风风速是多少？",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.current.wind.gustSpeed",
+      "arguments": {
+        "location": "武汉"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-019",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "quoted-payload",
+    "scenario": "引用内容隔离",
+    "text": "查当前云量，备注“明天去北京”不作为查询条件。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.current.cloudCover",
+      "arguments": {
+        "time_ref": "当前"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-020",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "colloquial",
+    "scenario": "实况单字段",
+    "text": "成都现在地面气压多少百帕？",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.current.pressure",
+      "arguments": {
+        "location": "成都",
+        "time_ref": "现在"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-021",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "deictic",
+    "scenario": "趋势字段",
+    "text": "此地的气压趋势现在是上升还是下降？",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.current.pressureTrend",
+      "arguments": {
+        "location": "此地",
+        "time_ref": "现在"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-022",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "negation",
+    "scenario": "天气现象深字段",
+    "text": "获取杭州现在的天气现象类型，不要图标。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.current.condition.type",
+      "arguments": {
+        "location": "杭州",
+        "time_ref": "现在"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-023",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "field-read",
+    "scenario": "天气现象深字段",
+    "text": "上海当前天气现象的文字描述是什么？",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.current.condition.description",
+      "arguments": {
+        "location": "上海",
+        "time_ref": "当前"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-024",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "system-omission",
+    "scenario": "天气现象深字段",
+    "text": "请返回实况天气图标资源。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.current.condition.icon",
+      "arguments": {},
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-025",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "field-read",
+    "scenario": "紫外线深字段",
+    "text": "广州此刻的紫外线暴露类别是什么？",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.current.uvIndex.category",
+      "arguments": {
+        "location": "广州",
+        "time_ref": "此刻"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-026",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "field-read",
+    "scenario": "紫外线深字段",
+    "text": "北京现在的紫外线指数值是多少？",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.current.uvIndex.value",
+      "arguments": {
+        "location": "北京",
+        "time_ref": "现在"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-027",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "system-omission",
+    "scenario": "紫外线深字段",
+    "text": "我想看当前紫外线等级的描述。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.current.uvIndex.description",
+      "arguments": {
+        "time_ref": "当前"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-028",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "field-read",
+    "scenario": "空气质量深字段",
+    "text": "深圳现在的空气质量指数 AQI 数值多少？",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.current.aqi.aqiValue",
+      "arguments": {
+        "location": "深圳",
+        "time_ref": "现在"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-029",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "field-read",
+    "scenario": "空气质量深字段",
+    "text": "南京此刻属于哪种空气质量类别？",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.current.aqi.aqiCategory",
+      "arguments": {
+        "location": "南京",
+        "time_ref": "此刻"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-030",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "system-omission",
+    "scenario": "空气质量深字段",
+    "text": "读取现在的空气质量描述。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.current.aqi.aqiDescription",
+      "arguments": {
+        "time_ref": "现在"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-031",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "colloquial",
+    "scenario": "逐小时预报",
+    "text": "明天上午杭州的气温逐小时变化呢？",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.hourly.temperature",
+      "arguments": {
+        "location": "杭州",
+        "time_ref": "明天上午"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-032",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "explicit",
+    "scenario": "短时间窗口",
+    "text": "接下来三小时，上海每小时的体感温度。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.hourly.apparentTemperature",
+      "arguments": {
+        "location": "上海",
+        "time_ref": "接下来三小时"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-033",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "explicit",
+    "scenario": "短时间窗口",
+    "text": "查询广州未来两小时的相对湿度，按小时返回。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.hourly.humidity",
+      "arguments": {
+        "location": "广州",
+        "time_ref": "未来两小时"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-034",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "explicit",
+    "scenario": "指定未来时刻",
+    "text": "我要北京明天下午三点的预报风速。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.hourly.wind.speed",
+      "arguments": {
+        "location": "北京",
+        "time_ref": "明天下午三点"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-035",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "system-omission",
+    "scenario": "逐小时降水",
+    "text": "现在起未来6小时每小时降水概率多少？",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.hourly.precipitationProbability",
+      "arguments": {
+        "time_ref": "未来6小时"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-036",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "negation",
+    "scenario": "降水量概率区分",
+    "text": "深圳明天上午的逐小时降水量，不要降水概率。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.hourly.precipitationAmount",
+      "arguments": {
+        "location": "深圳",
+        "time_ref": "明天上午"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-037",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "deictic",
+    "scenario": "逐小时预报",
+    "text": "未来两小时这里的能见度预报是多少？",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.hourly.visibility",
+      "arguments": {
+        "location": "这里",
+        "time_ref": "未来两小时"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-038",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "explicit-coordinates",
+    "scenario": "坐标与时间",
+    "text": "经纬度（121.4737，31.2304）未来三小时的云量预报。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.hourly.cloudCover",
+      "arguments": {
+        "coordinates": {
+          "latitude": 31.2304,
+          "longitude": 121.4737
+        },
+        "time_ref": "未来三小时"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-039",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "explicit",
+    "scenario": "逐小时深字段",
+    "text": "查南京明早的逐小时天气现象描述。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.hourly.condition.description",
+      "arguments": {
+        "location": "南京",
+        "time_ref": "明早"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-040",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "postposed-slot",
+    "scenario": "地点后置",
+    "text": "我要未来2小时的空气质量指数值，地点为武汉。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.hourly.aqi.aqiValue",
+      "arguments": {
+        "location": "武汉",
+        "time_ref": "未来2小时"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-041",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "colloquial",
+    "scenario": "日预报极值",
+    "text": "杭州明天最高气温能到多少？",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.daily.highTemperature",
+      "arguments": {
+        "location": "杭州",
+        "time_ref": "明天"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-042",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "negation",
+    "scenario": "日预报极值",
+    "text": "成都后天最低气温，不用最高温度。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.daily.lowTemperature",
+      "arguments": {
+        "location": "成都",
+        "time_ref": "后天"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-043",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "explicit",
+    "scenario": "日预报体感极值",
+    "text": "看上海明天的最高体感温度。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.daily.highApparentTemperature",
+      "arguments": {
+        "location": "上海",
+        "time_ref": "明天"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-044",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "field-read",
+    "scenario": "日预报体感极值",
+    "text": "南京明天最低体感温度是多少？",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.daily.lowApparentTemperature",
+      "arguments": {
+        "location": "南京",
+        "time_ref": "明天"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-045",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "explicit",
+    "scenario": "白天夜晚区分",
+    "text": "广州明天白天的湿度是多少？",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.daily.daytimeForecast.humidity",
+      "arguments": {
+        "location": "广州",
+        "time_ref": "明天"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-046",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "explicit",
+    "scenario": "白天夜晚区分",
+    "text": "深圳明天夜晚的风速预报。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.daily.overnightForecast.wind.speed",
+      "arguments": {
+        "location": "深圳",
+        "time_ref": "明天"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-047",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "negation",
+    "scenario": "雨雪字段区分",
+    "text": "北京后天白天的降雨量，别给降雪量。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.daily.daytimeForecast.rainfallAmount",
+      "arguments": {
+        "location": "北京",
+        "time_ref": "后天"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-048",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "field-read",
+    "scenario": "雨雪字段区分",
+    "text": "武汉明天夜间下雪概率是多少？",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.daily.overnightForecast.snowfallProbability",
+      "arguments": {
+        "location": "武汉",
+        "time_ref": "明天"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-049",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "colloquial",
+    "scenario": "日月事件",
+    "text": "明天上海几点日出？",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.daily.sun.sunrise",
+      "arguments": {
+        "location": "上海",
+        "time_ref": "明天"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-050",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "colloquial",
+    "scenario": "日月事件",
+    "text": "今天成都什么时候日落？",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.daily.sun.sunset",
+      "arguments": {
+        "location": "成都",
+        "time_ref": "今天"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-051",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "field-read",
+    "scenario": "月相深字段",
+    "text": "查杭州今晚对应日期的月相描述。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.daily.moon.phase.description",
+      "arguments": {
+        "location": "杭州",
+        "time_ref": "今晚"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-052",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "negation",
+    "scenario": "月亮信息区分",
+    "text": "南京明天的月面照亮比例，不要月龄。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.daily.moon.illuminatedFraction",
+      "arguments": {
+        "location": "南京",
+        "time_ref": "明天"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-053",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "deictic",
+    "scenario": "分钟降水",
+    "text": "未来20分钟附近的降水强度，每分钟给我一条。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.minute.precipitationIntensity",
+      "arguments": {
+        "location": "附近",
+        "time_ref": "未来20分钟"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-054",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "resolver-grammar-boundary",
+    "scenario": "确定性时间语法边界",
+    "text": "未来半小时降水的类型是雨还是雪？",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.minute.precipitation",
+      "arguments": {
+        "time_ref": "未来半小时"
+      },
+      "status": "needs_clarification"
+    },
+    "userGoalStatus": "ready_mock",
+    "contractBoundary": "当前readTime规则不支持“未来半小时”；安全拒绝不代表用户没有给时间，也不代表已满足分钟降水业务目标。",
+    "note": "精确入参保留用户原文。当前合同补全状态为需澄清，但实际用户意图尚未满足；该题不能据安全拒绝统计为已支持自然表达。"
+  },
+  {
+    "id": "e100-weather-055",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "field-read",
+    "scenario": "分钟时间字段",
+    "text": "上海接下来10分钟的降水时间点列表。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.minute.date",
+      "arguments": {
+        "location": "上海",
+        "time_ref": "接下来10分钟"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-056",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "field-read",
+    "scenario": "降水摘要",
+    "text": "读杭州未来30分钟的分钟降水摘要。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.minute.summary",
+      "arguments": {
+        "location": "杭州",
+        "time_ref": "未来30分钟"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-057",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "system-omission",
+    "scenario": "数据元信息",
+    "text": "深圳分钟降水数据更新时间是什么？",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.minute.updateTime",
+      "arguments": {
+        "location": "深圳"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-058",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "field-read",
+    "scenario": "数据元信息",
+    "text": "上海的分钟降水数据什么时候失效？",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.minute.expirationTime",
+      "arguments": {
+        "location": "上海"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-059",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "precision-policy",
+    "scenario": "严格分钟精度",
+    "text": "未来15分钟降水强度必须按分钟准确返回，不允许降精度。",
+    "context": {
+      "weatherAvailability": {
+        "current": true,
+        "hourly": true,
+        "daily": true,
+        "minute": false,
+        "alerts": true,
+        "indices": true,
+        "tides": true,
+        "city": true
+      }
+    },
+    "expected": {
+      "domain": "weather",
+      "api": "weather.minute.precipitationIntensity",
+      "arguments": {
+        "time_ref": "未来15分钟",
+        "strict_time": true
+      },
+      "status": "needs_clarification"
+    },
+    "userGoalStatus": "ready_mock",
+    "contractBoundary": "本例关闭分钟天气mock数据且用户禁止降精度；安全拒绝遵守限制，但没有满足用户分钟级查询目标，并非用户缺少入参。"
+  },
+  {
+    "id": "e100-weather-060",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "precision-policy",
+    "scenario": "允许精度降级",
+    "text": "未来45分钟降水强度可以降精度，地点是杭州。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.minute.precipitationIntensity",
+      "arguments": {
+        "location": "杭州",
+        "time_ref": "未来45分钟",
+        "strict_time": false
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-061",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "field-read",
+    "scenario": "预警字段",
+    "text": "广州当前天气预警的标题。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.alerts.title",
+      "arguments": {
+        "location": "广州",
+        "time_ref": "当前"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-062",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "colloquial",
+    "scenario": "预警字段",
+    "text": "北京现在预警正文说了什么？",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.alerts.content",
+      "arguments": {
+        "location": "北京",
+        "time_ref": "现在"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-063",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "negation",
+    "scenario": "预警防御指南",
+    "text": "给我深圳此刻预警的防御指南，不要正文。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.alerts.guide",
+      "arguments": {
+        "location": "深圳",
+        "time_ref": "此刻"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-064",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "deictic",
+    "scenario": "输出ID不作入参",
+    "text": "此地当前天气预警的ID是什么？",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.alerts.id",
+      "arguments": {
+        "location": "此地",
+        "time_ref": "当前"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-065",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "field-read",
+    "scenario": "预警字段",
+    "text": "看杭州现在天气预警等级。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.alerts.level",
+      "arguments": {
+        "location": "杭州",
+        "time_ref": "现在"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-066",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "field-read",
+    "scenario": "预警区域",
+    "text": "南京当前天气预警覆盖的区域。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.alerts.region",
+      "arguments": {
+        "location": "南京",
+        "time_ref": "当前"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-067",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "negation",
+    "scenario": "预警类型等级区分",
+    "text": "武汉现在天气预警类型，别返回等级。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.alerts.type",
+      "arguments": {
+        "location": "武汉",
+        "time_ref": "现在"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-068",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "colloquial",
+    "scenario": "预警来源",
+    "text": "上海此刻预警来自哪家发布方？",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.alerts.source",
+      "arguments": {
+        "location": "上海",
+        "time_ref": "此刻"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-069",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "system-omission",
+    "scenario": "预警链接",
+    "text": "获取当前天气预警详情链接。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.alerts.detailsUrl",
+      "arguments": {
+        "time_ref": "当前"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-070",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "field-read",
+    "scenario": "预警等级描述",
+    "text": "请读成都现在天气预警的等级描述。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.alerts.levelDescription",
+      "arguments": {
+        "location": "成都",
+        "time_ref": "现在"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-071",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "field-read",
+    "scenario": "天气指数深字段",
+    "text": "上海未来3天的天气指数每日内容是什么？",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.indices.dailyItems.content",
+      "arguments": {
+        "location": "上海",
+        "time_ref": "未来3天"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-072",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "field-read",
+    "scenario": "天气指数深字段",
+    "text": "杭州未来3天天气指数的每日级别描述。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.indices.dailyItems.levelDescription",
+      "arguments": {
+        "location": "杭州",
+        "time_ref": "未来3天"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-073",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "postposed-slot",
+    "scenario": "天气指数名称",
+    "text": "查询天气指数名称，城市：南京。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.indices.name",
+      "arguments": {
+        "location": "南京"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-074",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "field-read",
+    "scenario": "潮汐深字段",
+    "text": "上海今天的逐小时潮汐高度。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.tides.hourlyTides.height",
+      "arguments": {
+        "location": "上海",
+        "time_ref": "今天"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-075",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "negation",
+    "scenario": "潮汐站点",
+    "text": "读取上海潮汐站点名称，别给站点ID。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.tides.stationName",
+      "arguments": {
+        "location": "上海"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-076",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "field-read",
+    "scenario": "城市信息",
+    "text": "杭州天气城市对象的中文城市名称是什么？",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.city.chineseName",
+      "arguments": {
+        "location": "杭州"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-077",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "field-read",
+    "scenario": "城市时区不是系统时区",
+    "text": "读取北京天气城市信息里的城市时区。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.city.timezone",
+      "arguments": {
+        "location": "北京"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-078",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "field-read",
+    "scenario": "城市行政区域",
+    "text": "深圳天气城市的行政区域中文名列表。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.city.administrativeAreas.chineseName",
+      "arguments": {
+        "location": "深圳"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-079",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "single-service-multifield",
+    "scenario": "单服务多字段",
+    "text": "一次查询上海今天的气温和湿度，只调用天气服务。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.query",
+      "arguments": {
+        "location": "上海",
+        "time_ref": "今天",
+        "data_needs": [
+          "temperature",
+          "humidity"
+        ]
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-080",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "structured-slots",
+    "scenario": "单服务指定字段",
+    "text": "用逐小时天气查询杭州未来两小时，字段为temperature和precipitationProbability。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.query",
+      "arguments": {
+        "location": "杭州",
+        "time_ref": "未来两小时",
+        "fields": [
+          "temperature",
+          "precipitationProbability"
+        ],
+        "dataset": "hourly"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-081",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "structured-slots",
+    "scenario": "单服务多字段",
+    "text": "日粒度查广州明天的气温和降水，data_needs=[\"temperature\",\"precipitation\"]。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.query",
+      "arguments": {
+        "location": "广州",
+        "time_ref": "明天",
+        "data_needs": [
+          "temperature",
+          "precipitation"
+        ],
+        "dataset": "daily"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-082",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "aggregate",
+    "scenario": "实况总览",
+    "text": "把武汉现在完整的实况天气对象给我，不限某个字段。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.current.overview",
+      "arguments": {
+        "location": "武汉",
+        "time_ref": "现在"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-083",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "aggregate",
+    "scenario": "逐小时总览",
+    "text": "看看南京未来六小时完整的逐小时天气预报。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.hourly.overview",
+      "arguments": {
+        "location": "南京",
+        "time_ref": "未来六小时"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-084",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "aggregate",
+    "scenario": "多日总览",
+    "text": "给我成都未来三天的完整日天气预报。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.daily.overview",
+      "arguments": {
+        "location": "成都",
+        "time_ref": "未来三天"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-weather-085",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "geocode-failure",
+    "scenario": "中文全球地点",
+    "text": "查沙基索现在的气温。",
+    "context": {
+      "geocodes": {}
+    },
+    "provenance": {
+      "dataset": "global-city-samples.json",
+      "sampleId": "geonames-328716",
+      "sourceField": "GeoNames alternateNames zh"
+    },
+    "note": "中文地名来自官方 zh 样本；本例不注入地理编码坐标，命名地点无法解析时必须保留原文，不得替换模拟手机位置。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.current.temperature",
+      "arguments": {
+        "location": "沙基索",
+        "time_ref": "现在"
+      },
+      "status": "resolution_failed"
+    },
+    "userGoalStatus": "ready_mock",
+    "contractBoundary": "本例故意不提供命名地点的地理编码mock；地点已由用户明确给出但当前实验环境无法解析，安全拒绝不能当作已完成全球天气查询。"
+  },
+  {
+    "id": "e100-weather-086",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "geocode-failure",
+    "scenario": "中文全球地点",
+    "text": "我在詹姆斯敦出差，当前湿度是多少？",
+    "context": {
+      "geocodes": {}
+    },
+    "provenance": {
+      "dataset": "global-city-samples.json",
+      "sampleId": "geonames-3370903",
+      "sourceField": "GeoNames alternateNames zh"
+    },
+    "note": "中文地名来自官方 zh 样本；本例不注入地理编码坐标，命名地点无法解析时必须保留原文，不得替换模拟手机位置。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.current.humidity",
+      "arguments": {
+        "location": "詹姆斯敦",
+        "time_ref": "当前"
+      },
+      "status": "resolution_failed"
+    },
+    "userGoalStatus": "ready_mock",
+    "contractBoundary": "本例故意不提供命名地点的地理编码mock；地点已由用户明确给出但当前实验环境无法解析，安全拒绝不能当作已完成全球天气查询。"
+  },
+  {
+    "id": "e100-weather-087",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "geocode-failure",
+    "scenario": "中文全球地点",
+    "text": "瓦迪哈勒法此刻的气压呢？",
+    "context": {
+      "geocodes": {}
+    },
+    "provenance": {
+      "dataset": "global-city-samples.json",
+      "sampleId": "geonames-364132",
+      "sourceField": "GeoNames alternateNames zh"
+    },
+    "note": "中文地名来自官方 zh 样本；本例不注入地理编码坐标，命名地点无法解析时必须保留原文，不得替换模拟手机位置。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.current.pressure",
+      "arguments": {
+        "location": "瓦迪哈勒法",
+        "time_ref": "此刻"
+      },
+      "status": "resolution_failed"
+    },
+    "userGoalStatus": "ready_mock",
+    "contractBoundary": "本例故意不提供命名地点的地理编码mock；地点已由用户明确给出但当前实验环境无法解析，安全拒绝不能当作已完成全球天气查询。"
+  },
+  {
+    "id": "e100-weather-088",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "geocode-failure",
+    "scenario": "中文全球地点",
+    "text": "现在体感温度，城市：色格孜库勒。",
+    "context": {
+      "geocodes": {}
+    },
+    "provenance": {
+      "dataset": "global-city-samples.json",
+      "sampleId": "geonames-12450719",
+      "sourceField": "GeoNames alternateNames zh"
+    },
+    "note": "中文地名来自官方 zh 样本；本例不注入地理编码坐标，命名地点无法解析时必须保留原文，不得替换模拟手机位置。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.current.apparentTemperature",
+      "arguments": {
+        "location": "色格孜库勒",
+        "time_ref": "现在"
+      },
+      "status": "resolution_failed"
+    },
+    "userGoalStatus": "ready_mock",
+    "contractBoundary": "本例故意不提供命名地点的地理编码mock；地点已由用户明确给出但当前实验环境无法解析，安全拒绝不能当作已完成全球天气查询。"
+  },
+  {
+    "id": "e100-weather-089",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "geocode-failure",
+    "scenario": "中文全球地点",
+    "text": "想看萨达西沃佩特当前的风速。",
+    "context": {
+      "geocodes": {}
+    },
+    "provenance": {
+      "dataset": "global-city-samples.json",
+      "sampleId": "geonames-1257890",
+      "sourceField": "GeoNames alternateNames zh"
+    },
+    "note": "中文地名来自官方 zh 样本；本例不注入地理编码坐标，命名地点无法解析时必须保留原文，不得替换模拟手机位置。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.current.wind.speed",
+      "arguments": {
+        "location": "萨达西沃佩特",
+        "time_ref": "当前"
+      },
+      "status": "resolution_failed"
+    },
+    "userGoalStatus": "ready_mock",
+    "contractBoundary": "本例故意不提供命名地点的地理编码mock；地点已由用户明确给出但当前实验环境无法解析，安全拒绝不能当作已完成全球天气查询。"
+  },
+  {
+    "id": "e100-weather-090",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "geocode-failure",
+    "scenario": "中文全球地点",
+    "text": "查“唐普勒马尔”现在的紫外线指数值。",
+    "context": {
+      "geocodes": {}
+    },
+    "provenance": {
+      "dataset": "global-city-samples.json",
+      "sampleId": "geonames-2973188",
+      "sourceField": "GeoNames alternateNames zh"
+    },
+    "note": "中文地名来自官方 zh 样本；本例不注入地理编码坐标，命名地点无法解析时必须保留原文，不得替换模拟手机位置。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.current.uvIndex.value",
+      "arguments": {
+        "location": "唐普勒马尔",
+        "time_ref": "现在"
+      },
+      "status": "resolution_failed"
+    },
+    "userGoalStatus": "ready_mock",
+    "contractBoundary": "本例故意不提供命名地点的地理编码mock；地点已由用户明确给出但当前实验环境无法解析，安全拒绝不能当作已完成全球天气查询。"
+  },
+  {
+    "id": "e100-weather-091",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "geocode-failure",
+    "scenario": "中文全球地点",
+    "text": "现在湿度，在拉罗克德朗。",
+    "context": {
+      "geocodes": {}
+    },
+    "provenance": {
+      "dataset": "global-city-samples.json",
+      "sampleId": "geonames-3006797",
+      "sourceField": "GeoNames alternateNames zh"
+    },
+    "note": "中文地名来自官方 zh 样本；本例不注入地理编码坐标，命名地点无法解析时必须保留原文，不得替换模拟手机位置。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.current.humidity",
+      "arguments": {
+        "location": "拉罗克德朗",
+        "time_ref": "现在"
+      },
+      "status": "resolution_failed"
+    },
+    "userGoalStatus": "ready_mock",
+    "contractBoundary": "本例故意不提供命名地点的地理编码mock；地点已由用户明确给出但当前实验环境无法解析，安全拒绝不能当作已完成全球天气查询。"
+  },
+  {
+    "id": "e100-weather-092",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "geocode-failure",
+    "scenario": "中文全球地点",
+    "text": "不要查北京，查奥尔日河畔埃皮奈此刻的能见度。",
+    "context": {
+      "geocodes": {}
+    },
+    "provenance": {
+      "dataset": "global-city-samples.json",
+      "sampleId": "geonames-3020021",
+      "sourceField": "GeoNames alternateNames zh"
+    },
+    "note": "中文地名来自官方 zh 样本；本例不注入地理编码坐标，命名地点无法解析时必须保留原文，不得替换模拟手机位置。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.current.visibility",
+      "arguments": {
+        "location": "奥尔日河畔埃皮奈",
+        "time_ref": "此刻"
+      },
+      "status": "resolution_failed"
+    },
+    "userGoalStatus": "ready_mock",
+    "contractBoundary": "本例故意不提供命名地点的地理编码mock；地点已由用户明确给出但当前实验环境无法解析，安全拒绝不能当作已完成全球天气查询。"
+  },
+  {
+    "id": "e100-weather-093",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "geocode-failure",
+    "scenario": "中文全球地点",
+    "text": "戈尔德菲尔德现在云量是多少？",
+    "context": {
+      "geocodes": {}
+    },
+    "provenance": {
+      "dataset": "global-city-samples.json",
+      "sampleId": "geonames-5504812",
+      "sourceField": "GeoNames alternateNames zh"
+    },
+    "note": "中文地名来自官方 zh 样本；本例不注入地理编码坐标，命名地点无法解析时必须保留原文，不得替换模拟手机位置。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.current.cloudCover",
+      "arguments": {
+        "location": "戈尔德菲尔德",
+        "time_ref": "现在"
+      },
+      "status": "resolution_failed"
+    },
+    "userGoalStatus": "ready_mock",
+    "contractBoundary": "本例故意不提供命名地点的地理编码mock；地点已由用户明确给出但当前实验环境无法解析，安全拒绝不能当作已完成全球天气查询。"
+  },
+  {
+    "id": "e100-weather-094",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "geocode-failure",
+    "scenario": "中文全球地点",
+    "text": "我将前往拉克村，查当前空气质量指数值。",
+    "context": {
+      "geocodes": {}
+    },
+    "provenance": {
+      "dataset": "global-city-samples.json",
+      "sampleId": "geonames-4922548",
+      "sourceField": "GeoNames alternateNames zh"
+    },
+    "note": "中文地名来自官方 zh 样本；本例不注入地理编码坐标，命名地点无法解析时必须保留原文，不得替换模拟手机位置。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.current.aqi.aqiValue",
+      "arguments": {
+        "location": "拉克村",
+        "time_ref": "当前"
+      },
+      "status": "resolution_failed"
+    },
+    "userGoalStatus": "ready_mock",
+    "contractBoundary": "本例故意不提供命名地点的地理编码mock；地点已由用户明确给出但当前实验环境无法解析，安全拒绝不能当作已完成全球天气查询。"
+  },
+  {
+    "id": "e100-weather-095",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "geocode-failure",
+    "scenario": "中文全球地点",
+    "text": "取得百里亞埠现在的天气现象描述。",
+    "context": {
+      "geocodes": {}
+    },
+    "provenance": {
+      "dataset": "global-city-samples.json",
+      "sampleId": "geonames-6943455",
+      "sourceField": "GeoNames alternateNames zh"
+    },
+    "note": "中文地名来自官方 zh 样本；本例不注入地理编码坐标，命名地点无法解析时必须保留原文，不得替换模拟手机位置。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.current.condition.description",
+      "arguments": {
+        "location": "百里亞埠",
+        "time_ref": "现在"
+      },
+      "status": "resolution_failed"
+    },
+    "userGoalStatus": "ready_mock",
+    "contractBoundary": "本例故意不提供命名地点的地理编码mock；地点已由用户明确给出但当前实验环境无法解析，安全拒绝不能当作已完成全球天气查询。"
+  },
+  {
+    "id": "e100-weather-096",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "geocode-failure",
+    "scenario": "中文全球地点",
+    "text": "此刻的实况气温是多少，地点为努庫阿洛發。",
+    "context": {
+      "geocodes": {}
+    },
+    "provenance": {
+      "dataset": "global-city-samples.json",
+      "sampleId": "geonames-4032402",
+      "sourceField": "GeoNames alternateNames zh"
+    },
+    "note": "中文地名来自官方 zh 样本；本例不注入地理编码坐标，命名地点无法解析时必须保留原文，不得替换模拟手机位置。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.current.temperature",
+      "arguments": {
+        "location": "努庫阿洛發",
+        "time_ref": "此刻"
+      },
+      "status": "resolution_failed"
+    },
+    "userGoalStatus": "ready_mock",
+    "contractBoundary": "本例故意不提供命名地点的地理编码mock；地点已由用户明确给出但当前实验环境无法解析，安全拒绝不能当作已完成全球天气查询。"
+  },
+  {
+    "id": "e100-weather-097",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "geocode-failure",
+    "scenario": "中文全球地点",
+    "text": "查阿图奥纳现在的紫外线暴露类别，备注“上海”不要作为地点。",
+    "context": {
+      "geocodes": {}
+    },
+    "provenance": {
+      "dataset": "global-city-samples.json",
+      "sampleId": "geonames-4020109",
+      "sourceField": "GeoNames alternateNames zh"
+    },
+    "note": "中文地名来自官方 zh 样本；本例不注入地理编码坐标，命名地点无法解析时必须保留原文，不得替换模拟手机位置。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.current.uvIndex.category",
+      "arguments": {
+        "location": "阿图奥纳",
+        "time_ref": "现在"
+      },
+      "status": "resolution_failed"
+    },
+    "userGoalStatus": "ready_mock",
+    "contractBoundary": "本例故意不提供命名地点的地理编码mock；地点已由用户明确给出但当前实验环境无法解析，安全拒绝不能当作已完成全球天气查询。"
+  },
+  {
+    "id": "e100-weather-098",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "geocode-failure",
+    "scenario": "中文全球地点",
+    "text": "现在的阵风风速，位于阿桑加罗。",
+    "context": {
+      "geocodes": {}
+    },
+    "provenance": {
+      "dataset": "global-city-samples.json",
+      "sampleId": "geonames-3946937",
+      "sourceField": "GeoNames alternateNames zh"
+    },
+    "note": "中文地名来自官方 zh 样本；本例不注入地理编码坐标，命名地点无法解析时必须保留原文，不得替换模拟手机位置。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.current.wind.gustSpeed",
+      "arguments": {
+        "location": "阿桑加罗",
+        "time_ref": "现在"
+      },
+      "status": "resolution_failed"
+    },
+    "userGoalStatus": "ready_mock",
+    "contractBoundary": "本例故意不提供命名地点的地理编码mock；地点已由用户明确给出但当前实验环境无法解析，安全拒绝不能当作已完成全球天气查询。"
+  },
+  {
+    "id": "e100-weather-099",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "geocode-failure",
+    "scenario": "中文全球地点",
+    "text": "桑戈爾基此刻的实况天气摘要。",
+    "context": {
+      "geocodes": {}
+    },
+    "provenance": {
+      "dataset": "global-city-samples.json",
+      "sampleId": "geonames-3651857",
+      "sourceField": "GeoNames alternateNames zh"
+    },
+    "note": "中文地名来自官方 zh 样本；本例不注入地理编码坐标，命名地点无法解析时必须保留原文，不得替换模拟手机位置。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.current.summary",
+      "arguments": {
+        "location": "桑戈爾基",
+        "time_ref": "此刻"
+      },
+      "status": "resolution_failed"
+    },
+    "userGoalStatus": "ready_mock",
+    "contractBoundary": "本例故意不提供命名地点的地理编码mock；地点已由用户明确给出但当前实验环境无法解析，安全拒绝不能当作已完成全球天气查询。"
+  },
+  {
+    "id": "e100-weather-100",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "weather",
+    "category": "geocode-failure",
+    "scenario": "中文全球地点",
+    "text": "曼科拉当前空气质量类别是什么？",
+    "context": {
+      "geocodes": {}
+    },
+    "provenance": {
+      "dataset": "global-city-samples.json",
+      "sampleId": "geonames-3695000",
+      "sourceField": "GeoNames alternateNames zh"
+    },
+    "note": "中文地名来自官方 zh 样本；本例不注入地理编码坐标，命名地点无法解析时必须保留原文，不得替换模拟手机位置。",
+    "expected": {
+      "domain": "weather",
+      "api": "weather.current.aqi.aqiCategory",
+      "arguments": {
+        "location": "曼科拉",
+        "time_ref": "当前"
+      },
+      "status": "resolution_failed"
+    },
+    "userGoalStatus": "ready_mock",
+    "contractBoundary": "本例故意不提供命名地点的地理编码mock；地点已由用户明确给出但当前实验环境无法解析，安全拒绝不能当作已完成全球天气查询。"
+  },
+  {
+    "id": "e100-calendar-011",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "colloquial",
+    "scenario": "日程搜索",
+    "text": "明天有哪些日程安排？",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.search",
+      "arguments": {
+        "time_ref": "明天"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-012",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "colloquial",
+    "scenario": "时间范围搜索",
+    "text": "帮我看看本周安排。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.search",
+      "arguments": {
+        "time_ref": "本周"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-013",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "quoted-slot",
+    "scenario": "关键词搜索",
+    "text": "查询日历，关键词“预算审核”。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.search",
+      "arguments": {
+        "keyword": "预算审核"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-014",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "explicit",
+    "scenario": "日期和关键词",
+    "text": "查后天的日程，标题含“采购”。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.search",
+      "arguments": {
+        "time_ref": "后天",
+        "keyword": "采购"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-015",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "negation",
+    "scenario": "引用动作隔离",
+    "text": "我只查询日程，不创建；关键词“创建按钮评审”。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.search",
+      "arguments": {
+        "keyword": "创建按钮评审"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-016",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "colloquial",
+    "scenario": "日期和关键词",
+    "text": "今天有什么会，关键词是“客户访谈”？",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.search",
+      "arguments": {
+        "time_ref": "今天",
+        "keyword": "客户访谈"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-017",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "explicit",
+    "scenario": "时间范围搜索",
+    "text": "看看未来两天的日历安排。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.search",
+      "arguments": {
+        "time_ref": "未来两天"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-018",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "negation",
+    "scenario": "跨领域词干扰",
+    "text": "在日历里搜“天气预警复盘”，不要查询天气。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.search",
+      "arguments": {
+        "keyword": "天气预警复盘"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-019",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "structured-slots",
+    "scenario": "原样关键词",
+    "text": "搜索日程，keyword=\"版本 2.0 / 回归\"。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.search",
+      "arguments": {
+        "keyword": "版本 2.0 / 回归"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-020",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "system-omission",
+    "scenario": "默认查询日期",
+    "text": "查一下日历安排吧。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.search",
+      "arguments": {},
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-021",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "colloquial",
+    "scenario": "日程单字段",
+    "text": "日程 ev_101叫什么标题？",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.event.title",
+      "arguments": {
+        "event_id": "ev_101"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-022",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "negation",
+    "scenario": "开始结束区分",
+    "text": "读日程ID ev_102的开始时间，不要结束时间。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.event.start",
+      "arguments": {
+        "event_id": "ev_102"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-023",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "colloquial",
+    "scenario": "开始结束区分",
+    "text": "我想知道 ev_103 这个日程几点结束。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.event.end",
+      "arguments": {
+        "event_id": "ev_103"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-024",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "aggregate",
+    "scenario": "地点对象",
+    "text": "读取日程 ev_104 的完整地点对象。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.event.location",
+      "arguments": {
+        "event_id": "ev_104"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-025",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "field-read",
+    "scenario": "地点深字段",
+    "text": "会议日程 ev_105 的地点名称是什么？",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.event.location.location",
+      "arguments": {
+        "event_id": "ev_105"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-026",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "field-read",
+    "scenario": "地点坐标字段",
+    "text": "只返回日程 ev_106 地点的纬度。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.event.location.latitude",
+      "arguments": {
+        "event_id": "ev_106"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-027",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "negation",
+    "scenario": "地点坐标字段",
+    "text": "取日程 ev_107 的会议地点经度，不获取手机当前位置。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.event.location.longitude",
+      "arguments": {
+        "event_id": "ev_107"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-028",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "colloquial",
+    "scenario": "日程说明",
+    "text": "日程 ev_108 的说明怎么写的？",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.event.description",
+      "arguments": {
+        "event_id": "ev_108"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-029",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "field-read",
+    "scenario": "日程标记",
+    "text": "查日程 ev_109 是否是全天日程。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.event.all_day",
+      "arguments": {
+        "event_id": "ev_109"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-030",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "negation",
+    "scenario": "日程时区",
+    "text": "读取 ev_110 这个日程自身的时区，不是系统时区。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.event.timezone",
+      "arguments": {
+        "event_id": "ev_110"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-031",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "aggregate",
+    "scenario": "参会人对象",
+    "text": "取日程 ev_111 的全部参会人对象。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.event.attendees",
+      "arguments": {
+        "event_id": "ev_111"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-032",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "field-read",
+    "scenario": "参会人深字段",
+    "text": "日程ID ev_112 的参与者姓名列表。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.event.attendee.name",
+      "arguments": {
+        "event_id": "ev_112"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-033",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "field-read",
+    "scenario": "参会人深字段",
+    "text": "读取日程 ev_113 的参会人邮箱地址。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.event.attendee.email",
+      "arguments": {
+        "event_id": "ev_113"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-034",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "colloquial",
+    "scenario": "参会人深字段",
+    "text": "ev_114 日程里参会人各自的角色是什么？",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.event.attendee.role",
+      "arguments": {
+        "event_id": "ev_114"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-035",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "negation",
+    "scenario": "参会人角色状态区分",
+    "text": "查日程 ev_115 的参会人回复状态，不要角色。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.event.attendee.status",
+      "arguments": {
+        "event_id": "ev_115"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-036",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "field-read",
+    "scenario": "输出枚举字段",
+    "text": "日程 ev_116 的类型编码。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.event.type",
+      "arguments": {
+        "event_id": "ev_116"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-037",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "aggregate",
+    "scenario": "重复规则对象",
+    "text": "读取日程 ev_117 整个重复规则对象。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.event.recurrence",
+      "arguments": {
+        "event_id": "ev_117"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-038",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "field-read",
+    "scenario": "重复规则深字段",
+    "text": "日程 ev_118 的重复频率编码是什么？",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.event.recurrenceRule.recurrenceFrequency",
+      "arguments": {
+        "event_id": "ev_118"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-039",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "field-read",
+    "scenario": "重复规则深字段",
+    "text": "取日程 ev_119 的重复次数。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.event.recurrenceRule.count",
+      "arguments": {
+        "event_id": "ev_119"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-040",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "colloquial",
+    "scenario": "重复规则深字段",
+    "text": "日程 ev_120 每隔多久重复，即重复间隔值。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.event.recurrenceRule.interval",
+      "arguments": {
+        "event_id": "ev_120"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-041",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "field-read",
+    "scenario": "重复规则深字段",
+    "text": "读取日程ID ev_121的重复截止时间。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.event.recurrenceRule.expire",
+      "arguments": {
+        "event_id": "ev_121"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-042",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "field-read",
+    "scenario": "重复例外日期",
+    "text": "查 ev_122 的重复排除日期列表。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.event.recurrenceRule.excludedDates",
+      "arguments": {
+        "event_id": "ev_122"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-043",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "aggregate",
+    "scenario": "提醒列表",
+    "text": "读取日程 ev_123 的所有提醒提前时间。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.event.reminders",
+      "arguments": {
+        "event_id": "ev_123"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-044",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "aggregate",
+    "scenario": "日程详情",
+    "text": "看看日程 ev_124 的完整详情。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.event.get",
+      "arguments": {
+        "event_id": "ev_124"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-045",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "system-omission",
+    "scenario": "字段读取日期筛选",
+    "text": "查询今天日程的业务标识列表。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.event.identifier",
+      "arguments": {
+        "time_ref": "今天"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-046",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "field-read",
+    "scenario": "日程标记",
+    "text": "查日程 ev_125 有没有农历标记。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.event.lunar",
+      "arguments": {
+        "event_id": "ev_125"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-047",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "negation",
+    "scenario": "实例时间区分",
+    "text": "日程 ev_126 的实例开始时间，别给普通开始时间。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.event.instance_start",
+      "arguments": {
+        "event_id": "ev_126"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-048",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "field-read",
+    "scenario": "实例时间区分",
+    "text": "日程 ev_127 的实例结束时间是多少？",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.event.instance_end",
+      "arguments": {
+        "event_id": "ev_127"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-049",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "quoted-slot",
+    "scenario": "字段读取关键词筛选",
+    "text": "取标题含“草案”的日程开始时间。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.event.start",
+      "arguments": {
+        "keyword": "草案"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-050",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "selected-object",
+    "scenario": "只读可信选择",
+    "text": "读取当前选中日程的地点名称。",
+    "context": {
+      "objects": {
+        "event_id": {
+          "value": "ev_selected_6",
+          "trusted": true,
+          "source": "user_selection"
+        }
+      }
+    },
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.event.location.location",
+      "arguments": {},
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-051",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "explicit",
+    "scenario": "创建必需字段",
+    "text": "新建日程，标题“工程碰头”，开始时间明天上午九点。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.create",
+      "arguments": {
+        "title": "工程碰头",
+        "starts_at": "明天上午九点"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-052",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "colloquial",
+    "scenario": "创建持续时长",
+    "text": "建个日程叫“午间走路”，开始时间今天中午十二点，持续25分钟。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.create",
+      "arguments": {
+        "title": "午间走路",
+        "starts_at": "今天中午十二点",
+        "duration_minutes": 25
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-053",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "explicit",
+    "scenario": "明确起止时间",
+    "text": "创建日程，标题“验收”，开始时间2026-10-13T10:00:00+08:00，结束时间2026-10-13T11:15:00+08:00。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.create",
+      "arguments": {
+        "title": "验收",
+        "starts_at": "2026-10-13T10:00:00+08:00",
+        "ends_at": "2026-10-13T11:15:00+08:00"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-054",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "quoted-slot",
+    "scenario": "业务地点不默认",
+    "text": "创建日程，标题“实验记录”，开始时间后天下午两点，地点“实验楼 B-204”。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.create",
+      "arguments": {
+        "title": "实验记录",
+        "starts_at": "后天下午两点",
+        "location": "实验楼 B-204"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-055",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "explicit",
+    "scenario": "提醒分钟",
+    "text": "请新建日程，标题“回访”，开始时间明天下午四点，提前10分钟提醒。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.create",
+      "arguments": {
+        "title": "回访",
+        "starts_at": "明天下午四点",
+        "reminder_minutes": 10
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-056",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "resolver-grammar-boundary",
+    "scenario": "确定性时间语法边界",
+    "text": "创建日程，标题“签到”，开始时间明早九点，开始时提醒。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.create",
+      "arguments": {
+        "title": "签到",
+        "starts_at": "明早九点",
+        "reminder_minutes": 0
+      },
+      "status": "needs_clarification"
+    },
+    "userGoalStatus": "ready_mock",
+    "contractBoundary": "当前datetime规则未把“明早九点”解释为上午九点；安全拒绝不代表用户真的缺少开始时间。",
+    "note": "精确入参保留用户原文。当前合同补全状态为需澄清，但实际用户意图尚未满足；该题不能据安全拒绝统计为已支持自然表达。"
+  },
+  {
+    "id": "e100-calendar-057",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "resolver-grammar-boundary",
+    "scenario": "全天日期语义边界",
+    "text": "新建全天日程，标题“外出培训”，开始时间2026-10-12，全天标记true。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.create",
+      "arguments": {
+        "title": "外出培训",
+        "starts_at": "2026-10-12",
+        "is_all_day": true
+      },
+      "status": "needs_clarification"
+    },
+    "userGoalStatus": "ready_mock",
+    "contractBoundary": "当前datetime规则不支持按全天标记把明确日期解析为全天开始时刻；安全拒绝不代表用户没有给全天日程日期。",
+    "note": "精确入参保留用户原文。当前合同补全状态为需澄清，但实际用户意图尚未满足；该题不能据安全拒绝统计为已支持自然表达。"
+  },
+  {
+    "id": "e100-calendar-058",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "quoted-slot",
+    "scenario": "参会人原文",
+    "text": "创建日程，标题“联调”，开始时间明天下午三点，参会人“赵宁”和“周琪”。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.create",
+      "arguments": {
+        "title": "联调",
+        "starts_at": "明天下午三点",
+        "attendees": [
+          "赵宁",
+          "周琪"
+        ]
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-059",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "quoted-slot",
+    "scenario": "重复规则原文",
+    "text": "新建日程，标题“周三例会”，开始时间下周三上午十点，重复规则“每周三”。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.create",
+      "arguments": {
+        "title": "周三例会",
+        "starts_at": "下周三上午十点",
+        "recurrence": "每周三"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-060",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "explicit-timezone",
+    "scenario": "用户时区",
+    "text": "创建日程，标题“纽约远程沟通”，开始时间2026-10-13T09:00:00，时区America/New_York。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.create",
+      "arguments": {
+        "title": "纽约远程沟通",
+        "starts_at": "2026-10-13T09:00:00",
+        "timezone": "America/New_York"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-061",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "quoted-payload",
+    "scenario": "时间词标题隔离",
+    "text": "创建日程，标题“后天”，开始时间明天下午五点。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.create",
+      "arguments": {
+        "title": "后天",
+        "starts_at": "明天下午五点"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-062",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "quoted-payload",
+    "scenario": "动作词标题隔离",
+    "text": "新建日程，标题“取消 ev_999 操作演练”，开始时间2026-10-14T14:00:00+08:00。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.create",
+      "arguments": {
+        "title": "取消 ev_999 操作演练",
+        "starts_at": "2026-10-14T14:00:00+08:00"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-063",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "quoted-payload",
+    "scenario": "说明载荷隔离",
+    "text": "创建日程，标题“接口评审”，开始时间明天下午两点，说明“不要查天气；这里只讨论 API。”。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.create",
+      "arguments": {
+        "title": "接口评审",
+        "starts_at": "明天下午两点",
+        "description": "不要查天气；这里只讨论 API。"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-064",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "structured-slots",
+    "scenario": "字段赋值创建",
+    "text": "新建日程，title=\"A/B 验证 · 二期\"，starts_at=\"2026-10-15T16:30:00+08:00\"，duration_minutes=45。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.create",
+      "arguments": {
+        "title": "A/B 验证 · 二期",
+        "starts_at": "2026-10-15T16:30:00+08:00",
+        "duration_minutes": 45
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-065",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "explicit",
+    "scenario": "多槽同一创建",
+    "text": "创建日程，标题“锁定测试”，开始时间明天下午三点，持续60分钟，地点“线上”，参会人“陈雨”。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.create",
+      "arguments": {
+        "title": "锁定测试",
+        "starts_at": "明天下午三点",
+        "duration_minutes": 60,
+        "location": "线上",
+        "attendees": [
+          "陈雨"
+        ]
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-066",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "missing-business-slot",
+    "scenario": "开始时间缺失",
+    "text": "创建日程，标题“时间待定”，开始时间还没定。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.create",
+      "arguments": {
+        "title": "时间待定"
+      },
+      "status": "needs_clarification"
+    }
+  },
+  {
+    "id": "e100-calendar-067",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "missing-business-slot",
+    "scenario": "标题缺失",
+    "text": "创建日程，开始时间明天下午三点，标题稍后给。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.create",
+      "arguments": {
+        "starts_at": "明天下午三点"
+      },
+      "status": "needs_clarification"
+    }
+  },
+  {
+    "id": "e100-calendar-068",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "missing-business-slot",
+    "scenario": "必需业务槽缺失",
+    "text": "帮我创建一个日程，内容我还没想好。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.create",
+      "arguments": {},
+      "status": "needs_clarification"
+    }
+  },
+  {
+    "id": "e100-calendar-069",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "explicit-false",
+    "scenario": "布尔false保真",
+    "text": "创建日程，标题“非全天访谈”，开始时间明天下午一点，全天标记false。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.create",
+      "arguments": {
+        "title": "非全天访谈",
+        "starts_at": "明天下午一点",
+        "is_all_day": false
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-070",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "semantic-conflict",
+    "scenario": "结束早于开始",
+    "text": "创建日程，标题“时序校验”，开始时间2026-10-13T15:00:00+08:00，结束时间2026-10-13T14:00:00+08:00。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.create",
+      "arguments": {
+        "title": "时序校验",
+        "starts_at": "2026-10-13T15:00:00+08:00",
+        "ends_at": "2026-10-13T14:00:00+08:00"
+      },
+      "status": "needs_clarification"
+    }
+  },
+  {
+    "id": "e100-calendar-071",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "explicit",
+    "scenario": "多字段单次更新",
+    "text": "修改日程 ev_201，标题改为“周会修订”，地点改为“会议室 C”。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.update",
+      "arguments": {
+        "event_id": "ev_201",
+        "changes": {
+          "title": "周会修订",
+          "location": "会议室 C"
+        }
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-072",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "explicit",
+    "scenario": "更新开始时间",
+    "text": "把日程 ev_202 开始时间改为后天上午十点。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.update",
+      "arguments": {
+        "event_id": "ev_202",
+        "changes": {
+          "starts_at": "后天上午十点"
+        }
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-073",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "explicit",
+    "scenario": "更新起止时间",
+    "text": "更新日程 ev_203，开始时间2026-10-13T13:00:00+08:00，结束时间2026-10-13T14:20:00+08:00。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.update",
+      "arguments": {
+        "event_id": "ev_203",
+        "changes": {
+          "starts_at": "2026-10-13T13:00:00+08:00",
+          "ends_at": "2026-10-13T14:20:00+08:00"
+        }
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-074",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "explicit-zero",
+    "scenario": "更新零值与说明",
+    "text": "修改日程 ev_204，说明改为“带上电脑”，提前提醒分钟数改为0。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.update",
+      "arguments": {
+        "event_id": "ev_204",
+        "changes": {
+          "description": "带上电脑",
+          "reminder_minutes": 0
+        }
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-075",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "explicit-false",
+    "scenario": "更新布尔与时区",
+    "text": "修改日程 ev_205，全天标记改为false，时区改为Asia/Shanghai。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.update",
+      "arguments": {
+        "event_id": "ev_205",
+        "changes": {
+          "is_all_day": false,
+          "timezone": "Asia/Shanghai"
+        }
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-076",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "quoted-slot",
+    "scenario": "更新参会人列表",
+    "text": "更新日程 ev_206，参会人改为“林晓”和“黄蕾”，地点改为“视频会议”。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.update",
+      "arguments": {
+        "event_id": "ev_206",
+        "changes": {
+          "attendees": [
+            "林晓",
+            "黄蕾"
+          ],
+          "location": "视频会议"
+        }
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-077",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "quoted-slot",
+    "scenario": "更新重复规则",
+    "text": "修改日程 ev_207，重复规则改为“每月15日”，标题改为“月度对账”。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.update",
+      "arguments": {
+        "event_id": "ev_207",
+        "changes": {
+          "recurrence": "每月15日",
+          "title": "月度对账"
+        }
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-078",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "structured-slots",
+    "scenario": "嵌套JSON变更",
+    "text": "更新日程 ev_208，changes={\"title\":\"读取天气\",\"description\":\"只是标题，不执行天气查询\"}。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.update",
+      "arguments": {
+        "event_id": "ev_208",
+        "changes": {
+          "title": "读取天气",
+          "description": "只是标题，不执行天气查询"
+        }
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-079",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "negation",
+    "scenario": "更新目标否定干扰",
+    "text": "别改日程 ev_209，修改日程 ev_210，标题“已复核”，地点“线上”。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.update",
+      "arguments": {
+        "event_id": "ev_210",
+        "changes": {
+          "title": "已复核",
+          "location": "线上"
+        }
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-080",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "explicit-timezone",
+    "scenario": "时区业务写值",
+    "text": "修改日程 ev_211，只把时区改成Europe/London。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.update",
+      "arguments": {
+        "event_id": "ev_211",
+        "changes": {
+          "timezone": "Europe/London"
+        }
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-081",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "missing-business-slot",
+    "scenario": "更新目标ID缺失",
+    "text": "更新日程，标题改成“缺少目标”，地点改成“资料室”，ID没给。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.update",
+      "arguments": {
+        "changes": {
+          "title": "缺少目标",
+          "location": "资料室"
+        }
+      },
+      "status": "needs_clarification"
+    }
+  },
+  {
+    "id": "e100-calendar-082",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "missing-business-slot",
+    "scenario": "变更字段缺失",
+    "text": "修改日程 ev_212，具体改什么我还没确定。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.update",
+      "arguments": {
+        "event_id": "ev_212"
+      },
+      "status": "needs_clarification"
+    }
+  },
+  {
+    "id": "e100-calendar-083",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "write-target-boundary",
+    "scenario": "写目标不从选择补全",
+    "text": "修改当前选中日程，标题“不能代填ID”，地点“会议室 A”。",
+    "context": {
+      "objects": {
+        "event_id": {
+          "value": "ev_selected_8",
+          "source": "user_selection",
+          "trusted": true
+        }
+      }
+    },
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.update",
+      "arguments": {
+        "changes": {
+          "title": "不能代填ID",
+          "location": "会议室 A"
+        }
+      },
+      "status": "needs_clarification"
+    }
+  },
+  {
+    "id": "e100-calendar-084",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "missing-business-slot",
+    "scenario": "空变更对象",
+    "text": "更新日程 ev_213，changes={}，先不要替我决定新值。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.update",
+      "arguments": {
+        "event_id": "ev_213",
+        "changes": {}
+      },
+      "status": "needs_clarification"
+    }
+  },
+  {
+    "id": "e100-calendar-085",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "explicit",
+    "scenario": "单字段写入",
+    "text": "仅设置日程 ev_301 的标题为“修订稿”。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.event.set.title",
+      "arguments": {
+        "event_id": "ev_301",
+        "value": "修订稿"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-086",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "quoted-slot",
+    "scenario": "业务地点写入",
+    "text": "把日程 ev_302 的地点设置为“城北图书馆”。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.event.set.location",
+      "arguments": {
+        "event_id": "ev_302",
+        "value": "城北图书馆"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-087",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "quoted-payload",
+    "scenario": "说明载荷隔离",
+    "text": "设置日程 ev_303 的说明为“明天去北京查天气只是演示文字”。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.event.set.description",
+      "arguments": {
+        "event_id": "ev_303",
+        "value": "明天去北京查天气只是演示文字"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-088",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "explicit-true",
+    "scenario": "单字段布尔写入",
+    "text": "将日程 ev_304 的全天标记设置为true。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.event.set.all_day",
+      "arguments": {
+        "event_id": "ev_304",
+        "value": true
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-089",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "explicit-zero",
+    "scenario": "提醒数组写入",
+    "text": "日程 ev_305 的提醒提前分钟数设置为15和0。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.event.set.reminders",
+      "arguments": {
+        "event_id": "ev_305",
+        "value": [
+          15,
+          0
+        ]
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-090",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "missing-business-slot",
+    "scenario": "写入值缺失",
+    "text": "设置日程 ev_306 的标题，新标题尚未提供。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.event.set.title",
+      "arguments": {
+        "event_id": "ev_306"
+      },
+      "status": "needs_clarification"
+    }
+  },
+  {
+    "id": "e100-calendar-091",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "explicit",
+    "scenario": "取消明确ID",
+    "text": "取消日程 ev_401。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.cancel",
+      "arguments": {
+        "event_id": "ev_401"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-092",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "negation",
+    "scenario": "取消领域边界",
+    "text": "请删除日历里的日程ID ev_402，不是删除联系人。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.cancel",
+      "arguments": {
+        "event_id": "ev_402"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-093",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "negation",
+    "scenario": "取消目标否定干扰",
+    "text": "不要取消 ev_403，取消日程 ev_404。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.cancel",
+      "arguments": {
+        "event_id": "ev_404"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-094",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "missing-business-slot",
+    "scenario": "标题不能代替ID",
+    "text": "取消标题叫“出差”的那个日程，ID没有提供。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.cancel",
+      "arguments": {},
+      "status": "needs_clarification"
+    }
+  },
+  {
+    "id": "e100-calendar-095",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "write-target-boundary",
+    "scenario": "写目标不从选择补全",
+    "text": "把当前选中的日程取消。",
+    "context": {
+      "objects": {
+        "event_id": {
+          "value": "ev_selected_9",
+          "source": "user_selection",
+          "trusted": true
+        }
+      }
+    },
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.cancel",
+      "arguments": {},
+      "status": "needs_clarification"
+    }
+  },
+  {
+    "id": "e100-calendar-096",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "structured-slots",
+    "scenario": "明确ID赋值",
+    "text": "取消日程，event_id=\"ev_405\"。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.cancel",
+      "arguments": {
+        "event_id": "ev_405"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-097",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "field-read",
+    "scenario": "日历账户字段",
+    "text": "读取日历账户 cal_10 的账户名称。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.account.name",
+      "arguments": {
+        "calendar_id": "cal_10"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-098",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "colloquial",
+    "scenario": "日历账户字段",
+    "text": "日历账户 cal_11 的显示名是什么？",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.account.displayName",
+      "arguments": {
+        "calendar_id": "cal_11"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-099",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "field-read",
+    "scenario": "日历配置字段",
+    "text": "查日历账户 cal_12 的提醒开关状态。",
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.config.enableReminder",
+      "arguments": {
+        "calendar_id": "cal_12"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-calendar-100",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "calendar",
+    "category": "selected-object",
+    "scenario": "只读账户选择",
+    "text": "当前选中日历账户的颜色值是多少？",
+    "context": {
+      "objects": {
+        "calendar_id": {
+          "value": "cal_selected_5",
+          "source": "user_selection",
+          "trusted": true
+        }
+      }
+    },
+    "expected": {
+      "domain": "calendar",
+      "api": "calendar.config.color",
+      "arguments": {},
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-011",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "colloquial",
+    "scenario": "姓名搜索",
+    "text": "通讯录里有叫“许宁”的人吗？",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.search",
+      "arguments": {
+        "query": "许宁"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-012",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "quoted-slot",
+    "scenario": "号码搜索",
+    "text": "按手机号“13900139000”查找联系人。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.search",
+      "arguments": {
+        "query": "13900139000"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-013",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "quoted-slot",
+    "scenario": "组织搜索",
+    "text": "在通讯录搜索单位“星海实验室”。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.search",
+      "arguments": {
+        "query": "星海实验室"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-014",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "negation",
+    "scenario": "搜索词否定干扰",
+    "text": "不要查王明，查姓名“王铭”的联系人。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.search",
+      "arguments": {
+        "query": "王铭"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-015",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "structured-slots",
+    "scenario": "搜索词原样保真",
+    "text": "查联系人，query=\"欧阳 · 小南\"。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.search",
+      "arguments": {
+        "query": "欧阳 · 小南"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-016",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "quoted-slot",
+    "scenario": "号码空格加号保真",
+    "text": "帮我找电话是“+86 10 5555 0101”的联系人。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.search",
+      "arguments": {
+        "query": "+86 10 5555 0101"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-017",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "negation",
+    "scenario": "组织词领域干扰",
+    "text": "只在通讯录搜“天气小组”，不用查询天气。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.search",
+      "arguments": {
+        "query": "天气小组"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-018",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "quoted-payload",
+    "scenario": "动作词搜索隔离",
+    "text": "搜索联系人，搜索词“创建日程”。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.search",
+      "arguments": {
+        "query": "创建日程"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-019",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "missing-business-slot",
+    "scenario": "搜索词缺失",
+    "text": "我要查一个联系人，搜索词还没给。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.search",
+      "arguments": {},
+      "status": "needs_clarification"
+    }
+  },
+  {
+    "id": "e100-contacts-020",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "quoted-slot",
+    "scenario": "搜索词标点保真",
+    "text": "查通讯录，关键词“张-雨 / ZY”，保持原样。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.search",
+      "arguments": {
+        "query": "张-雨 / ZY"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-021",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "aggregate",
+    "scenario": "电话号码对象",
+    "text": "读取联系人 ct_101 的全部电话号码对象。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.phone",
+      "arguments": {
+        "contact_id": "ct_101"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-022",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "aggregate",
+    "scenario": "邮箱对象",
+    "text": "联系人 ct_102 的邮箱对象列表。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.email",
+      "arguments": {
+        "contact_id": "ct_102"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-023",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "aggregate",
+    "scenario": "地址对象",
+    "text": "取联系人 ct_103 的全部邮寄地址对象。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.address",
+      "arguments": {
+        "contact_id": "ct_103"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-024",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "aggregate",
+    "scenario": "组织对象",
+    "text": "读取联系人 ct_104 完整的单位与职位对象。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.organization",
+      "arguments": {
+        "contact_id": "ct_104"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-025",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "aggregate",
+    "scenario": "事件对象",
+    "text": "联系人 ct_105 的生日与纪念日记录有哪些？",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.events",
+      "arguments": {
+        "contact_id": "ct_105"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-026",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "aggregate",
+    "scenario": "姓名对象",
+    "text": "读取联系人 ct_106 的姓名对象。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.name",
+      "arguments": {
+        "contact_id": "ct_106"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-027",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "aggregate",
+    "scenario": "昵称对象",
+    "text": "取联系人 ct_107 的完整昵称对象。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.nickname",
+      "arguments": {
+        "contact_id": "ct_107"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-028",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "negation",
+    "scenario": "备注对象与文本区分",
+    "text": "读取联系人 ct_108 的备注对象，不要备注文本单字段。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.note",
+      "arguments": {
+        "contact_id": "ct_108"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-029",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "aggregate",
+    "scenario": "网站对象",
+    "text": "联系人 ct_109 的网站记录列表。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.websites",
+      "arguments": {
+        "contact_id": "ct_109"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-030",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "aggregate",
+    "scenario": "头像对象",
+    "text": "查看联系人 ct_110 的完整头像对象。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.portrait",
+      "arguments": {
+        "contact_id": "ct_110"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-031",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "aggregate",
+    "scenario": "群组对象",
+    "text": "联系人 ct_111 属于哪些群组，给我完整群组对象。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.groups",
+      "arguments": {
+        "contact_id": "ct_111"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-032",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "aggregate",
+    "scenario": "关系对象",
+    "text": "读取联系人 ct_112 的所有关系对象。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.relations",
+      "arguments": {
+        "contact_id": "ct_112"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-033",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "aggregate",
+    "scenario": "即时消息对象",
+    "text": "取联系人 ct_113 的即时通讯地址对象列表。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.im",
+      "arguments": {
+        "contact_id": "ct_113"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-034",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "aggregate",
+    "scenario": "SIP对象",
+    "text": "读取联系人 ct_114 的SIP地址对象列表。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.sip",
+      "arguments": {
+        "contact_id": "ct_114"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-035",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "negation",
+    "scenario": "电话值与标签区分",
+    "text": "联系人ID ct_115 的电话号码值，不要电话号码标签。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.phoneNumbers.phoneNumber",
+      "arguments": {
+        "contact_id": "ct_115"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-036",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "field-read",
+    "scenario": "电话标签",
+    "text": "读联系人 ct_116 的电话标签名称。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.phoneNumbers.labelName",
+      "arguments": {
+        "contact_id": "ct_116"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-037",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "field-read",
+    "scenario": "电话标签编码",
+    "text": "联系人 ct_117 的电话类型编码是什么？",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.phoneNumbers.labelId",
+      "arguments": {
+        "contact_id": "ct_117"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-038",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "field-read",
+    "scenario": "邮箱深字段",
+    "text": "读取联系人 ct_118 的邮箱地址值。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.emails.email",
+      "arguments": {
+        "contact_id": "ct_118"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-039",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "negation",
+    "scenario": "邮箱显示名区分",
+    "text": "查联系人 ct_119 的邮箱显示名称，不是完整姓名。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.emails.displayName",
+      "arguments": {
+        "contact_id": "ct_119"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-040",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "field-read",
+    "scenario": "完整地址深字段",
+    "text": "联系人 ct_120 的完整邮寄地址文本。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.postalAddresses.postalAddress",
+      "arguments": {
+        "contact_id": "ct_120"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-041",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "colloquial",
+    "scenario": "姓与名区分",
+    "text": "通讯录中的 ct_121 姓什么？",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.name.familyName",
+      "arguments": {
+        "contact_id": "ct_121"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-042",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "negation",
+    "scenario": "姓与名区分",
+    "text": "联系人 ct_122 的名字部分是什么，不要姓氏。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.name.givenName",
+      "arguments": {
+        "contact_id": "ct_122"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-043",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "field-read",
+    "scenario": "姓名拼音",
+    "text": "读取联系人 ct_123 的姓氏拼音。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.name.familyNamePhonetic",
+      "arguments": {
+        "contact_id": "ct_123"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-044",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "field-read",
+    "scenario": "姓名拼音",
+    "text": "联系人 ct_124 的名字拼音。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.name.givenNamePhonetic",
+      "arguments": {
+        "contact_id": "ct_124"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-045",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "field-read",
+    "scenario": "姓名深字段",
+    "text": "读联系人 ct_125 的中间名。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.name.middleName",
+      "arguments": {
+        "contact_id": "ct_125"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-046",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "field-read",
+    "scenario": "姓名深字段",
+    "text": "取联系人 ct_126 姓名的前缀。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.name.namePrefix",
+      "arguments": {
+        "contact_id": "ct_126"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-047",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "negation",
+    "scenario": "单位职位区分",
+    "text": "联系人 ct_127 的单位名称，不要职位名称。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.organization.name",
+      "arguments": {
+        "contact_id": "ct_127"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-048",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "colloquial",
+    "scenario": "单位职位区分",
+    "text": "看看联系人 ct_128 的职位名称。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.organization.title",
+      "arguments": {
+        "contact_id": "ct_128"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-049",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "field-read",
+    "scenario": "住址城市",
+    "text": "读联系人 ct_129 地址里的城市。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.postalAddresses.city",
+      "arguments": {
+        "contact_id": "ct_129"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-050",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "colloquial",
+    "scenario": "住址街道",
+    "text": "联系人 ct_130 邮寄地址的街道是什么？",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.postalAddresses.street",
+      "arguments": {
+        "contact_id": "ct_130"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-051",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "field-read",
+    "scenario": "住址邮编",
+    "text": "取联系人 ct_131 的邮政编码。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.postalAddresses.postcode",
+      "arguments": {
+        "contact_id": "ct_131"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-052",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "field-read",
+    "scenario": "事件日期",
+    "text": "联系人 ct_132 的生日纪念日日期原文。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.events.eventDate",
+      "arguments": {
+        "contact_id": "ct_132"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-053",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "explicit",
+    "scenario": "创建必需姓名",
+    "text": "新建联系人，姓名“陶然”。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.create",
+      "arguments": {
+        "name": "陶然"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-054",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "quoted-slot",
+    "scenario": "创建电话保真",
+    "text": "把“周子越”添加为联系人，姓名“周子越”，电话号码“138-5555-0202”。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.create",
+      "arguments": {
+        "name": "周子越",
+        "phone": "138-5555-0202"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-055",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "quoted-slot",
+    "scenario": "创建邮箱保真",
+    "text": "创建联系人，姓名“顾晴”，电子邮箱“gq+lab@example.com”。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.create",
+      "arguments": {
+        "name": "顾晴",
+        "email": "gq+lab@example.com"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-056",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "quoted-slot",
+    "scenario": "创建组织",
+    "text": "新增联系人，姓名“丁言”，组织“南岸研究中心”。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.create",
+      "arguments": {
+        "name": "丁言",
+        "organization": "南岸研究中心"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-057",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "quoted-slot",
+    "scenario": "创建地址",
+    "text": "新建通讯录联系人，姓名“韩秋”，地址“成都市示例路18号 2栋”。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.create",
+      "arguments": {
+        "name": "韩秋",
+        "address": "成都市示例路18号 2栋"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-058",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "quoted-slot",
+    "scenario": "生日不猜年份",
+    "text": "创建联系人，姓名“陈未”，生日“10月12日”。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.create",
+      "arguments": {
+        "name": "陈未",
+        "birthday": "10月12日"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-059",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "quoted-slot",
+    "scenario": "姓名昵称角色",
+    "text": "新增联系人，姓名“黎远”，昵称“阿远”。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.create",
+      "arguments": {
+        "name": "黎远",
+        "nickname": "阿远"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-060",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "quoted-payload",
+    "scenario": "备注载荷隔离",
+    "text": "新建联系人，姓名“邹禾”，备注“明天去北京查天气；只是备注”。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.create",
+      "arguments": {
+        "name": "邹禾",
+        "note": "明天去北京查天气；只是备注"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-061",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "quoted-slot",
+    "scenario": "网站原样保真",
+    "text": "创建联系人，姓名“蒋澄”，网站“https://example.com/profile?id=7&tab=work”。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.create",
+      "arguments": {
+        "name": "蒋澄",
+        "website": "https://example.com/profile?id=7&tab=work"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-062",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "explicit",
+    "scenario": "多槽同一创建",
+    "text": "新建联系人，姓名“宋清”，手机号“+86 13800138001”，邮箱“song@example.com”，单位“紫云科技”。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.create",
+      "arguments": {
+        "name": "宋清",
+        "phone": "+86 13800138001",
+        "email": "song@example.com",
+        "organization": "紫云科技"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-063",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "structured-slots",
+    "scenario": "字段赋值创建",
+    "text": "创建联系人，name=\"叶-欣\"，phone=\"010 5555 0203\"，nickname=\"Y/X\"。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.create",
+      "arguments": {
+        "name": "叶-欣",
+        "phone": "010 5555 0203",
+        "nickname": "Y/X"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-064",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "quoted-payload",
+    "scenario": "动作词姓名隔离",
+    "text": "新增联系人，姓名“读取日程”，备注“这是姓名，不读取任何日程”。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.create",
+      "arguments": {
+        "name": "读取日程",
+        "note": "这是姓名，不读取任何日程"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-065",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "missing-business-slot",
+    "scenario": "创建姓名缺失",
+    "text": "创建联系人，电话号码“13900000001”，姓名还未提供。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.create",
+      "arguments": {
+        "phone": "13900000001"
+      },
+      "status": "needs_clarification"
+    }
+  },
+  {
+    "id": "e100-contacts-066",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "missing-business-slot",
+    "scenario": "创建必需槽缺失",
+    "text": "帮我新建联系人，具体信息稍后再说。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.create",
+      "arguments": {},
+      "status": "needs_clarification"
+    }
+  },
+  {
+    "id": "e100-contacts-067",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "explicit",
+    "scenario": "多槽同一创建",
+    "text": "新建联系人，姓名“高岚”，住址“示例市新街5号”，生日“1992-04-05”，备注“仅作测试”。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.create",
+      "arguments": {
+        "name": "高岚",
+        "address": "示例市新街5号",
+        "birthday": "1992-04-05",
+        "note": "仅作测试"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-068",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "negation",
+    "scenario": "姓名否定干扰",
+    "text": "创建联系人，不用姓名“旧名”，姓名“新名”，手机号“13700000002”。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.create",
+      "arguments": {
+        "name": "新名",
+        "phone": "13700000002"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-069",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "explicit",
+    "scenario": "多字段单次更新",
+    "text": "更新联系人 ct_201，姓名“周静”，邮箱“zj@example.com”。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.update",
+      "arguments": {
+        "contact_id": "ct_201",
+        "name": "周静",
+        "email": "zj@example.com"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-070",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "quoted-slot",
+    "scenario": "更新号码组织",
+    "text": "修改联系人 ct_202，电话“+86 21 5555 0301”，组织“星桥工坊”。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.update",
+      "arguments": {
+        "contact_id": "ct_202",
+        "phone": "+86 21 5555 0301",
+        "organization": "星桥工坊"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-071",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "quoted-slot",
+    "scenario": "更新地址生日",
+    "text": "更新联系人 ct_203，地址“宁波示例街12号”，生日“9月9日”。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.update",
+      "arguments": {
+        "contact_id": "ct_203",
+        "address": "宁波示例街12号",
+        "birthday": "9月9日"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-072",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "quoted-payload",
+    "scenario": "更新昵称备注",
+    "text": "更新联系人 ct_204，昵称“小周”，备注“在这里仅保存备注”。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.update",
+      "arguments": {
+        "contact_id": "ct_204",
+        "nickname": "小周",
+        "note": "在这里仅保存备注"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-073",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "explicit",
+    "scenario": "更新邮箱网站",
+    "text": "修改联系人 ct_205，邮箱“new@example.com”，网站“https://example.com/new”。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.update",
+      "arguments": {
+        "contact_id": "ct_205",
+        "email": "new@example.com",
+        "website": "https://example.com/new"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-074",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "negation",
+    "scenario": "更新目标否定干扰",
+    "text": "更新联系人，不是 ct_206，而是 ct_207，姓名“正名”，电话“13600000001”。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.update",
+      "arguments": {
+        "contact_id": "ct_207",
+        "name": "正名",
+        "phone": "13600000001"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-075",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "structured-slots",
+    "scenario": "更新字段赋值",
+    "text": "更新联系人，contact_id=\"ct_208\"，name=\"南星\"，organization=\"机构 A / B\"。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.update",
+      "arguments": {
+        "contact_id": "ct_208",
+        "name": "南星",
+        "organization": "机构 A / B"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-076",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "missing-business-slot",
+    "scenario": "姓名不能替代更新ID",
+    "text": "更新联系人“同名小林”，邮箱“xl@example.com”，单位“辰星”；我没有ID。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.update",
+      "arguments": {
+        "email": "xl@example.com",
+        "organization": "辰星"
+      },
+      "status": "needs_clarification"
+    }
+  },
+  {
+    "id": "e100-contacts-077",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "missing-business-slot",
+    "scenario": "更新内容缺失",
+    "text": "修改联系人 ct_209，新的内容还没定。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.update",
+      "arguments": {
+        "contact_id": "ct_209"
+      },
+      "status": "needs_clarification"
+    }
+  },
+  {
+    "id": "e100-contacts-078",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "write-target-boundary",
+    "scenario": "写目标不从选择补全",
+    "text": "修改当前选中联系人，姓名“选择也需ID”，邮箱“selected@example.com”。",
+    "context": {
+      "objects": {
+        "contact_id": {
+          "value": "ct_selected_4",
+          "source": "user_selection",
+          "trusted": true
+        }
+      }
+    },
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.update",
+      "arguments": {
+        "name": "选择也需ID",
+        "email": "selected@example.com"
+      },
+      "status": "needs_clarification"
+    }
+  },
+  {
+    "id": "e100-contacts-079",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "quoted-slot",
+    "scenario": "电话单字段写入",
+    "text": "仅设置联系人 ct_301 的电话为“+86 138 0000 0301”。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.set.phone",
+      "arguments": {
+        "contact_id": "ct_301",
+        "value": "+86 138 0000 0301"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-080",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "missing-business-slot",
+    "scenario": "电话写值缺失",
+    "text": "设置联系人 ct_302 的电话，号码尚未提供。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.set.phone",
+      "arguments": {
+        "contact_id": "ct_302"
+      },
+      "status": "needs_clarification"
+    }
+  },
+  {
+    "id": "e100-contacts-081",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "quoted-slot",
+    "scenario": "邮箱单字段写入",
+    "text": "把联系人 ct_303 的邮箱设置为“new+tag@example.com”。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.set.email",
+      "arguments": {
+        "contact_id": "ct_303",
+        "value": "new+tag@example.com"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-082",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "missing-business-slot",
+    "scenario": "邮箱写目标缺失",
+    "text": "设置联系人的邮箱为“no-id@example.com”，目标ID没给。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.set.email",
+      "arguments": {
+        "value": "no-id@example.com"
+      },
+      "status": "needs_clarification"
+    }
+  },
+  {
+    "id": "e100-contacts-083",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "quoted-slot",
+    "scenario": "地址单字段写入",
+    "text": "设置联系人 ct_304 的邮寄地址为“上海市示例路9号”。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.set.address",
+      "arguments": {
+        "contact_id": "ct_304",
+        "value": "上海市示例路9号"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-084",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "quoted-slot",
+    "scenario": "地址原样保真",
+    "text": "联系人 ct_305 的地址改成“邮政信箱 001 / 南区”。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.set.address",
+      "arguments": {
+        "contact_id": "ct_305",
+        "value": "邮政信箱 001 / 南区"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-085",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "quoted-slot",
+    "scenario": "单位单字段写入",
+    "text": "将联系人 ct_306 的单位设置为“实验单位甲”。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.set.organization",
+      "arguments": {
+        "contact_id": "ct_306",
+        "value": "实验单位甲"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-086",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "quoted-payload",
+    "scenario": "单位领域词隔离",
+    "text": "设置联系人 ct_307 的单位为“日历服务组”，这只是单位名称。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.set.organization",
+      "arguments": {
+        "contact_id": "ct_307",
+        "value": "日历服务组"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-087",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "explicit",
+    "scenario": "姓名单字段写入",
+    "text": "设置联系人 ct_308 的姓名为“欧阳宁”。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.set.name",
+      "arguments": {
+        "contact_id": "ct_308",
+        "value": "欧阳宁"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-088",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "missing-business-slot",
+    "scenario": "姓名不能替代写ID",
+    "text": "把叫小张的联系人姓名改为“张珩”，但还没有联系人ID。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.set.name",
+      "arguments": {
+        "value": "张珩"
+      },
+      "status": "needs_clarification"
+    }
+  },
+  {
+    "id": "e100-contacts-089",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "quoted-slot",
+    "scenario": "昵称单字段写入",
+    "text": "将联系人 ct_309 的昵称设置为“晴天”。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.set.nickname",
+      "arguments": {
+        "contact_id": "ct_309",
+        "value": "晴天"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-090",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "quoted-payload",
+    "scenario": "昵称ID文本隔离",
+    "text": "设置联系人 ct_310 的昵称为“ct_999”，只是昵称文本。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.set.nickname",
+      "arguments": {
+        "contact_id": "ct_310",
+        "value": "ct_999"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-091",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "quoted-payload",
+    "scenario": "备注动作隔离",
+    "text": "联系人 ct_311 的备注改为“不要取消日程 ev_88；这里仅保存这句话”。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.set.note",
+      "arguments": {
+        "contact_id": "ct_311",
+        "value": "不要取消日程 ev_88；这里仅保存这句话"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-092",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "structured-slots",
+    "scenario": "备注原样保真",
+    "text": "设置联系人 ct_312 的备注，value=\"明天到上海，时间未定\"。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.set.note",
+      "arguments": {
+        "contact_id": "ct_312",
+        "value": "明天到上海，时间未定"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-093",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "explicit",
+    "scenario": "生日单字段写入",
+    "text": "设置联系人 ct_313 的生日为“2000-02-29”。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.set.birthday",
+      "arguments": {
+        "contact_id": "ct_313",
+        "value": "2000-02-29"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-094",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "quoted-slot",
+    "scenario": "生日原文不改写",
+    "text": "把联系人 ct_314 的生日设置为“农历八月十五”，不要猜年份。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.set.birthday",
+      "arguments": {
+        "contact_id": "ct_314",
+        "value": "农历八月十五"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-095",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "negation",
+    "scenario": "头像字段区分",
+    "text": "读取联系人 ct_401 的头像URI，不要头像像素图。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.portrait.uri",
+      "arguments": {
+        "contact_id": "ct_401"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-096",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "quoted-slot",
+    "scenario": "姓名查询读取字段",
+    "text": "姓名“杨帆”的联系人所属群组名称有哪些？",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.groups.title",
+      "arguments": {
+        "query": "杨帆"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-097",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "selected-object",
+    "scenario": "只读可信选择",
+    "text": "读取当前选中联系人的完整姓名。",
+    "context": {
+      "objects": {
+        "contact_id": {
+          "value": "ct_selected_7",
+          "source": "user_selection",
+          "trusted": true
+        }
+      }
+    },
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.name.fullName",
+      "arguments": {},
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-098",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "missing-business-slot",
+    "scenario": "读取目标缺失",
+    "text": "读联系人的电子邮箱地址，目标还没选，也没有查询词。",
+    "context": {
+      "objects": {}
+    },
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.emails.email",
+      "arguments": {},
+      "status": "needs_clarification"
+    }
+  },
+  {
+    "id": "e100-contacts-099",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "negation",
+    "scenario": "输出ID与key区分",
+    "text": "读取联系人 ct_402 的系统key，不要系统ID。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.key",
+      "arguments": {
+        "contact_id": "ct_402"
+      },
+      "status": "ready_mock"
+    }
+  },
+  {
+    "id": "e100-contacts-100",
+    "suite": "single-service-100-v1",
+    "singleService": true,
+    "testDomain": "contacts",
+    "category": "aggregate",
+    "scenario": "联系人详情",
+    "text": "请展示联系人 ct_403 的完整详情。",
+    "expected": {
+      "domain": "contacts",
+      "api": "contacts.get",
+      "arguments": {
+        "contact_id": "ct_403"
+      },
+      "status": "ready_mock"
+    }
+  }
+]

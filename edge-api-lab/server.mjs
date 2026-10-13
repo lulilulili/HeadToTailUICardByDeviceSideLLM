@@ -19,8 +19,8 @@ if(!Number.isInteger(port)||port<1024||port>65535)throw new Error('PORT 必须�
 const address=new URL(ollamaUrl);
 if(!['localhost','127.0.0.1','[::1]'].includes(address.hostname)||address.protocol!=='http:')throw new Error('本工程仅接入本机 HTTP Ollama 服务');
 const store=await new RuntimeStore(join(root,'data','runtime')).init();
-const [currentGuide,historicalGuide,adaptiveGuide,layaGuide]=await Promise.all(['current-feasibility.json','guide.json','adaptive-jev.json','laya.json'].map(async file=>JSON.parse(await readFile(join(root,'docs',file),'utf8'))));
-const docs=[layaGuide,adaptiveGuide,currentGuide,...historicalGuide.filter(section=>section.id!==currentGuide.id).map(section=>({...section,html:`<p>历史说明快照（2026-10-10）；当前范围与配置以“Laya 本机决策”“智能分步与 Jev”和“当前可行性验证”页签为准。</p>${section.html}`}))];
+const [currentGuide,historicalGuide,adaptiveGuide,layaGuide,rerunGuide]=await Promise.all(['current-feasibility.json','guide.json','adaptive-jev.json','laya.json','adaptive-1000-rerun.json'].map(async file=>JSON.parse(await readFile(join(root,'docs',file),'utf8'))));
+const docs=[rerunGuide,layaGuide,adaptiveGuide,currentGuide,...historicalGuide.filter(section=>section.id!==currentGuide.id).map(section=>({...section,html:`<p>历史说明快照（2026-10-10）；当前范围与配置以“当前重测：多轮与Laya对照”“Laya 本机决策”“智能分步与 Jev”和“当前可行性验证”页签为准。</p>${section.html}`}))];
 const cases=await loadCases(root);
 const baseContext={...experimentDefaults,...evaluationSystemDefaults,now:'2026-10-10T08:00:00+08:00',timezone:'Asia/Shanghai',location:{latitude:31.2304,longitude:121.4737,label:'模拟手机当前位置（上海固定坐标）',precision:'coordinate',source:'fixture'}};
 const providers=createProviders({ollamaUrl,jevUrl:process.env.JEV_URL});

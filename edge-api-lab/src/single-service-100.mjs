@@ -2,6 +2,8 @@ import {readFile} from 'node:fs/promises';
 import {join} from 'node:path';
 import {coreSingleServiceCases} from '../data/single-service-core.mjs';
 import {experimentDefaults,evaluationSystemDefaults} from './fixtures.mjs';
+import {PROMPT_VERSION,ADAPTIVE_PROMPT_VERSION} from './prompts.mjs';
+import {ADAPTIVE_ROUTING_VERSION} from './adaptive-routing.mjs';
 
 export const SINGLE_SERVICE_100_SUITE='single-service-100-v1';
 export const SINGLE_SERVICE_100_MODELS=['qwen2.5:0.5b','qwen2.5:1.5b','qwen2.5:3b','qwen2.5:7b'];
@@ -14,7 +16,14 @@ export function singleService100Plan(manifest){
  const conditions=manifest?.conditions??{},models=conditions.models;
  if(!Array.isArray(models)||!models.length||new Set(models).size!==models.length)throw new Error('Manifest models missing or duplicate');
  if(models.some(model=>!SINGLE_SERVICE_100_MODELS.includes(model)))throw new Error('Manifest contains an unapproved model');
- if(manifest.version==='single-service-100-batch-v2'&&JSON.stringify(models)!==JSON.stringify(SINGLE_SERVICE_100_MODELS))throw new Error('New batch requires the approved four-model order');
+ if(['single-service-100-batch-v2','single-service-100-batch-v3'].includes(manifest.version)&&JSON.stringify(models)!==JSON.stringify(SINGLE_SERVICE_100_MODELS))throw new Error('New batch requires the approved four-model order');
+ const mode=conditions.mode??'unified';
+ if(!['unified','adaptive'].includes(mode))throw new Error('Benchmark mode must be unified or adaptive Qwen');
+ if(manifest.version==='single-service-100-batch-v3'){
+  if(conditions.mode!==mode)throw new Error('New batch requires explicit frozen mode');
+  if(conditions.promptVersion!==(mode==='adaptive'?ADAPTIVE_PROMPT_VERSION:PROMPT_VERSION))throw new Error('Manifest prompt version differs from frozen mode');
+  if(conditions.routingPolicy!==(mode==='adaptive'?ADAPTIVE_ROUTING_VERSION:'unified-single-v1'))throw new Error('Manifest routing policy differs from frozen mode');
+ }
  const modelOrder=conditions.modelOrder??models;
  if(JSON.stringify(models)!==JSON.stringify(modelOrder))throw new Error('Manifest model order differs from declared models');
  const domains=conditions.domains??SINGLE_SERVICE_100_DOMAINS;
@@ -24,8 +33,10 @@ export function singleService100Plan(manifest){
  const totalCalls=models.length*callsPerModel;
  if(conditions.totalCalls!==undefined&&conditions.totalCalls!==totalCalls)throw new Error('Manifest totalCalls differs from model plan');
  if(conditions.callsPerModel!==undefined&&conditions.callsPerModel!==callsPerModel)throw new Error('Manifest callsPerModel differs');
+ if(conditions.totalRequests!==undefined&&conditions.totalRequests!==totalCalls)throw new Error('Manifest totalRequests differs');
+ if(conditions.requestsPerModel!==undefined&&conditions.requestsPerModel!==callsPerModel)throw new Error('Manifest requestsPerModel differs');
  if(conditions.repeats!==undefined&&conditions.repeats!==1)throw new Error('Manifest repeats must be one');
- return {models:[...models],modelOrder:[...modelOrder],domains:[...domains],callsPerModel,perDomain,totalCalls};
+ return {models:[...models],modelOrder:[...modelOrder],domains:[...domains],callsPerModel,perDomain,totalCalls,mode,requestsPerModel:callsPerModel,totalRequests:totalCalls};
 }
 
 /** Hand-authored expectations are evaluation data; never supplied to model prompts. */
