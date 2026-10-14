@@ -1,0 +1,890 @@
+{
+  "version": "laya-independent-record-v1",
+  "manifestId": "laya-independent-20261014-646d71bf-aef9-4093-ad37-494b7a484d55",
+  "caseId": "e100-calendar-064",
+  "testDomain": "calendar",
+  "scenario": "字段赋值创建",
+  "text": "新建日程，title=\"A/B 验证 · 二期\"，starts_at=\"2026-10-15T16:30:00+08:00\"，duration_minutes=45。",
+  "context": {
+    "geocodes": {
+      "上海": {
+        "label": "上海市（地理编码夹具）",
+        "latitude": 31.2304,
+        "longitude": 121.4737,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "北京": {
+        "label": "北京市（地理编码夹具）",
+        "latitude": 39.9042,
+        "longitude": 116.4074,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "杭州": {
+        "label": "杭州市（地理编码夹具）",
+        "latitude": 30.2741,
+        "longitude": 120.1551,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "深圳": {
+        "label": "深圳市（地理编码夹具）",
+        "latitude": 22.5431,
+        "longitude": 114.0579,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "广州": {
+        "label": "广州市（地理编码夹具）",
+        "latitude": 23.1291,
+        "longitude": 113.2644,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "成都": {
+        "label": "成都市（地理编码夹具）",
+        "latitude": 30.5728,
+        "longitude": 104.0668,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "南京": {
+        "label": "南京市（地理编码夹具）",
+        "latitude": 32.0603,
+        "longitude": 118.7969,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "武汉": {
+        "label": "武汉市（地理编码夹具）",
+        "latitude": 30.5928,
+        "longitude": 114.3055,
+        "precision": "city",
+        "source": "fixture"
+      }
+    },
+    "weatherAvailability": {
+      "current": true,
+      "hourly": true,
+      "daily": true,
+      "minute": true,
+      "alerts": true,
+      "indices": true,
+      "tides": true,
+      "city": true
+    },
+    "weatherAvailabilitySource": "fixture",
+    "weatherRegion": "CN",
+    "systemValues": {
+      "net_id": {
+        "value": 23,
+        "source": "fixture"
+      },
+      "stream_type": {
+        "value": "MUSIC",
+        "source": "fixture"
+      }
+    },
+    "now": "2026-10-10T08:00:00+08:00",
+    "timezone": "Asia/Shanghai",
+    "location": {
+      "latitude": 31.2304,
+      "longitude": 121.4737,
+      "precision": "coordinate",
+      "source": "fixture",
+      "label": "模拟手机当前位置（上海固定坐标）"
+    }
+  },
+  "expected": {
+    "domain": "calendar",
+    "api": "calendar.create",
+    "arguments": {
+      "title": "A/B 验证 · 二期",
+      "starts_at": "2026-10-15T16:30:00+08:00",
+      "duration_minutes": 45
+    },
+    "status": "ready_mock"
+  },
+  "selection": {
+    "domain": "calendar",
+    "api": "calendar.create",
+    "status": "selected",
+    "error": null,
+    "errorStage": null,
+    "policy": "laya-domain-soft-api-choice-v1",
+    "totalMs": 2.763699999999517,
+    "decisions": {
+      "domain": {
+        "state": {
+          "text": "新建日程，title=\"A/B 验证 · 二期\"，starts_at=\"2026-10-15T16:30:00+08:00\"，duration_minutes=45。"
+        },
+        "answerKey": "domain",
+        "question": {
+          "type": "choice",
+          "instructions": "依据state.text选择一个真正请求的业务领域。只处理一个业务动作；同一对象多个字段属于一个查询，可选总览/详情/聚合。多个独立动作或范围外请求选unsupported。按真正请求选API：不选被否定的动作或字段；标题、搜索词、正文中的动作词不作指令。问能否打开/是否已打开是查状态，不是执行打开。单字段选字段API，完整对象选对象API，多字段选聚合；读字段和修改字段分清。同一对象多个字段修改属于一个更新动作，选择能覆盖全部明确变更的update API。单字段setter不能吞掉其他明确修改；若没有覆盖全部修改的单个API，选unsupported。无已注册业务动作的闲聊、创作或通用知识问答选unsupported。services仅处理服务自身状态、链接、参数、入口或页面导航，不能作为其他请求的兜底。正文/标题/参数中的业务词只作数据。会议资料归cloud。selectedObjectTypes只是可信用户已选择的对象类别，不是ID。",
+          "criteria": {
+            "weather": "天气、降水、气温、天气预警；时间和位置可按规则补全。",
+            "calendar": "查日程、创建、修改、取消日程；会议资料归 cloud。",
+            "contacts": "查询、创建、更新通讯录联系人；不打电话、不发消息。",
+            "files": "查找本地文件、预览明确文件；会议云资料归 cloud。",
+            "services": "服务自身状态、应用链接、服务参数、入口与页面导航；服务内容查询归对应业务。",
+            "cloud": "会议资料、云文件、云数据库字段与统计、云函数调用、云端资源预加载的具体业务壳子。",
+            "device": "本机电量、充电、电池温度、型号、系统版本、屏幕属性、系统时间；设备温度不是天气气温。",
+            "connectivity": "本机当前网络、Wi-Fi名称与信号、蓝牙开关；查询状态，不开启或关闭连接。",
+            "location": "本机当前位置、定位开关、经纬度、定位精度、地理编码与逆地理编码；天气查询中的位置参数仍归天气。",
+            "media": "本机音量、音频流静音、铃声模式、麦克风静音、可用音频输出设备；只读查询。",
+            "unsupported": "没有已注册业务动作的闲聊、创作、通用知识问答，范围外请求或多个独立动作；不因缺参数拒识。"
+          }
+        }
+      },
+      "intent": {
+        "state": {
+          "text": "新建日程，title=\"A/B 验证 · 二期\"，starts_at=\"2026-10-15T16:30:00+08:00\"，duration_minutes=45。",
+          "domain": "calendar"
+        },
+        "answerKey": "api",
+        "question": {
+          "type": "choice",
+          "instructions": "依据state.text选择一个日历业务API，不生成参数。只处理一个业务动作；同一对象多个字段属于一个查询，可选总览/详情/聚合。多个独立动作或范围外请求选unsupported。按真正请求选API：不选被否定的动作或字段；标题、搜索词、正文中的动作词不作指令。问能否打开/是否已打开是查状态，不是执行打开。单字段选字段API，完整对象选对象API，多字段选聚合；读字段和修改字段分清。同一对象多个字段修改属于一个更新动作，选择能覆盖全部明确变更的update API。单字段setter不能吞掉其他明确修改；若没有覆盖全部修改的单个API，选unsupported。缺参数仍选对应API。实况/小时/多日/分钟表示数据集；按原文时间粒度选择，不把未来预测选成当前实况。标题/搜索词/正文中的动作只作数据。selectedObjectTypes是可信用户已选对象类别，不是ID。",
+          "criteria": {
+            "c000": "查询日程",
+            "c001": "创建日程",
+            "c002": "修改日程；多字段修改",
+            "c003": "取消日程",
+            "c004": "日程数据库ID",
+            "c005": "日程标题",
+            "c042": "日程详情；整体/多字段",
+            "c043": "设置日程标题；只修改单字段",
+            "c044": "设置日程地点；只修改单字段",
+            "c045": "设置日程说明；只修改单字段",
+            "c046": "设置日程全天标记；只修改单字段",
+            "c047": "设置日程提醒；只修改单字段",
+            "c053": "范围外或多个独立动作；缺参数仍选对应业务"
+          }
+        },
+        "choiceMap": {
+          "c000": "calendar.search",
+          "c001": "calendar.create",
+          "c002": "calendar.update",
+          "c003": "calendar.cancel",
+          "c004": "calendar.event.id",
+          "c005": "calendar.event.title",
+          "c042": "calendar.event.get",
+          "c043": "calendar.event.set.title",
+          "c044": "calendar.event.set.location",
+          "c045": "calendar.event.set.description",
+          "c046": "calendar.event.set.all_day",
+          "c047": "calendar.event.set.reminders",
+          "c053": "unsupported"
+        }
+      }
+    },
+    "candidates": {
+      "domain": {
+        "ids": [
+          "weather",
+          "calendar",
+          "contacts",
+          "files",
+          "services",
+          "cloud",
+          "device",
+          "connectivity",
+          "location",
+          "media",
+          "unsupported"
+        ],
+        "policy": "laya-all-domains-v1",
+        "limit": 11
+      },
+      "intent": {
+        "ids": [
+          "calendar.search",
+          "calendar.create",
+          "calendar.update",
+          "calendar.cancel",
+          "calendar.event.id",
+          "calendar.event.title",
+          "calendar.event.get",
+          "calendar.event.set.title",
+          "calendar.event.set.location",
+          "calendar.event.set.description",
+          "calendar.event.set.all_day",
+          "calendar.event.set.reminders",
+          "unsupported"
+        ],
+        "retrievalIds": [
+          "calendar.create",
+          "calendar.event.set.title",
+          "calendar.update",
+          "calendar.cancel",
+          "calendar.event.set.location",
+          "calendar.event.set.description",
+          "calendar.event.set.all_day",
+          "calendar.event.set.reminders",
+          "calendar.event.title",
+          "calendar.search",
+          "calendar.event.get",
+          "calendar.event.id"
+        ],
+        "scores": [
+          {
+            "id": "calendar.create",
+            "score": 55,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": null,
+            "field": null
+          },
+          {
+            "id": "calendar.event.set.title",
+            "score": 15,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "Event",
+            "field": "title"
+          },
+          {
+            "id": "calendar.update",
+            "score": 0,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": null,
+            "field": null
+          },
+          {
+            "id": "calendar.cancel",
+            "score": 0,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": null,
+            "field": null
+          },
+          {
+            "id": "calendar.event.set.location",
+            "score": 0,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "Event",
+            "field": "location"
+          },
+          {
+            "id": "calendar.event.set.description",
+            "score": 0,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "Event",
+            "field": "description"
+          },
+          {
+            "id": "calendar.event.set.all_day",
+            "score": 0,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "Event",
+            "field": "isAllDay"
+          },
+          {
+            "id": "calendar.event.set.reminders",
+            "score": 0,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "Event",
+            "field": "reminderTime"
+          },
+          {
+            "id": "calendar.event.title",
+            "score": -25,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "Event",
+            "field": "title"
+          },
+          {
+            "id": "calendar.search",
+            "score": -31,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": null,
+            "field": null
+          },
+          {
+            "id": "calendar.event.get",
+            "score": -37,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "Event",
+            "field": "*"
+          },
+          {
+            "id": "calendar.event.id",
+            "score": -40,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "Event",
+            "field": "id"
+          }
+        ],
+        "policy": "laya-domain-soft-api-choice-v1",
+        "limit": 12,
+        "totalEligible": 53,
+        "hardFilters": [],
+        "wireKeys": [
+          "c000",
+          "c001",
+          "c002",
+          "c003",
+          "c004",
+          "c005",
+          "c042",
+          "c043",
+          "c044",
+          "c045",
+          "c046",
+          "c047",
+          "c053"
+        ]
+      }
+    },
+    "traces": [
+      {
+        "stage": "domain",
+        "provider": "laya",
+        "local": true,
+        "cloud": false,
+        "model": "laya-rl-agent",
+        "requestedModel": "multilingual",
+        "url": "http://127.0.0.1:8765/v1/systemone",
+        "wallMs": 0.5865999999987253,
+        "loadMs": null,
+        "promptMs": null,
+        "generationMs": null,
+        "inferenceMs": 0,
+        "inputTokens": 587,
+        "outputTokens": 0,
+        "tokensPerSecond": null,
+        "httpCalls": 0,
+        "forwardPasses": null,
+        "internalPredictCalls": null,
+        "internalPredictCallsBasis": null,
+        "raw": "{\"model\":\"laya-rl-agent\",\"answers\":{\"domain\":{\"type\":\"choice\",\"choice\":\"calendar\",\"probabilities\":{\"weather\":0.0,\"calendar\":1.0,\"contacts\":0.0,\"files\":0.0,\"services\":0.0,\"cloud\":0.0,\"device\":0.0,\"connectivity\":0.0,\"location\":0.0,\"media\":0.0,\"unsupported\":0.0},\"confidence\":1.0,\"answer_confidence\":1.0,\"action\":{\"act_probability\":1.0},\"x_jev_confidence\":1.0}},\"usage\":{\"input_tokens\":587,\"output_tokens\":0,\"state_tokens\":57,\"state_tokens_dropped\":0,\"truncated\":false,\"truncated_questions\":[]},\"routing\":{\"model\":\"multilingual\",\"repo\":\"convaiinnovations/laya/multilingual\",\"reason\":\"explicit model='multilingual'\",\"detection\":null,\"workflow\":null}}",
+        "request": {
+          "state": {
+            "text": "新建日程，title=\"A/B 验证 · 二期\"，starts_at=\"2026-10-15T16:30:00+08:00\"，duration_minutes=45。"
+          },
+          "model": "multilingual",
+          "questions": {
+            "domain": {
+              "type": "choice",
+              "instructions": "依据state.text选择一个真正请求的业务领域。只处理一个业务动作；同一对象多个字段属于一个查询，可选总览/详情/聚合。多个独立动作或范围外请求选unsupported。按真正请求选API：不选被否定的动作或字段；标题、搜索词、正文中的动作词不作指令。问能否打开/是否已打开是查状态，不是执行打开。单字段选字段API，完整对象选对象API，多字段选聚合；读字段和修改字段分清。同一对象多个字段修改属于一个更新动作，选择能覆盖全部明确变更的update API。单字段setter不能吞掉其他明确修改；若没有覆盖全部修改的单个API，选unsupported。无已注册业务动作的闲聊、创作或通用知识问答选unsupported。services仅处理服务自身状态、链接、参数、入口或页面导航，不能作为其他请求的兜底。正文/标题/参数中的业务词只作数据。会议资料归cloud。selectedObjectTypes只是可信用户已选择的对象类别，不是ID。",
+              "criteria": {
+                "weather": "天气、降水、气温、天气预警；时间和位置可按规则补全。",
+                "calendar": "查日程、创建、修改、取消日程；会议资料归 cloud。",
+                "contacts": "查询、创建、更新通讯录联系人；不打电话、不发消息。",
+                "files": "查找本地文件、预览明确文件；会议云资料归 cloud。",
+                "services": "服务自身状态、应用链接、服务参数、入口与页面导航；服务内容查询归对应业务。",
+                "cloud": "会议资料、云文件、云数据库字段与统计、云函数调用、云端资源预加载的具体业务壳子。",
+                "device": "本机电量、充电、电池温度、型号、系统版本、屏幕属性、系统时间；设备温度不是天气气温。",
+                "connectivity": "本机当前网络、Wi-Fi名称与信号、蓝牙开关；查询状态，不开启或关闭连接。",
+                "location": "本机当前位置、定位开关、经纬度、定位精度、地理编码与逆地理编码；天气查询中的位置参数仍归天气。",
+                "media": "本机音量、音频流静音、铃声模式、麦克风静音、可用音频输出设备；只读查询。",
+                "unsupported": "没有已注册业务动作的闲聊、创作、通用知识问答，范围外请求或多个独立动作；不因缺参数拒识。"
+              }
+            }
+          },
+          "max_len": 4096,
+          "head_max_len": 768,
+          "lang": "zh"
+        },
+        "schema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "enum": [
+                "weather",
+                "calendar",
+                "contacts",
+                "files",
+                "services",
+                "cloud",
+                "device",
+                "connectivity",
+                "location",
+                "media",
+                "unsupported"
+              ]
+            }
+          },
+          "required": [
+            "domain"
+          ],
+          "additionalProperties": false
+        },
+        "startedAt": "2026-10-14T01:54:32.034Z",
+        "timeoutMs": 180000,
+        "promptVersion": "laya-choice-v1",
+        "doneReason": null,
+        "truncated": false,
+        "probabilities": {
+          "weather": 0,
+          "calendar": 1,
+          "contacts": 0,
+          "files": 0,
+          "services": 0,
+          "cloud": 0,
+          "device": 0,
+          "connectivity": 0,
+          "location": 0,
+          "media": 0,
+          "unsupported": 0
+        },
+        "wireProbabilities": {
+          "weather": 0,
+          "calendar": 1,
+          "contacts": 0,
+          "files": 0,
+          "services": 0,
+          "cloud": 0,
+          "device": 0,
+          "connectivity": 0,
+          "location": 0,
+          "media": 0,
+          "unsupported": 0
+        },
+        "confidence": 1,
+        "answerConfidence": 1,
+        "jevConfidence": 1,
+        "usage": {
+          "input_tokens": 587,
+          "output_tokens": 0,
+          "state_tokens": 57,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "routing": {
+          "model": "multilingual",
+          "repo": "convaiinnovations/laya/multilingual",
+          "reason": "explicit model='multilingual'",
+          "detection": null,
+          "workflow": null
+        },
+        "tournament": null,
+        "choiceMap": null,
+        "options": {
+          "max_len": 4096,
+          "head_max_len": 768,
+          "lang": "zh",
+          "retries": 0
+        },
+        "promptMeta": {
+          "version": "laya-choice-v1",
+          "systemChars": 427,
+          "inputChars": 83,
+          "decisionChars": 1153,
+          "candidates": {
+            "ids": [
+              "weather",
+              "calendar",
+              "contacts",
+              "files",
+              "services",
+              "cloud",
+              "device",
+              "connectivity",
+              "location",
+              "media",
+              "unsupported"
+            ],
+            "policy": "laya-all-domains-v1",
+            "limit": 11
+          }
+        },
+        "httpStatus": 200,
+        "independentReuse": {
+          "version": "laya-independent-replay-v1",
+          "hit": true,
+          "verified": true,
+          "currentInferenceExecuted": false,
+          "requestSha256": "c1562f979c67b3a404890c8578545f06979b95c0fd1865b4426cb8d4ab337be1",
+          "responseSha256": "3f5937b3a82e4e2f317673c2f0aeb0b32a14fd3ccb43892a53c7c11d795b0e40",
+          "entryPath": "data/runtime/laya-reuse/single-service-100-20261013-093b947a-6d72-4e9f-8ae1-d3f6b9480a2d/entries/c1562f979c67b3a404890c8578545f06979b95c0fd1865b4426cb8d4ab337be1.entry.json",
+          "entrySha256": "5667fb1b49a51ae1fb0673bfec73a1dc1e347d8a64703e66c441c5b059c6a4e9",
+          "sourcePath": "evidence/single-service-100/single-service-100-20261013-093b947a-6d72-4e9f-8ae1-d3f6b9480a2d/qwen2.5-0.5b/e100-calendar-064.json",
+          "sourceSha256": "a9ef29cc41e0dfa463411884e0a23951d6da114a98ffb819bd3eab4aa2d9466a",
+          "sourceType": "formal",
+          "sourceInferenceMs": 892.03,
+          "sourceHttpMs": 895.8693999999668,
+          "sourceServiceMs": null,
+          "sourceObservedAt": "2026-10-13T04:43:22.645Z",
+          "profile": {
+            "model": "multilingual",
+            "modelRevision": "7b928d828b7b0e022f929d9bd2e44165aa270148",
+            "layaVersion": "0.4.6",
+            "threads": 8,
+            "device": "cpu",
+            "tournamentGroup": 16,
+            "maxChoices": 255,
+            "maxLen": 4096,
+            "headMaxLen": 768
+          },
+          "lookupMs": 0.017700000000331784
+        }
+      },
+      {
+        "stage": "intent",
+        "provider": "laya",
+        "local": true,
+        "cloud": false,
+        "model": "laya-rl-agent",
+        "requestedModel": "multilingual",
+        "url": "http://127.0.0.1:8765/v1/systemone",
+        "wallMs": 0.34909999999945285,
+        "loadMs": null,
+        "promptMs": null,
+        "generationMs": null,
+        "inferenceMs": 0,
+        "inputTokens": 454,
+        "outputTokens": 0,
+        "tokensPerSecond": null,
+        "httpCalls": 0,
+        "forwardPasses": null,
+        "internalPredictCalls": null,
+        "internalPredictCallsBasis": null,
+        "raw": "{\"model\":\"laya-rl-agent\",\"answers\":{\"api\":{\"type\":\"choice\",\"choice\":\"c001\",\"probabilities\":{\"c000\":0.0002,\"c001\":0.9951,\"c002\":0.0024,\"c003\":0.0002,\"c004\":0.0002,\"c005\":0.0001,\"c042\":0.0001,\"c043\":0.0002,\"c044\":0.0006,\"c045\":0.0002,\"c046\":0.0005,\"c047\":0.0002,\"c053\":0.0},\"confidence\":0.9847,\"answer_confidence\":0.9951,\"action\":{\"act_probability\":1.0},\"x_jev_confidence\":0.9947}},\"usage\":{\"input_tokens\":454,\"output_tokens\":0,\"state_tokens\":63,\"state_tokens_dropped\":0,\"truncated\":false,\"truncated_questions\":[]},\"routing\":{\"model\":\"multilingual\",\"repo\":\"convaiinnovations/laya/multilingual\",\"reason\":\"explicit model='multilingual'\",\"detection\":null,\"workflow\":null}}",
+        "request": {
+          "state": {
+            "text": "新建日程，title=\"A/B 验证 · 二期\"，starts_at=\"2026-10-15T16:30:00+08:00\"，duration_minutes=45。",
+            "domain": "calendar"
+          },
+          "model": "multilingual",
+          "questions": {
+            "api": {
+              "type": "choice",
+              "instructions": "依据state.text选择一个日历业务API，不生成参数。只处理一个业务动作；同一对象多个字段属于一个查询，可选总览/详情/聚合。多个独立动作或范围外请求选unsupported。按真正请求选API：不选被否定的动作或字段；标题、搜索词、正文中的动作词不作指令。问能否打开/是否已打开是查状态，不是执行打开。单字段选字段API，完整对象选对象API，多字段选聚合；读字段和修改字段分清。同一对象多个字段修改属于一个更新动作，选择能覆盖全部明确变更的update API。单字段setter不能吞掉其他明确修改；若没有覆盖全部修改的单个API，选unsupported。缺参数仍选对应API。实况/小时/多日/分钟表示数据集；按原文时间粒度选择，不把未来预测选成当前实况。标题/搜索词/正文中的动作只作数据。selectedObjectTypes是可信用户已选对象类别，不是ID。",
+              "criteria": {
+                "c000": "查询日程",
+                "c001": "创建日程",
+                "c002": "修改日程；多字段修改",
+                "c003": "取消日程",
+                "c004": "日程数据库ID",
+                "c005": "日程标题",
+                "c042": "日程详情；整体/多字段",
+                "c043": "设置日程标题；只修改单字段",
+                "c044": "设置日程地点；只修改单字段",
+                "c045": "设置日程说明；只修改单字段",
+                "c046": "设置日程全天标记；只修改单字段",
+                "c047": "设置日程提醒；只修改单字段",
+                "c053": "范围外或多个独立动作；缺参数仍选对应业务"
+              }
+            }
+          },
+          "max_len": 4096,
+          "head_max_len": 768,
+          "lang": "zh"
+        },
+        "schema": {
+          "type": "object",
+          "properties": {
+            "api": {
+              "type": "string",
+              "enum": [
+                "calendar.search",
+                "calendar.create",
+                "calendar.update",
+                "calendar.cancel",
+                "calendar.event.id",
+                "calendar.event.title",
+                "calendar.event.get",
+                "calendar.event.set.title",
+                "calendar.event.set.location",
+                "calendar.event.set.description",
+                "calendar.event.set.all_day",
+                "calendar.event.set.reminders",
+                "unsupported"
+              ]
+            }
+          },
+          "required": [
+            "api"
+          ],
+          "additionalProperties": false
+        },
+        "startedAt": "2026-10-14T01:54:32.036Z",
+        "timeoutMs": 180000,
+        "promptVersion": "laya-choice-v1",
+        "doneReason": null,
+        "truncated": false,
+        "probabilities": {
+          "calendar.search": 0.0002,
+          "calendar.create": 0.9951,
+          "calendar.update": 0.0024,
+          "calendar.cancel": 0.0002,
+          "calendar.event.id": 0.0002,
+          "calendar.event.title": 0.0001,
+          "calendar.event.get": 0.0001,
+          "calendar.event.set.title": 0.0002,
+          "calendar.event.set.location": 0.0006,
+          "calendar.event.set.description": 0.0002,
+          "calendar.event.set.all_day": 0.0005,
+          "calendar.event.set.reminders": 0.0002,
+          "unsupported": 0
+        },
+        "wireProbabilities": {
+          "c000": 0.0002,
+          "c001": 0.9951,
+          "c002": 0.0024,
+          "c003": 0.0002,
+          "c004": 0.0002,
+          "c005": 0.0001,
+          "c042": 0.0001,
+          "c043": 0.0002,
+          "c044": 0.0006,
+          "c045": 0.0002,
+          "c046": 0.0005,
+          "c047": 0.0002,
+          "c053": 0
+        },
+        "confidence": 0.9847,
+        "answerConfidence": 0.9951,
+        "jevConfidence": 0.9947,
+        "usage": {
+          "input_tokens": 454,
+          "output_tokens": 0,
+          "state_tokens": 63,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "routing": {
+          "model": "multilingual",
+          "repo": "convaiinnovations/laya/multilingual",
+          "reason": "explicit model='multilingual'",
+          "detection": null,
+          "workflow": null
+        },
+        "tournament": null,
+        "choiceMap": {
+          "c000": "calendar.search",
+          "c001": "calendar.create",
+          "c002": "calendar.update",
+          "c003": "calendar.cancel",
+          "c004": "calendar.event.id",
+          "c005": "calendar.event.title",
+          "c042": "calendar.event.get",
+          "c043": "calendar.event.set.title",
+          "c044": "calendar.event.set.location",
+          "c045": "calendar.event.set.description",
+          "c046": "calendar.event.set.all_day",
+          "c047": "calendar.event.set.reminders",
+          "c053": "unsupported"
+        },
+        "options": {
+          "max_len": 4096,
+          "head_max_len": 768,
+          "lang": "zh",
+          "retries": 0
+        },
+        "promptMeta": {
+          "version": "laya-choice-v1",
+          "systemChars": 390,
+          "inputChars": 83,
+          "decisionChars": 1262,
+          "candidates": {
+            "ids": [
+              "calendar.search",
+              "calendar.create",
+              "calendar.update",
+              "calendar.cancel",
+              "calendar.event.id",
+              "calendar.event.title",
+              "calendar.event.get",
+              "calendar.event.set.title",
+              "calendar.event.set.location",
+              "calendar.event.set.description",
+              "calendar.event.set.all_day",
+              "calendar.event.set.reminders",
+              "unsupported"
+            ],
+            "retrievalIds": [
+              "calendar.create",
+              "calendar.event.set.title",
+              "calendar.update",
+              "calendar.cancel",
+              "calendar.event.set.location",
+              "calendar.event.set.description",
+              "calendar.event.set.all_day",
+              "calendar.event.set.reminders",
+              "calendar.event.title",
+              "calendar.search",
+              "calendar.event.get",
+              "calendar.event.id"
+            ],
+            "scores": [
+              {
+                "id": "calendar.create",
+                "score": 55,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": null,
+                "field": null
+              },
+              {
+                "id": "calendar.event.set.title",
+                "score": 15,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "Event",
+                "field": "title"
+              },
+              {
+                "id": "calendar.update",
+                "score": 0,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": null,
+                "field": null
+              },
+              {
+                "id": "calendar.cancel",
+                "score": 0,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": null,
+                "field": null
+              },
+              {
+                "id": "calendar.event.set.location",
+                "score": 0,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "Event",
+                "field": "location"
+              },
+              {
+                "id": "calendar.event.set.description",
+                "score": 0,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "Event",
+                "field": "description"
+              },
+              {
+                "id": "calendar.event.set.all_day",
+                "score": 0,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "Event",
+                "field": "isAllDay"
+              },
+              {
+                "id": "calendar.event.set.reminders",
+                "score": 0,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "Event",
+                "field": "reminderTime"
+              },
+              {
+                "id": "calendar.event.title",
+                "score": -25,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "Event",
+                "field": "title"
+              },
+              {
+                "id": "calendar.search",
+                "score": -31,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": null,
+                "field": null
+              },
+              {
+                "id": "calendar.event.get",
+                "score": -37,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "Event",
+                "field": "*"
+              },
+              {
+                "id": "calendar.event.id",
+                "score": -40,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "Event",
+                "field": "id"
+              }
+            ],
+            "policy": "laya-domain-soft-api-choice-v1",
+            "limit": 12,
+            "totalEligible": 53,
+            "hardFilters": [],
+            "wireKeys": [
+              "c000",
+              "c001",
+              "c002",
+              "c003",
+              "c004",
+              "c005",
+              "c042",
+              "c043",
+              "c044",
+              "c045",
+              "c046",
+              "c047",
+              "c053"
+            ]
+          }
+        },
+        "httpStatus": 200,
+        "independentReuse": {
+          "version": "laya-independent-replay-v1",
+          "hit": true,
+          "verified": true,
+          "currentInferenceExecuted": false,
+          "requestSha256": "86fe0d1652b10e0ee6605c2c6b1e64a8d55cfe9efcfbd502930f9ace2a494945",
+          "responseSha256": "daddb55c88b9c71afd8295c9a826192fcc1c1eec91df0fbe9048325703094e79",
+          "entryPath": "data/runtime/laya-reuse/single-service-100-20261013-093b947a-6d72-4e9f-8ae1-d3f6b9480a2d/entries/86fe0d1652b10e0ee6605c2c6b1e64a8d55cfe9efcfbd502930f9ace2a494945.entry.json",
+          "entrySha256": "50e01c68f22481c6492e215da06277dc1d67ab286d627a48b404fe5bd322924e",
+          "sourcePath": "evidence/single-service-100/single-service-100-20261013-093b947a-6d72-4e9f-8ae1-d3f6b9480a2d/qwen2.5-0.5b/e100-calendar-064.json",
+          "sourceSha256": "a9ef29cc41e0dfa463411884e0a23951d6da114a98ffb819bd3eab4aa2d9466a",
+          "sourceType": "formal",
+          "sourceInferenceMs": 647,
+          "sourceHttpMs": 651.9601999999722,
+          "sourceServiceMs": null,
+          "sourceObservedAt": "2026-10-13T04:43:24.540Z",
+          "profile": {
+            "model": "multilingual",
+            "modelRevision": "7b928d828b7b0e022f929d9bd2e44165aa270148",
+            "layaVersion": "0.4.6",
+            "threads": 8,
+            "device": "cpu",
+            "tournamentGroup": 16,
+            "maxChoices": 255,
+            "maxLen": 4096,
+            "headMaxLen": 768
+          },
+          "lookupMs": 0.01630000000113796
+        }
+      }
+    ]
+  },
+  "score": {
+    "domain": true,
+    "api": true,
+    "joint": true,
+    "expectedInCandidates": true,
+    "candidateRecallEligible": true,
+    "domainGateMiss": false,
+    "retrievalMiss": false,
+    "candidateChoiceMiss": false,
+    "providerError": false,
+    "errorCategory": "correct"
+  },
+  "createdAt": "2026-10-14T01:54:32.036Z"
+}

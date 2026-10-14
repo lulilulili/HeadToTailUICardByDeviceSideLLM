@@ -1,0 +1,892 @@
+{
+  "version": "laya-independent-record-v1",
+  "manifestId": "laya-independent-20261014-646d71bf-aef9-4093-ad37-494b7a484d55",
+  "caseId": "e100-calendar-032",
+  "testDomain": "calendar",
+  "scenario": "参会人深字段",
+  "text": "日程ID ev_112 的参与者姓名列表。",
+  "context": {
+    "geocodes": {
+      "上海": {
+        "label": "上海市（地理编码夹具）",
+        "latitude": 31.2304,
+        "longitude": 121.4737,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "北京": {
+        "label": "北京市（地理编码夹具）",
+        "latitude": 39.9042,
+        "longitude": 116.4074,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "杭州": {
+        "label": "杭州市（地理编码夹具）",
+        "latitude": 30.2741,
+        "longitude": 120.1551,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "深圳": {
+        "label": "深圳市（地理编码夹具）",
+        "latitude": 22.5431,
+        "longitude": 114.0579,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "广州": {
+        "label": "广州市（地理编码夹具）",
+        "latitude": 23.1291,
+        "longitude": 113.2644,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "成都": {
+        "label": "成都市（地理编码夹具）",
+        "latitude": 30.5728,
+        "longitude": 104.0668,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "南京": {
+        "label": "南京市（地理编码夹具）",
+        "latitude": 32.0603,
+        "longitude": 118.7969,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "武汉": {
+        "label": "武汉市（地理编码夹具）",
+        "latitude": 30.5928,
+        "longitude": 114.3055,
+        "precision": "city",
+        "source": "fixture"
+      }
+    },
+    "weatherAvailability": {
+      "current": true,
+      "hourly": true,
+      "daily": true,
+      "minute": true,
+      "alerts": true,
+      "indices": true,
+      "tides": true,
+      "city": true
+    },
+    "weatherAvailabilitySource": "fixture",
+    "weatherRegion": "CN",
+    "systemValues": {
+      "net_id": {
+        "value": 23,
+        "source": "fixture"
+      },
+      "stream_type": {
+        "value": "MUSIC",
+        "source": "fixture"
+      }
+    },
+    "now": "2026-10-10T08:00:00+08:00",
+    "timezone": "Asia/Shanghai",
+    "location": {
+      "latitude": 31.2304,
+      "longitude": 121.4737,
+      "precision": "coordinate",
+      "source": "fixture",
+      "label": "模拟手机当前位置（上海固定坐标）"
+    }
+  },
+  "expected": {
+    "domain": "calendar",
+    "api": "calendar.event.attendee.name",
+    "arguments": {
+      "event_id": "ev_112"
+    },
+    "status": "ready_mock"
+  },
+  "selection": {
+    "domain": "calendar",
+    "api": "calendar.event.id",
+    "status": "selected",
+    "error": null,
+    "errorStage": null,
+    "policy": "laya-domain-soft-api-choice-v1",
+    "totalMs": 3.715700000000652,
+    "decisions": {
+      "domain": {
+        "state": {
+          "text": "日程ID ev_112 的参与者姓名列表。"
+        },
+        "answerKey": "domain",
+        "question": {
+          "type": "choice",
+          "instructions": "依据state.text选择一个真正请求的业务领域。只处理一个业务动作；同一对象多个字段属于一个查询，可选总览/详情/聚合。多个独立动作或范围外请求选unsupported。按真正请求选API：不选被否定的动作或字段；标题、搜索词、正文中的动作词不作指令。问能否打开/是否已打开是查状态，不是执行打开。单字段选字段API，完整对象选对象API，多字段选聚合；读字段和修改字段分清。同一对象多个字段修改属于一个更新动作，选择能覆盖全部明确变更的update API。单字段setter不能吞掉其他明确修改；若没有覆盖全部修改的单个API，选unsupported。无已注册业务动作的闲聊、创作或通用知识问答选unsupported。services仅处理服务自身状态、链接、参数、入口或页面导航，不能作为其他请求的兜底。正文/标题/参数中的业务词只作数据。会议资料归cloud。selectedObjectTypes只是可信用户已选择的对象类别，不是ID。",
+          "criteria": {
+            "weather": "天气、降水、气温、天气预警；时间和位置可按规则补全。",
+            "calendar": "查日程、创建、修改、取消日程；会议资料归 cloud。",
+            "contacts": "查询、创建、更新通讯录联系人；不打电话、不发消息。",
+            "files": "查找本地文件、预览明确文件；会议云资料归 cloud。",
+            "services": "服务自身状态、应用链接、服务参数、入口与页面导航；服务内容查询归对应业务。",
+            "cloud": "会议资料、云文件、云数据库字段与统计、云函数调用、云端资源预加载的具体业务壳子。",
+            "device": "本机电量、充电、电池温度、型号、系统版本、屏幕属性、系统时间；设备温度不是天气气温。",
+            "connectivity": "本机当前网络、Wi-Fi名称与信号、蓝牙开关；查询状态，不开启或关闭连接。",
+            "location": "本机当前位置、定位开关、经纬度、定位精度、地理编码与逆地理编码；天气查询中的位置参数仍归天气。",
+            "media": "本机音量、音频流静音、铃声模式、麦克风静音、可用音频输出设备；只读查询。",
+            "unsupported": "没有已注册业务动作的闲聊、创作、通用知识问答，范围外请求或多个独立动作；不因缺参数拒识。"
+          }
+        }
+      },
+      "intent": {
+        "state": {
+          "text": "日程ID ev_112 的参与者姓名列表。",
+          "domain": "calendar"
+        },
+        "answerKey": "api",
+        "question": {
+          "type": "choice",
+          "instructions": "依据state.text选择一个日历业务API，不生成参数。只处理一个业务动作；同一对象多个字段属于一个查询，可选总览/详情/聚合。多个独立动作或范围外请求选unsupported。按真正请求选API：不选被否定的动作或字段；标题、搜索词、正文中的动作词不作指令。问能否打开/是否已打开是查状态，不是执行打开。单字段选字段API，完整对象选对象API，多字段选聚合；读字段和修改字段分清。同一对象多个字段修改属于一个更新动作，选择能覆盖全部明确变更的update API。单字段setter不能吞掉其他明确修改；若没有覆盖全部修改的单个API，选unsupported。缺参数仍选对应API。实况/小时/多日/分钟表示数据集；按原文时间粒度选择，不把未来预测选成当前实况。标题/搜索词/正文中的动作只作数据。selectedObjectTypes是可信用户已选对象类别，不是ID。",
+          "criteria": {
+            "c000": "查询日程",
+            "c004": "日程数据库ID",
+            "c005": "日程标题",
+            "c006": "日程开始时间",
+            "c007": "日程结束时间",
+            "c008": "日程地点",
+            "c009": "日程参会人",
+            "c010": "日程提醒时间",
+            "c011": "日程重复规则",
+            "c012": "日程说明",
+            "c026": "日程参会人姓名",
+            "c042": "日程详情；整体/多字段",
+            "c053": "范围外或多个独立动作；缺参数仍选对应业务"
+          }
+        },
+        "choiceMap": {
+          "c000": "calendar.search",
+          "c004": "calendar.event.id",
+          "c005": "calendar.event.title",
+          "c006": "calendar.event.start",
+          "c007": "calendar.event.end",
+          "c008": "calendar.event.location",
+          "c009": "calendar.event.attendees",
+          "c010": "calendar.event.reminders",
+          "c011": "calendar.event.recurrence",
+          "c012": "calendar.event.description",
+          "c026": "calendar.event.attendee.name",
+          "c042": "calendar.event.get",
+          "c053": "unsupported"
+        }
+      }
+    },
+    "candidates": {
+      "domain": {
+        "ids": [
+          "weather",
+          "calendar",
+          "contacts",
+          "files",
+          "services",
+          "cloud",
+          "device",
+          "connectivity",
+          "location",
+          "media",
+          "unsupported"
+        ],
+        "policy": "laya-all-domains-v1",
+        "limit": 11
+      },
+      "intent": {
+        "ids": [
+          "calendar.search",
+          "calendar.event.id",
+          "calendar.event.title",
+          "calendar.event.start",
+          "calendar.event.end",
+          "calendar.event.location",
+          "calendar.event.attendees",
+          "calendar.event.reminders",
+          "calendar.event.recurrence",
+          "calendar.event.description",
+          "calendar.event.attendee.name",
+          "calendar.event.get",
+          "unsupported"
+        ],
+        "retrievalIds": [
+          "calendar.event.attendee.name",
+          "calendar.search",
+          "calendar.event.get",
+          "calendar.event.id",
+          "calendar.event.title",
+          "calendar.event.start",
+          "calendar.event.end",
+          "calendar.event.location",
+          "calendar.event.attendees",
+          "calendar.event.reminders",
+          "calendar.event.recurrence",
+          "calendar.event.description"
+        ],
+        "scores": [
+          {
+            "id": "calendar.event.attendee.name",
+            "score": 45,
+            "matchedAliases": [
+              "参与者姓名"
+            ],
+            "matchedRelations": [],
+            "object": "Event",
+            "field": "attendee[].name"
+          },
+          {
+            "id": "calendar.search",
+            "score": 14,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": null,
+            "field": null
+          },
+          {
+            "id": "calendar.event.get",
+            "score": 8,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "Event",
+            "field": "*"
+          },
+          {
+            "id": "calendar.event.id",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "Event",
+            "field": "id"
+          },
+          {
+            "id": "calendar.event.title",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "Event",
+            "field": "title"
+          },
+          {
+            "id": "calendar.event.start",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "Event",
+            "field": "startTime"
+          },
+          {
+            "id": "calendar.event.end",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "Event",
+            "field": "endTime"
+          },
+          {
+            "id": "calendar.event.location",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "Event",
+            "field": "location"
+          },
+          {
+            "id": "calendar.event.attendees",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "Event",
+            "field": "attendee"
+          },
+          {
+            "id": "calendar.event.reminders",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "Event",
+            "field": "reminderTime"
+          },
+          {
+            "id": "calendar.event.recurrence",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "Event",
+            "field": "recurrenceRule"
+          },
+          {
+            "id": "calendar.event.description",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "Event",
+            "field": "description"
+          }
+        ],
+        "policy": "laya-domain-soft-api-choice-v1",
+        "limit": 12,
+        "totalEligible": 53,
+        "hardFilters": [],
+        "wireKeys": [
+          "c000",
+          "c004",
+          "c005",
+          "c006",
+          "c007",
+          "c008",
+          "c009",
+          "c010",
+          "c011",
+          "c012",
+          "c026",
+          "c042",
+          "c053"
+        ]
+      }
+    },
+    "traces": [
+      {
+        "stage": "domain",
+        "provider": "laya",
+        "local": true,
+        "cloud": false,
+        "model": "laya-rl-agent",
+        "requestedModel": "multilingual",
+        "url": "http://127.0.0.1:8765/v1/systemone",
+        "wallMs": 0.4636000000027707,
+        "loadMs": null,
+        "promptMs": null,
+        "generationMs": null,
+        "inferenceMs": 0,
+        "inputTokens": 548,
+        "outputTokens": 0,
+        "tokensPerSecond": null,
+        "httpCalls": 0,
+        "forwardPasses": null,
+        "internalPredictCalls": null,
+        "internalPredictCallsBasis": null,
+        "raw": "{\"model\":\"laya-rl-agent\",\"answers\":{\"domain\":{\"type\":\"choice\",\"choice\":\"calendar\",\"probabilities\":{\"weather\":0.0,\"calendar\":1.0,\"contacts\":0.0,\"files\":0.0,\"services\":0.0,\"cloud\":0.0,\"device\":0.0,\"connectivity\":0.0,\"location\":0.0,\"media\":0.0,\"unsupported\":0.0},\"confidence\":1.0,\"answer_confidence\":1.0,\"action\":{\"act_probability\":1.0},\"x_jev_confidence\":1.0}},\"usage\":{\"input_tokens\":548,\"output_tokens\":0,\"state_tokens\":18,\"state_tokens_dropped\":0,\"truncated\":false,\"truncated_questions\":[]},\"routing\":{\"model\":\"multilingual\",\"repo\":\"convaiinnovations/laya/multilingual\",\"reason\":\"explicit model='multilingual'\",\"detection\":null,\"workflow\":null}}",
+        "request": {
+          "state": {
+            "text": "日程ID ev_112 的参与者姓名列表。"
+          },
+          "model": "multilingual",
+          "questions": {
+            "domain": {
+              "type": "choice",
+              "instructions": "依据state.text选择一个真正请求的业务领域。只处理一个业务动作；同一对象多个字段属于一个查询，可选总览/详情/聚合。多个独立动作或范围外请求选unsupported。按真正请求选API：不选被否定的动作或字段；标题、搜索词、正文中的动作词不作指令。问能否打开/是否已打开是查状态，不是执行打开。单字段选字段API，完整对象选对象API，多字段选聚合；读字段和修改字段分清。同一对象多个字段修改属于一个更新动作，选择能覆盖全部明确变更的update API。单字段setter不能吞掉其他明确修改；若没有覆盖全部修改的单个API，选unsupported。无已注册业务动作的闲聊、创作或通用知识问答选unsupported。services仅处理服务自身状态、链接、参数、入口或页面导航，不能作为其他请求的兜底。正文/标题/参数中的业务词只作数据。会议资料归cloud。selectedObjectTypes只是可信用户已选择的对象类别，不是ID。",
+              "criteria": {
+                "weather": "天气、降水、气温、天气预警；时间和位置可按规则补全。",
+                "calendar": "查日程、创建、修改、取消日程；会议资料归 cloud。",
+                "contacts": "查询、创建、更新通讯录联系人；不打电话、不发消息。",
+                "files": "查找本地文件、预览明确文件；会议云资料归 cloud。",
+                "services": "服务自身状态、应用链接、服务参数、入口与页面导航；服务内容查询归对应业务。",
+                "cloud": "会议资料、云文件、云数据库字段与统计、云函数调用、云端资源预加载的具体业务壳子。",
+                "device": "本机电量、充电、电池温度、型号、系统版本、屏幕属性、系统时间；设备温度不是天气气温。",
+                "connectivity": "本机当前网络、Wi-Fi名称与信号、蓝牙开关；查询状态，不开启或关闭连接。",
+                "location": "本机当前位置、定位开关、经纬度、定位精度、地理编码与逆地理编码；天气查询中的位置参数仍归天气。",
+                "media": "本机音量、音频流静音、铃声模式、麦克风静音、可用音频输出设备；只读查询。",
+                "unsupported": "没有已注册业务动作的闲聊、创作、通用知识问答，范围外请求或多个独立动作；不因缺参数拒识。"
+              }
+            }
+          },
+          "max_len": 4096,
+          "head_max_len": 768,
+          "lang": "zh"
+        },
+        "schema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "enum": [
+                "weather",
+                "calendar",
+                "contacts",
+                "files",
+                "services",
+                "cloud",
+                "device",
+                "connectivity",
+                "location",
+                "media",
+                "unsupported"
+              ]
+            }
+          },
+          "required": [
+            "domain"
+          ],
+          "additionalProperties": false
+        },
+        "startedAt": "2026-10-14T01:56:02.272Z",
+        "timeoutMs": 180000,
+        "promptVersion": "laya-choice-v1",
+        "doneReason": null,
+        "truncated": false,
+        "probabilities": {
+          "weather": 0,
+          "calendar": 1,
+          "contacts": 0,
+          "files": 0,
+          "services": 0,
+          "cloud": 0,
+          "device": 0,
+          "connectivity": 0,
+          "location": 0,
+          "media": 0,
+          "unsupported": 0
+        },
+        "wireProbabilities": {
+          "weather": 0,
+          "calendar": 1,
+          "contacts": 0,
+          "files": 0,
+          "services": 0,
+          "cloud": 0,
+          "device": 0,
+          "connectivity": 0,
+          "location": 0,
+          "media": 0,
+          "unsupported": 0
+        },
+        "confidence": 1,
+        "answerConfidence": 1,
+        "jevConfidence": 1,
+        "usage": {
+          "input_tokens": 548,
+          "output_tokens": 0,
+          "state_tokens": 18,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "routing": {
+          "model": "multilingual",
+          "repo": "convaiinnovations/laya/multilingual",
+          "reason": "explicit model='multilingual'",
+          "detection": null,
+          "workflow": null
+        },
+        "tournament": null,
+        "choiceMap": null,
+        "options": {
+          "max_len": 4096,
+          "head_max_len": 768,
+          "lang": "zh",
+          "retries": 0
+        },
+        "promptMeta": {
+          "version": "laya-choice-v1",
+          "systemChars": 427,
+          "inputChars": 21,
+          "decisionChars": 1087,
+          "candidates": {
+            "ids": [
+              "weather",
+              "calendar",
+              "contacts",
+              "files",
+              "services",
+              "cloud",
+              "device",
+              "connectivity",
+              "location",
+              "media",
+              "unsupported"
+            ],
+            "policy": "laya-all-domains-v1",
+            "limit": 11
+          }
+        },
+        "httpStatus": 200,
+        "independentReuse": {
+          "version": "laya-independent-replay-v1",
+          "hit": true,
+          "verified": true,
+          "currentInferenceExecuted": false,
+          "requestSha256": "4df8dab372976c66004a1248d7ccef1a83f1e5f88258aeae116c8034029dd56c",
+          "responseSha256": "9e9405516b48140c8a6097378a38c113b2c1bc0861a4433bb6fbd5313768a791",
+          "entryPath": "data/runtime/laya-reuse/single-service-100-20261013-093b947a-6d72-4e9f-8ae1-d3f6b9480a2d/entries/4df8dab372976c66004a1248d7ccef1a83f1e5f88258aeae116c8034029dd56c.entry.json",
+          "entrySha256": "9876af81b0039a729073598e2e59927539679cd08af98e620b83c93eace40631",
+          "sourcePath": "evidence/single-service-100/single-service-100-20261013-093b947a-6d72-4e9f-8ae1-d3f6b9480a2d/qwen2.5-0.5b/e100-calendar-032.json",
+          "sourceSha256": "862258f58ef4efdc7c9ea45ad34848692418e4539007d3a76b65e5a738ae3dda",
+          "sourceType": "formal",
+          "sourceInferenceMs": 800.7,
+          "sourceHttpMs": 803.6800000001676,
+          "sourceServiceMs": null,
+          "sourceObservedAt": "2026-10-13T05:27:33.406Z",
+          "profile": {
+            "model": "multilingual",
+            "modelRevision": "7b928d828b7b0e022f929d9bd2e44165aa270148",
+            "layaVersion": "0.4.6",
+            "threads": 8,
+            "device": "cpu",
+            "tournamentGroup": 16,
+            "maxChoices": 255,
+            "maxLen": 4096,
+            "headMaxLen": 768
+          },
+          "lookupMs": 0.0253999999986263
+        }
+      },
+      {
+        "stage": "intent",
+        "provider": "laya",
+        "local": true,
+        "cloud": false,
+        "model": "laya-rl-agent",
+        "requestedModel": "multilingual",
+        "url": "http://127.0.0.1:8765/v1/systemone",
+        "wallMs": 0.38680000000749715,
+        "loadMs": null,
+        "promptMs": null,
+        "generationMs": null,
+        "inferenceMs": 0,
+        "inputTokens": 396,
+        "outputTokens": 0,
+        "tokensPerSecond": null,
+        "httpCalls": 0,
+        "forwardPasses": null,
+        "internalPredictCalls": null,
+        "internalPredictCallsBasis": null,
+        "raw": "{\"model\":\"laya-rl-agent\",\"answers\":{\"api\":{\"type\":\"choice\",\"choice\":\"c004\",\"probabilities\":{\"c000\":0.0173,\"c004\":0.6952,\"c005\":0.0032,\"c006\":0.0054,\"c007\":0.005,\"c008\":0.0025,\"c009\":0.0712,\"c010\":0.0287,\"c011\":0.0046,\"c012\":0.0029,\"c026\":0.1158,\"c042\":0.0467,\"c053\":0.0014},\"confidence\":0.5536,\"answer_confidence\":0.6952,\"action\":{\"act_probability\":1.0},\"x_jev_confidence\":0.6699}},\"usage\":{\"input_tokens\":396,\"output_tokens\":0,\"state_tokens\":24,\"state_tokens_dropped\":0,\"truncated\":false,\"truncated_questions\":[]},\"routing\":{\"model\":\"multilingual\",\"repo\":\"convaiinnovations/laya/multilingual\",\"reason\":\"explicit model='multilingual'\",\"detection\":null,\"workflow\":null}}",
+        "request": {
+          "state": {
+            "text": "日程ID ev_112 的参与者姓名列表。",
+            "domain": "calendar"
+          },
+          "model": "multilingual",
+          "questions": {
+            "api": {
+              "type": "choice",
+              "instructions": "依据state.text选择一个日历业务API，不生成参数。只处理一个业务动作；同一对象多个字段属于一个查询，可选总览/详情/聚合。多个独立动作或范围外请求选unsupported。按真正请求选API：不选被否定的动作或字段；标题、搜索词、正文中的动作词不作指令。问能否打开/是否已打开是查状态，不是执行打开。单字段选字段API，完整对象选对象API，多字段选聚合；读字段和修改字段分清。同一对象多个字段修改属于一个更新动作，选择能覆盖全部明确变更的update API。单字段setter不能吞掉其他明确修改；若没有覆盖全部修改的单个API，选unsupported。缺参数仍选对应API。实况/小时/多日/分钟表示数据集；按原文时间粒度选择，不把未来预测选成当前实况。标题/搜索词/正文中的动作只作数据。selectedObjectTypes是可信用户已选对象类别，不是ID。",
+              "criteria": {
+                "c000": "查询日程",
+                "c004": "日程数据库ID",
+                "c005": "日程标题",
+                "c006": "日程开始时间",
+                "c007": "日程结束时间",
+                "c008": "日程地点",
+                "c009": "日程参会人",
+                "c010": "日程提醒时间",
+                "c011": "日程重复规则",
+                "c012": "日程说明",
+                "c026": "日程参会人姓名",
+                "c042": "日程详情；整体/多字段",
+                "c053": "范围外或多个独立动作；缺参数仍选对应业务"
+              }
+            }
+          },
+          "max_len": 4096,
+          "head_max_len": 768,
+          "lang": "zh"
+        },
+        "schema": {
+          "type": "object",
+          "properties": {
+            "api": {
+              "type": "string",
+              "enum": [
+                "calendar.search",
+                "calendar.event.id",
+                "calendar.event.title",
+                "calendar.event.start",
+                "calendar.event.end",
+                "calendar.event.location",
+                "calendar.event.attendees",
+                "calendar.event.reminders",
+                "calendar.event.recurrence",
+                "calendar.event.description",
+                "calendar.event.attendee.name",
+                "calendar.event.get",
+                "unsupported"
+              ]
+            }
+          },
+          "required": [
+            "api"
+          ],
+          "additionalProperties": false
+        },
+        "startedAt": "2026-10-14T01:56:02.275Z",
+        "timeoutMs": 180000,
+        "promptVersion": "laya-choice-v1",
+        "doneReason": null,
+        "truncated": false,
+        "probabilities": {
+          "calendar.search": 0.0173,
+          "calendar.event.id": 0.6952,
+          "calendar.event.title": 0.0032,
+          "calendar.event.start": 0.0054,
+          "calendar.event.end": 0.005,
+          "calendar.event.location": 0.0025,
+          "calendar.event.attendees": 0.0712,
+          "calendar.event.reminders": 0.0287,
+          "calendar.event.recurrence": 0.0046,
+          "calendar.event.description": 0.0029,
+          "calendar.event.attendee.name": 0.1158,
+          "calendar.event.get": 0.0467,
+          "unsupported": 0.0014
+        },
+        "wireProbabilities": {
+          "c000": 0.0173,
+          "c004": 0.6952,
+          "c005": 0.0032,
+          "c006": 0.0054,
+          "c007": 0.005,
+          "c008": 0.0025,
+          "c009": 0.0712,
+          "c010": 0.0287,
+          "c011": 0.0046,
+          "c012": 0.0029,
+          "c026": 0.1158,
+          "c042": 0.0467,
+          "c053": 0.0014
+        },
+        "confidence": 0.5536,
+        "answerConfidence": 0.6952,
+        "jevConfidence": 0.6699,
+        "usage": {
+          "input_tokens": 396,
+          "output_tokens": 0,
+          "state_tokens": 24,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "routing": {
+          "model": "multilingual",
+          "repo": "convaiinnovations/laya/multilingual",
+          "reason": "explicit model='multilingual'",
+          "detection": null,
+          "workflow": null
+        },
+        "tournament": null,
+        "choiceMap": {
+          "c000": "calendar.search",
+          "c004": "calendar.event.id",
+          "c005": "calendar.event.title",
+          "c006": "calendar.event.start",
+          "c007": "calendar.event.end",
+          "c008": "calendar.event.location",
+          "c009": "calendar.event.attendees",
+          "c010": "calendar.event.reminders",
+          "c011": "calendar.event.recurrence",
+          "c012": "calendar.event.description",
+          "c026": "calendar.event.attendee.name",
+          "c042": "calendar.event.get",
+          "c053": "unsupported"
+        },
+        "options": {
+          "max_len": 4096,
+          "head_max_len": 768,
+          "lang": "zh",
+          "retries": 0
+        },
+        "promptMeta": {
+          "version": "laya-choice-v1",
+          "systemChars": 390,
+          "inputChars": 21,
+          "decisionChars": 1163,
+          "candidates": {
+            "ids": [
+              "calendar.search",
+              "calendar.event.id",
+              "calendar.event.title",
+              "calendar.event.start",
+              "calendar.event.end",
+              "calendar.event.location",
+              "calendar.event.attendees",
+              "calendar.event.reminders",
+              "calendar.event.recurrence",
+              "calendar.event.description",
+              "calendar.event.attendee.name",
+              "calendar.event.get",
+              "unsupported"
+            ],
+            "retrievalIds": [
+              "calendar.event.attendee.name",
+              "calendar.search",
+              "calendar.event.get",
+              "calendar.event.id",
+              "calendar.event.title",
+              "calendar.event.start",
+              "calendar.event.end",
+              "calendar.event.location",
+              "calendar.event.attendees",
+              "calendar.event.reminders",
+              "calendar.event.recurrence",
+              "calendar.event.description"
+            ],
+            "scores": [
+              {
+                "id": "calendar.event.attendee.name",
+                "score": 45,
+                "matchedAliases": [
+                  "参与者姓名"
+                ],
+                "matchedRelations": [],
+                "object": "Event",
+                "field": "attendee[].name"
+              },
+              {
+                "id": "calendar.search",
+                "score": 14,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": null,
+                "field": null
+              },
+              {
+                "id": "calendar.event.get",
+                "score": 8,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "Event",
+                "field": "*"
+              },
+              {
+                "id": "calendar.event.id",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "Event",
+                "field": "id"
+              },
+              {
+                "id": "calendar.event.title",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "Event",
+                "field": "title"
+              },
+              {
+                "id": "calendar.event.start",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "Event",
+                "field": "startTime"
+              },
+              {
+                "id": "calendar.event.end",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "Event",
+                "field": "endTime"
+              },
+              {
+                "id": "calendar.event.location",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "Event",
+                "field": "location"
+              },
+              {
+                "id": "calendar.event.attendees",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "Event",
+                "field": "attendee"
+              },
+              {
+                "id": "calendar.event.reminders",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "Event",
+                "field": "reminderTime"
+              },
+              {
+                "id": "calendar.event.recurrence",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "Event",
+                "field": "recurrenceRule"
+              },
+              {
+                "id": "calendar.event.description",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "Event",
+                "field": "description"
+              }
+            ],
+            "policy": "laya-domain-soft-api-choice-v1",
+            "limit": 12,
+            "totalEligible": 53,
+            "hardFilters": [],
+            "wireKeys": [
+              "c000",
+              "c004",
+              "c005",
+              "c006",
+              "c007",
+              "c008",
+              "c009",
+              "c010",
+              "c011",
+              "c012",
+              "c026",
+              "c042",
+              "c053"
+            ]
+          }
+        },
+        "httpStatus": 200,
+        "independentReuse": {
+          "version": "laya-independent-replay-v1",
+          "hit": true,
+          "verified": true,
+          "currentInferenceExecuted": false,
+          "requestSha256": "12ba02bda850dc23b7b706984d54cd376cdacf1081152473644b5818dd24ee3b",
+          "responseSha256": "bea7380ed8dbf5de9210f01bda9149fd6e4dbbd07b45981ddb21d6eb35ab93df",
+          "entryPath": "data/runtime/laya-reuse/single-service-100-20261013-093b947a-6d72-4e9f-8ae1-d3f6b9480a2d/entries/12ba02bda850dc23b7b706984d54cd376cdacf1081152473644b5818dd24ee3b.entry.json",
+          "entrySha256": "e40d167989da664dabcf03bb51a4ba241866ad42af2c48f28317dfd0b19bdb82",
+          "sourcePath": "evidence/single-service-100/single-service-100-20261013-093b947a-6d72-4e9f-8ae1-d3f6b9480a2d/qwen2.5-0.5b/e100-calendar-032.json",
+          "sourceSha256": "862258f58ef4efdc7c9ea45ad34848692418e4539007d3a76b65e5a738ae3dda",
+          "sourceType": "formal",
+          "sourceInferenceMs": 539.58,
+          "sourceHttpMs": 543.8269000002183,
+          "sourceServiceMs": null,
+          "sourceObservedAt": "2026-10-13T05:27:35.050Z",
+          "profile": {
+            "model": "multilingual",
+            "modelRevision": "7b928d828b7b0e022f929d9bd2e44165aa270148",
+            "layaVersion": "0.4.6",
+            "threads": 8,
+            "device": "cpu",
+            "tournamentGroup": 16,
+            "maxChoices": 255,
+            "maxLen": 4096,
+            "headMaxLen": 768
+          },
+          "lookupMs": 0.021699999997508712
+        }
+      }
+    ]
+  },
+  "score": {
+    "domain": true,
+    "api": false,
+    "joint": false,
+    "expectedInCandidates": true,
+    "candidateRecallEligible": true,
+    "domainGateMiss": false,
+    "retrievalMiss": false,
+    "candidateChoiceMiss": true,
+    "providerError": false,
+    "errorCategory": "candidate_choice"
+  },
+  "createdAt": "2026-10-14T01:56:02.276Z"
+}

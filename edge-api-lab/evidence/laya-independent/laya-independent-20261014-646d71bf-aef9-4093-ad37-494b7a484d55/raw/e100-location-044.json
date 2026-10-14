@@ -1,0 +1,857 @@
+{
+  "version": "laya-independent-record-v1",
+  "manifestId": "laya-independent-20261014-646d71bf-aef9-4093-ad37-494b7a484d55",
+  "caseId": "e100-location-044",
+  "testDomain": "location",
+  "scenario": "natural",
+  "text": "我现在所处位置海拔多少米",
+  "context": {
+    "geocodes": {
+      "上海": {
+        "label": "上海市（地理编码夹具）",
+        "latitude": 31.2304,
+        "longitude": 121.4737,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "北京": {
+        "label": "北京市（地理编码夹具）",
+        "latitude": 39.9042,
+        "longitude": 116.4074,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "杭州": {
+        "label": "杭州市（地理编码夹具）",
+        "latitude": 30.2741,
+        "longitude": 120.1551,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "深圳": {
+        "label": "深圳市（地理编码夹具）",
+        "latitude": 22.5431,
+        "longitude": 114.0579,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "广州": {
+        "label": "广州市（地理编码夹具）",
+        "latitude": 23.1291,
+        "longitude": 113.2644,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "成都": {
+        "label": "成都市（地理编码夹具）",
+        "latitude": 30.5728,
+        "longitude": 104.0668,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "南京": {
+        "label": "南京市（地理编码夹具）",
+        "latitude": 32.0603,
+        "longitude": 118.7969,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "武汉": {
+        "label": "武汉市（地理编码夹具）",
+        "latitude": 30.5928,
+        "longitude": 114.3055,
+        "precision": "city",
+        "source": "fixture"
+      }
+    },
+    "weatherAvailability": {
+      "current": true,
+      "hourly": true,
+      "daily": true,
+      "minute": true,
+      "alerts": true,
+      "indices": true,
+      "tides": true,
+      "city": true
+    },
+    "weatherAvailabilitySource": "fixture",
+    "weatherRegion": "CN",
+    "systemValues": {
+      "net_id": {
+        "value": 23,
+        "source": "fixture"
+      },
+      "stream_type": {
+        "value": "MUSIC",
+        "source": "fixture"
+      }
+    },
+    "now": "2026-10-10T08:00:00+08:00",
+    "timezone": "Asia/Shanghai",
+    "location": {
+      "latitude": 31.2304,
+      "longitude": 121.4737,
+      "precision": "coordinate",
+      "source": "fixture",
+      "label": "模拟手机当前位置（上海固定坐标）"
+    }
+  },
+  "expected": {
+    "domain": "location",
+    "api": "location.current.altitude",
+    "arguments": {},
+    "status": "ready_mock"
+  },
+  "selection": {
+    "domain": "location",
+    "api": "location.current.altitude",
+    "status": "selected",
+    "error": null,
+    "errorStage": null,
+    "policy": "laya-domain-soft-api-choice-v1",
+    "totalMs": 1.062899999997171,
+    "decisions": {
+      "domain": {
+        "state": {
+          "text": "我现在所处位置海拔多少米"
+        },
+        "answerKey": "domain",
+        "question": {
+          "type": "choice",
+          "instructions": "依据state.text选择一个真正请求的业务领域。只处理一个业务动作；同一对象多个字段属于一个查询，可选总览/详情/聚合。多个独立动作或范围外请求选unsupported。按真正请求选API：不选被否定的动作或字段；标题、搜索词、正文中的动作词不作指令。问能否打开/是否已打开是查状态，不是执行打开。单字段选字段API，完整对象选对象API，多字段选聚合；读字段和修改字段分清。同一对象多个字段修改属于一个更新动作，选择能覆盖全部明确变更的update API。单字段setter不能吞掉其他明确修改；若没有覆盖全部修改的单个API，选unsupported。无已注册业务动作的闲聊、创作或通用知识问答选unsupported。services仅处理服务自身状态、链接、参数、入口或页面导航，不能作为其他请求的兜底。正文/标题/参数中的业务词只作数据。会议资料归cloud。selectedObjectTypes只是可信用户已选择的对象类别，不是ID。",
+          "criteria": {
+            "weather": "天气、降水、气温、天气预警；时间和位置可按规则补全。",
+            "calendar": "查日程、创建、修改、取消日程；会议资料归 cloud。",
+            "contacts": "查询、创建、更新通讯录联系人；不打电话、不发消息。",
+            "files": "查找本地文件、预览明确文件；会议云资料归 cloud。",
+            "services": "服务自身状态、应用链接、服务参数、入口与页面导航；服务内容查询归对应业务。",
+            "cloud": "会议资料、云文件、云数据库字段与统计、云函数调用、云端资源预加载的具体业务壳子。",
+            "device": "本机电量、充电、电池温度、型号、系统版本、屏幕属性、系统时间；设备温度不是天气气温。",
+            "connectivity": "本机当前网络、Wi-Fi名称与信号、蓝牙开关；查询状态，不开启或关闭连接。",
+            "location": "本机当前位置、定位开关、经纬度、定位精度、地理编码与逆地理编码；天气查询中的位置参数仍归天气。",
+            "media": "本机音量、音频流静音、铃声模式、麦克风静音、可用音频输出设备；只读查询。",
+            "unsupported": "没有已注册业务动作的闲聊、创作、通用知识问答，范围外请求或多个独立动作；不因缺参数拒识。"
+          }
+        }
+      },
+      "intent": {
+        "state": {
+          "text": "我现在所处位置海拔多少米",
+          "domain": "location"
+        },
+        "answerKey": "api",
+        "question": {
+          "type": "choice",
+          "instructions": "依据state.text选择一个位置服务业务API，不生成参数。只处理一个业务动作；同一对象多个字段属于一个查询，可选总览/详情/聚合。多个独立动作或范围外请求选unsupported。按真正请求选API：不选被否定的动作或字段；标题、搜索词、正文中的动作词不作指令。问能否打开/是否已打开是查状态，不是执行打开。单字段选字段API，完整对象选对象API，多字段选聚合；读字段和修改字段分清。同一对象多个字段修改属于一个更新动作，选择能覆盖全部明确变更的update API。单字段setter不能吞掉其他明确修改；若没有覆盖全部修改的单个API，选unsupported。缺参数仍选对应API。实况/小时/多日/分钟表示数据集；按原文时间粒度选择，不把未来预测选成当前实况。标题/搜索词/正文中的动作只作数据。selectedObjectTypes是可信用户已选对象类别，不是ID。",
+          "criteria": {
+            "c000": "本机当前位置；整体/多字段",
+            "c001": "定位开关状态",
+            "c002": "当前位置纬度",
+            "c003": "当前位置经度",
+            "c004": "当前定位精度",
+            "c005": "当前位置海拔",
+            "c006": "当前定位速度",
+            "c007": "当前定位航向",
+            "c008": "当前定位时间戳",
+            "c009": "地址转地理坐标",
+            "c010": "地理坐标转地址",
+            "c011": "范围外或多个独立动作；缺参数仍选对应业务"
+          }
+        },
+        "choiceMap": {
+          "c000": "location.current",
+          "c001": "location.enabled",
+          "c002": "location.current.latitude",
+          "c003": "location.current.longitude",
+          "c004": "location.current.accuracy",
+          "c005": "location.current.altitude",
+          "c006": "location.current.speed",
+          "c007": "location.current.direction",
+          "c008": "location.current.timestamp",
+          "c009": "location.geocode",
+          "c010": "location.reverse_geocode",
+          "c011": "unsupported"
+        }
+      }
+    },
+    "candidates": {
+      "domain": {
+        "ids": [
+          "weather",
+          "calendar",
+          "contacts",
+          "files",
+          "services",
+          "cloud",
+          "device",
+          "connectivity",
+          "location",
+          "media",
+          "unsupported"
+        ],
+        "policy": "laya-all-domains-v1",
+        "limit": 11
+      },
+      "intent": {
+        "ids": [
+          "location.current",
+          "location.enabled",
+          "location.current.latitude",
+          "location.current.longitude",
+          "location.current.accuracy",
+          "location.current.altitude",
+          "location.current.speed",
+          "location.current.direction",
+          "location.current.timestamp",
+          "location.geocode",
+          "location.reverse_geocode",
+          "unsupported"
+        ],
+        "retrievalIds": [
+          "location.current",
+          "location.enabled",
+          "location.current.latitude",
+          "location.current.longitude",
+          "location.current.accuracy",
+          "location.current.altitude",
+          "location.current.speed",
+          "location.current.direction",
+          "location.current.timestamp",
+          "location.geocode",
+          "location.reverse_geocode"
+        ],
+        "scores": [
+          {
+            "id": "location.current",
+            "score": 8,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "Location",
+            "field": "*"
+          },
+          {
+            "id": "location.enabled",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "geoLocationManager",
+            "field": "isLocationEnabled"
+          },
+          {
+            "id": "location.current.latitude",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "Location",
+            "field": "latitude"
+          },
+          {
+            "id": "location.current.longitude",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "Location",
+            "field": "longitude"
+          },
+          {
+            "id": "location.current.accuracy",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "Location",
+            "field": "accuracy"
+          },
+          {
+            "id": "location.current.altitude",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "Location",
+            "field": "altitude"
+          },
+          {
+            "id": "location.current.speed",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "Location",
+            "field": "speed"
+          },
+          {
+            "id": "location.current.direction",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "Location",
+            "field": "direction"
+          },
+          {
+            "id": "location.current.timestamp",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "Location",
+            "field": "timeStamp"
+          },
+          {
+            "id": "location.geocode",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "geoLocationManager",
+            "field": "getAddressesFromLocationName"
+          },
+          {
+            "id": "location.reverse_geocode",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "geoLocationManager",
+            "field": "getAddressesFromLocation"
+          }
+        ],
+        "policy": "laya-domain-soft-api-choice-v1",
+        "limit": 12,
+        "totalEligible": 11,
+        "hardFilters": [],
+        "wireKeys": [
+          "c000",
+          "c001",
+          "c002",
+          "c003",
+          "c004",
+          "c005",
+          "c006",
+          "c007",
+          "c008",
+          "c009",
+          "c010",
+          "c011"
+        ]
+      }
+    },
+    "traces": [
+      {
+        "stage": "domain",
+        "provider": "laya",
+        "local": true,
+        "cloud": false,
+        "model": "laya-rl-agent",
+        "requestedModel": "multilingual",
+        "url": "http://127.0.0.1:8765/v1/systemone",
+        "wallMs": 0.36220000000321306,
+        "loadMs": null,
+        "promptMs": null,
+        "generationMs": null,
+        "inferenceMs": 0,
+        "inputTokens": 543,
+        "outputTokens": 0,
+        "tokensPerSecond": null,
+        "httpCalls": 0,
+        "forwardPasses": null,
+        "internalPredictCalls": null,
+        "internalPredictCallsBasis": null,
+        "raw": "{\"model\":\"laya-rl-agent\",\"answers\":{\"domain\":{\"type\":\"choice\",\"choice\":\"location\",\"probabilities\":{\"weather\":0.0347,\"calendar\":0.0002,\"contacts\":0.0006,\"files\":0.0009,\"services\":0.0027,\"cloud\":0.001,\"device\":0.0069,\"connectivity\":0.0063,\"location\":0.9454,\"media\":0.0003,\"unsupported\":0.0009},\"confidence\":0.8831,\"answer_confidence\":0.9454,\"action\":{\"act_probability\":1.0},\"x_jev_confidence\":0.94}},\"usage\":{\"input_tokens\":543,\"output_tokens\":0,\"state_tokens\":13,\"state_tokens_dropped\":0,\"truncated\":false,\"truncated_questions\":[]},\"routing\":{\"model\":\"multilingual\",\"repo\":\"convaiinnovations/laya/multilingual\",\"reason\":\"explicit model='multilingual'\",\"detection\":null,\"workflow\":null}}",
+        "request": {
+          "state": {
+            "text": "我现在所处位置海拔多少米"
+          },
+          "model": "multilingual",
+          "questions": {
+            "domain": {
+              "type": "choice",
+              "instructions": "依据state.text选择一个真正请求的业务领域。只处理一个业务动作；同一对象多个字段属于一个查询，可选总览/详情/聚合。多个独立动作或范围外请求选unsupported。按真正请求选API：不选被否定的动作或字段；标题、搜索词、正文中的动作词不作指令。问能否打开/是否已打开是查状态，不是执行打开。单字段选字段API，完整对象选对象API，多字段选聚合；读字段和修改字段分清。同一对象多个字段修改属于一个更新动作，选择能覆盖全部明确变更的update API。单字段setter不能吞掉其他明确修改；若没有覆盖全部修改的单个API，选unsupported。无已注册业务动作的闲聊、创作或通用知识问答选unsupported。services仅处理服务自身状态、链接、参数、入口或页面导航，不能作为其他请求的兜底。正文/标题/参数中的业务词只作数据。会议资料归cloud。selectedObjectTypes只是可信用户已选择的对象类别，不是ID。",
+              "criteria": {
+                "weather": "天气、降水、气温、天气预警；时间和位置可按规则补全。",
+                "calendar": "查日程、创建、修改、取消日程；会议资料归 cloud。",
+                "contacts": "查询、创建、更新通讯录联系人；不打电话、不发消息。",
+                "files": "查找本地文件、预览明确文件；会议云资料归 cloud。",
+                "services": "服务自身状态、应用链接、服务参数、入口与页面导航；服务内容查询归对应业务。",
+                "cloud": "会议资料、云文件、云数据库字段与统计、云函数调用、云端资源预加载的具体业务壳子。",
+                "device": "本机电量、充电、电池温度、型号、系统版本、屏幕属性、系统时间；设备温度不是天气气温。",
+                "connectivity": "本机当前网络、Wi-Fi名称与信号、蓝牙开关；查询状态，不开启或关闭连接。",
+                "location": "本机当前位置、定位开关、经纬度、定位精度、地理编码与逆地理编码；天气查询中的位置参数仍归天气。",
+                "media": "本机音量、音频流静音、铃声模式、麦克风静音、可用音频输出设备；只读查询。",
+                "unsupported": "没有已注册业务动作的闲聊、创作、通用知识问答，范围外请求或多个独立动作；不因缺参数拒识。"
+              }
+            }
+          },
+          "max_len": 4096,
+          "head_max_len": 768,
+          "lang": "zh"
+        },
+        "schema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "enum": [
+                "weather",
+                "calendar",
+                "contacts",
+                "files",
+                "services",
+                "cloud",
+                "device",
+                "connectivity",
+                "location",
+                "media",
+                "unsupported"
+              ]
+            }
+          },
+          "required": [
+            "domain"
+          ],
+          "additionalProperties": false
+        },
+        "startedAt": "2026-10-14T01:54:52.051Z",
+        "timeoutMs": 180000,
+        "promptVersion": "laya-choice-v1",
+        "doneReason": null,
+        "truncated": false,
+        "probabilities": {
+          "weather": 0.0347,
+          "calendar": 0.0002,
+          "contacts": 0.0006,
+          "files": 0.0009,
+          "services": 0.0027,
+          "cloud": 0.001,
+          "device": 0.0069,
+          "connectivity": 0.0063,
+          "location": 0.9454,
+          "media": 0.0003,
+          "unsupported": 0.0009
+        },
+        "wireProbabilities": {
+          "weather": 0.0347,
+          "calendar": 0.0002,
+          "contacts": 0.0006,
+          "files": 0.0009,
+          "services": 0.0027,
+          "cloud": 0.001,
+          "device": 0.0069,
+          "connectivity": 0.0063,
+          "location": 0.9454,
+          "media": 0.0003,
+          "unsupported": 0.0009
+        },
+        "confidence": 0.8831,
+        "answerConfidence": 0.9454,
+        "jevConfidence": 0.94,
+        "usage": {
+          "input_tokens": 543,
+          "output_tokens": 0,
+          "state_tokens": 13,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "routing": {
+          "model": "multilingual",
+          "repo": "convaiinnovations/laya/multilingual",
+          "reason": "explicit model='multilingual'",
+          "detection": null,
+          "workflow": null
+        },
+        "tournament": null,
+        "choiceMap": null,
+        "options": {
+          "max_len": 4096,
+          "head_max_len": 768,
+          "lang": "zh",
+          "retries": 0
+        },
+        "promptMeta": {
+          "version": "laya-choice-v1",
+          "systemChars": 427,
+          "inputChars": 12,
+          "decisionChars": 1078,
+          "candidates": {
+            "ids": [
+              "weather",
+              "calendar",
+              "contacts",
+              "files",
+              "services",
+              "cloud",
+              "device",
+              "connectivity",
+              "location",
+              "media",
+              "unsupported"
+            ],
+            "policy": "laya-all-domains-v1",
+            "limit": 11
+          }
+        },
+        "httpStatus": 200,
+        "independentReuse": {
+          "version": "laya-independent-replay-v1",
+          "hit": true,
+          "verified": true,
+          "currentInferenceExecuted": false,
+          "requestSha256": "ed1201024830b38091dbe5a040f79db75aeb49d76e74e7a552c82dd5926964d0",
+          "responseSha256": "bc47d30ab96251b6ef3ea9586d9d89cc27d324fb0375ca0241eca8eb86eb48c7",
+          "entryPath": "data/runtime/laya-reuse/single-service-100-20261013-093b947a-6d72-4e9f-8ae1-d3f6b9480a2d/entries/ed1201024830b38091dbe5a040f79db75aeb49d76e74e7a552c82dd5926964d0.entry.json",
+          "entrySha256": "f8e0e8524f9e080f604314d2ca0f18741e2cd0a45d7f98c301024adba7e939c8",
+          "sourcePath": "evidence/single-service-100/single-service-100-20261013-093b947a-6d72-4e9f-8ae1-d3f6b9480a2d/qwen2.5-0.5b/e100-location-044.json",
+          "sourceSha256": "de339a7acbea01fa27974c9f130cef1b721ee3bfdfd4e750faa495925e41fa89",
+          "sourceType": "formal",
+          "sourceInferenceMs": 801.73,
+          "sourceHttpMs": 805.0204999999842,
+          "sourceServiceMs": null,
+          "sourceObservedAt": "2026-10-13T04:53:58.110Z",
+          "profile": {
+            "model": "multilingual",
+            "modelRevision": "7b928d828b7b0e022f929d9bd2e44165aa270148",
+            "layaVersion": "0.4.6",
+            "threads": 8,
+            "device": "cpu",
+            "tournamentGroup": 16,
+            "maxChoices": 255,
+            "maxLen": 4096,
+            "headMaxLen": 768
+          },
+          "lookupMs": 0.018499999998311978
+        }
+      },
+      {
+        "stage": "intent",
+        "provider": "laya",
+        "local": true,
+        "cloud": false,
+        "model": "laya-rl-agent",
+        "requestedModel": "multilingual",
+        "url": "http://127.0.0.1:8765/v1/systemone",
+        "wallMs": 0.25359999999636784,
+        "loadMs": null,
+        "promptMs": null,
+        "generationMs": null,
+        "inferenceMs": 0,
+        "inputTokens": 383,
+        "outputTokens": 0,
+        "tokensPerSecond": null,
+        "httpCalls": 0,
+        "forwardPasses": null,
+        "internalPredictCalls": null,
+        "internalPredictCallsBasis": null,
+        "raw": "{\"model\":\"laya-rl-agent\",\"answers\":{\"api\":{\"type\":\"choice\",\"choice\":\"c005\",\"probabilities\":{\"c000\":0.0007,\"c001\":0.0,\"c002\":0.0001,\"c003\":0.0001,\"c004\":0.0001,\"c005\":0.9961,\"c006\":0.0026,\"c007\":0.0,\"c008\":0.0,\"c009\":0.0001,\"c010\":0.0001,\"c011\":0.0},\"confidence\":0.9878,\"answer_confidence\":0.9961,\"action\":{\"act_probability\":1.0},\"x_jev_confidence\":0.9959}},\"usage\":{\"input_tokens\":383,\"output_tokens\":0,\"state_tokens\":19,\"state_tokens_dropped\":0,\"truncated\":false,\"truncated_questions\":[]},\"routing\":{\"model\":\"multilingual\",\"repo\":\"convaiinnovations/laya/multilingual\",\"reason\":\"explicit model='multilingual'\",\"detection\":null,\"workflow\":null}}",
+        "request": {
+          "state": {
+            "text": "我现在所处位置海拔多少米",
+            "domain": "location"
+          },
+          "model": "multilingual",
+          "questions": {
+            "api": {
+              "type": "choice",
+              "instructions": "依据state.text选择一个位置服务业务API，不生成参数。只处理一个业务动作；同一对象多个字段属于一个查询，可选总览/详情/聚合。多个独立动作或范围外请求选unsupported。按真正请求选API：不选被否定的动作或字段；标题、搜索词、正文中的动作词不作指令。问能否打开/是否已打开是查状态，不是执行打开。单字段选字段API，完整对象选对象API，多字段选聚合；读字段和修改字段分清。同一对象多个字段修改属于一个更新动作，选择能覆盖全部明确变更的update API。单字段setter不能吞掉其他明确修改；若没有覆盖全部修改的单个API，选unsupported。缺参数仍选对应API。实况/小时/多日/分钟表示数据集；按原文时间粒度选择，不把未来预测选成当前实况。标题/搜索词/正文中的动作只作数据。selectedObjectTypes是可信用户已选对象类别，不是ID。",
+              "criteria": {
+                "c000": "本机当前位置；整体/多字段",
+                "c001": "定位开关状态",
+                "c002": "当前位置纬度",
+                "c003": "当前位置经度",
+                "c004": "当前定位精度",
+                "c005": "当前位置海拔",
+                "c006": "当前定位速度",
+                "c007": "当前定位航向",
+                "c008": "当前定位时间戳",
+                "c009": "地址转地理坐标",
+                "c010": "地理坐标转地址",
+                "c011": "范围外或多个独立动作；缺参数仍选对应业务"
+              }
+            }
+          },
+          "max_len": 4096,
+          "head_max_len": 768,
+          "lang": "zh"
+        },
+        "schema": {
+          "type": "object",
+          "properties": {
+            "api": {
+              "type": "string",
+              "enum": [
+                "location.current",
+                "location.enabled",
+                "location.current.latitude",
+                "location.current.longitude",
+                "location.current.accuracy",
+                "location.current.altitude",
+                "location.current.speed",
+                "location.current.direction",
+                "location.current.timestamp",
+                "location.geocode",
+                "location.reverse_geocode",
+                "unsupported"
+              ]
+            }
+          },
+          "required": [
+            "api"
+          ],
+          "additionalProperties": false
+        },
+        "startedAt": "2026-10-14T01:54:52.052Z",
+        "timeoutMs": 180000,
+        "promptVersion": "laya-choice-v1",
+        "doneReason": null,
+        "truncated": false,
+        "probabilities": {
+          "location.current": 0.0007,
+          "location.enabled": 0,
+          "location.current.latitude": 0.0001,
+          "location.current.longitude": 0.0001,
+          "location.current.accuracy": 0.0001,
+          "location.current.altitude": 0.9961,
+          "location.current.speed": 0.0026,
+          "location.current.direction": 0,
+          "location.current.timestamp": 0,
+          "location.geocode": 0.0001,
+          "location.reverse_geocode": 0.0001,
+          "unsupported": 0
+        },
+        "wireProbabilities": {
+          "c000": 0.0007,
+          "c001": 0,
+          "c002": 0.0001,
+          "c003": 0.0001,
+          "c004": 0.0001,
+          "c005": 0.9961,
+          "c006": 0.0026,
+          "c007": 0,
+          "c008": 0,
+          "c009": 0.0001,
+          "c010": 0.0001,
+          "c011": 0
+        },
+        "confidence": 0.9878,
+        "answerConfidence": 0.9961,
+        "jevConfidence": 0.9959,
+        "usage": {
+          "input_tokens": 383,
+          "output_tokens": 0,
+          "state_tokens": 19,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "routing": {
+          "model": "multilingual",
+          "repo": "convaiinnovations/laya/multilingual",
+          "reason": "explicit model='multilingual'",
+          "detection": null,
+          "workflow": null
+        },
+        "tournament": null,
+        "choiceMap": {
+          "c000": "location.current",
+          "c001": "location.enabled",
+          "c002": "location.current.latitude",
+          "c003": "location.current.longitude",
+          "c004": "location.current.accuracy",
+          "c005": "location.current.altitude",
+          "c006": "location.current.speed",
+          "c007": "location.current.direction",
+          "c008": "location.current.timestamp",
+          "c009": "location.geocode",
+          "c010": "location.reverse_geocode",
+          "c011": "unsupported"
+        },
+        "options": {
+          "max_len": 4096,
+          "head_max_len": 768,
+          "lang": "zh",
+          "retries": 0
+        },
+        "promptMeta": {
+          "version": "laya-choice-v1",
+          "systemChars": 392,
+          "inputChars": 12,
+          "decisionChars": 1131,
+          "candidates": {
+            "ids": [
+              "location.current",
+              "location.enabled",
+              "location.current.latitude",
+              "location.current.longitude",
+              "location.current.accuracy",
+              "location.current.altitude",
+              "location.current.speed",
+              "location.current.direction",
+              "location.current.timestamp",
+              "location.geocode",
+              "location.reverse_geocode",
+              "unsupported"
+            ],
+            "retrievalIds": [
+              "location.current",
+              "location.enabled",
+              "location.current.latitude",
+              "location.current.longitude",
+              "location.current.accuracy",
+              "location.current.altitude",
+              "location.current.speed",
+              "location.current.direction",
+              "location.current.timestamp",
+              "location.geocode",
+              "location.reverse_geocode"
+            ],
+            "scores": [
+              {
+                "id": "location.current",
+                "score": 8,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "Location",
+                "field": "*"
+              },
+              {
+                "id": "location.enabled",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "geoLocationManager",
+                "field": "isLocationEnabled"
+              },
+              {
+                "id": "location.current.latitude",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "Location",
+                "field": "latitude"
+              },
+              {
+                "id": "location.current.longitude",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "Location",
+                "field": "longitude"
+              },
+              {
+                "id": "location.current.accuracy",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "Location",
+                "field": "accuracy"
+              },
+              {
+                "id": "location.current.altitude",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "Location",
+                "field": "altitude"
+              },
+              {
+                "id": "location.current.speed",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "Location",
+                "field": "speed"
+              },
+              {
+                "id": "location.current.direction",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "Location",
+                "field": "direction"
+              },
+              {
+                "id": "location.current.timestamp",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "Location",
+                "field": "timeStamp"
+              },
+              {
+                "id": "location.geocode",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "geoLocationManager",
+                "field": "getAddressesFromLocationName"
+              },
+              {
+                "id": "location.reverse_geocode",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "geoLocationManager",
+                "field": "getAddressesFromLocation"
+              }
+            ],
+            "policy": "laya-domain-soft-api-choice-v1",
+            "limit": 12,
+            "totalEligible": 11,
+            "hardFilters": [],
+            "wireKeys": [
+              "c000",
+              "c001",
+              "c002",
+              "c003",
+              "c004",
+              "c005",
+              "c006",
+              "c007",
+              "c008",
+              "c009",
+              "c010",
+              "c011"
+            ]
+          }
+        },
+        "httpStatus": 200,
+        "independentReuse": {
+          "version": "laya-independent-replay-v1",
+          "hit": true,
+          "verified": true,
+          "currentInferenceExecuted": false,
+          "requestSha256": "6eb52a4546095426cffd5d61de086edf467f6982413a283ba3ae300dc63ffcea",
+          "responseSha256": "db779b7a755b7b18d4275e2012c561a40fd2dd72635094c0eac86dea41487bd7",
+          "entryPath": "data/runtime/laya-reuse/single-service-100-20261013-093b947a-6d72-4e9f-8ae1-d3f6b9480a2d/entries/6eb52a4546095426cffd5d61de086edf467f6982413a283ba3ae300dc63ffcea.entry.json",
+          "entrySha256": "e20e5f5c7ae2bb09161d2f99f0a9c7de5bb5dd8c8c6c93bdf5dc7a12e78894b4",
+          "sourcePath": "evidence/single-service-100/single-service-100-20261013-093b947a-6d72-4e9f-8ae1-d3f6b9480a2d/qwen2.5-1.5b/e100-location-044.json",
+          "sourceSha256": "18b82984472bb0edb1534dbaf1cc45a4744abf8ba7c2a83ff4f718604a9269f1",
+          "sourceType": "formal",
+          "sourceInferenceMs": 593.86,
+          "sourceHttpMs": 597.423599999398,
+          "sourceServiceMs": null,
+          "sourceObservedAt": "2026-10-13T06:06:08.823Z",
+          "profile": {
+            "model": "multilingual",
+            "modelRevision": "7b928d828b7b0e022f929d9bd2e44165aa270148",
+            "layaVersion": "0.4.6",
+            "threads": 8,
+            "device": "cpu",
+            "tournamentGroup": 16,
+            "maxChoices": 255,
+            "maxLen": 4096,
+            "headMaxLen": 768
+          },
+          "lookupMs": 0.014100000000325963
+        }
+      }
+    ]
+  },
+  "score": {
+    "domain": true,
+    "api": true,
+    "joint": true,
+    "expectedInCandidates": true,
+    "candidateRecallEligible": true,
+    "domainGateMiss": false,
+    "retrievalMiss": false,
+    "candidateChoiceMiss": false,
+    "providerError": false,
+    "errorCategory": "correct"
+  },
+  "createdAt": "2026-10-14T01:54:52.052Z"
+}

@@ -1,0 +1,898 @@
+{
+  "version": "laya-independent-record-v1",
+  "manifestId": "laya-independent-20261014-646d71bf-aef9-4093-ad37-494b7a484d55",
+  "caseId": "e100-contacts-052",
+  "testDomain": "contacts",
+  "scenario": "事件日期",
+  "text": "联系人 ct_132 的生日纪念日日期原文。",
+  "context": {
+    "geocodes": {
+      "上海": {
+        "label": "上海市（地理编码夹具）",
+        "latitude": 31.2304,
+        "longitude": 121.4737,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "北京": {
+        "label": "北京市（地理编码夹具）",
+        "latitude": 39.9042,
+        "longitude": 116.4074,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "杭州": {
+        "label": "杭州市（地理编码夹具）",
+        "latitude": 30.2741,
+        "longitude": 120.1551,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "深圳": {
+        "label": "深圳市（地理编码夹具）",
+        "latitude": 22.5431,
+        "longitude": 114.0579,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "广州": {
+        "label": "广州市（地理编码夹具）",
+        "latitude": 23.1291,
+        "longitude": 113.2644,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "成都": {
+        "label": "成都市（地理编码夹具）",
+        "latitude": 30.5728,
+        "longitude": 104.0668,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "南京": {
+        "label": "南京市（地理编码夹具）",
+        "latitude": 32.0603,
+        "longitude": 118.7969,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "武汉": {
+        "label": "武汉市（地理编码夹具）",
+        "latitude": 30.5928,
+        "longitude": 114.3055,
+        "precision": "city",
+        "source": "fixture"
+      }
+    },
+    "weatherAvailability": {
+      "current": true,
+      "hourly": true,
+      "daily": true,
+      "minute": true,
+      "alerts": true,
+      "indices": true,
+      "tides": true,
+      "city": true
+    },
+    "weatherAvailabilitySource": "fixture",
+    "weatherRegion": "CN",
+    "systemValues": {
+      "net_id": {
+        "value": 23,
+        "source": "fixture"
+      },
+      "stream_type": {
+        "value": "MUSIC",
+        "source": "fixture"
+      }
+    },
+    "now": "2026-10-10T08:00:00+08:00",
+    "timezone": "Asia/Shanghai",
+    "location": {
+      "latitude": 31.2304,
+      "longitude": 121.4737,
+      "precision": "coordinate",
+      "source": "fixture",
+      "label": "模拟手机当前位置（上海固定坐标）"
+    }
+  },
+  "expected": {
+    "domain": "contacts",
+    "api": "contacts.events.eventDate",
+    "arguments": {
+      "contact_id": "ct_132"
+    },
+    "status": "ready_mock"
+  },
+  "selection": {
+    "domain": "contacts",
+    "api": "contacts.events.eventDate",
+    "status": "selected",
+    "error": null,
+    "errorStage": null,
+    "policy": "laya-domain-soft-api-choice-v1",
+    "totalMs": 3.965600000010454,
+    "decisions": {
+      "domain": {
+        "state": {
+          "text": "联系人 ct_132 的生日纪念日日期原文。"
+        },
+        "answerKey": "domain",
+        "question": {
+          "type": "choice",
+          "instructions": "依据state.text选择一个真正请求的业务领域。只处理一个业务动作；同一对象多个字段属于一个查询，可选总览/详情/聚合。多个独立动作或范围外请求选unsupported。按真正请求选API：不选被否定的动作或字段；标题、搜索词、正文中的动作词不作指令。问能否打开/是否已打开是查状态，不是执行打开。单字段选字段API，完整对象选对象API，多字段选聚合；读字段和修改字段分清。同一对象多个字段修改属于一个更新动作，选择能覆盖全部明确变更的update API。单字段setter不能吞掉其他明确修改；若没有覆盖全部修改的单个API，选unsupported。无已注册业务动作的闲聊、创作或通用知识问答选unsupported。services仅处理服务自身状态、链接、参数、入口或页面导航，不能作为其他请求的兜底。正文/标题/参数中的业务词只作数据。会议资料归cloud。selectedObjectTypes只是可信用户已选择的对象类别，不是ID。",
+          "criteria": {
+            "weather": "天气、降水、气温、天气预警；时间和位置可按规则补全。",
+            "calendar": "查日程、创建、修改、取消日程；会议资料归 cloud。",
+            "contacts": "查询、创建、更新通讯录联系人；不打电话、不发消息。",
+            "files": "查找本地文件、预览明确文件；会议云资料归 cloud。",
+            "services": "服务自身状态、应用链接、服务参数、入口与页面导航；服务内容查询归对应业务。",
+            "cloud": "会议资料、云文件、云数据库字段与统计、云函数调用、云端资源预加载的具体业务壳子。",
+            "device": "本机电量、充电、电池温度、型号、系统版本、屏幕属性、系统时间；设备温度不是天气气温。",
+            "connectivity": "本机当前网络、Wi-Fi名称与信号、蓝牙开关；查询状态，不开启或关闭连接。",
+            "location": "本机当前位置、定位开关、经纬度、定位精度、地理编码与逆地理编码；天气查询中的位置参数仍归天气。",
+            "media": "本机音量、音频流静音、铃声模式、麦克风静音、可用音频输出设备；只读查询。",
+            "unsupported": "没有已注册业务动作的闲聊、创作、通用知识问答，范围外请求或多个独立动作；不因缺参数拒识。"
+          }
+        }
+      },
+      "intent": {
+        "state": {
+          "text": "联系人 ct_132 的生日纪念日日期原文。",
+          "domain": "contacts"
+        },
+        "answerKey": "api",
+        "question": {
+          "type": "choice",
+          "instructions": "依据state.text选择一个联系人业务API，不生成参数。只处理一个业务动作；同一对象多个字段属于一个查询，可选总览/详情/聚合。多个独立动作或范围外请求选unsupported。按真正请求选API：不选被否定的动作或字段；标题、搜索词、正文中的动作词不作指令。问能否打开/是否已打开是查状态，不是执行打开。单字段选字段API，完整对象选对象API，多字段选聚合；读字段和修改字段分清。同一对象多个字段修改属于一个更新动作，选择能覆盖全部明确变更的update API。单字段setter不能吞掉其他明确修改；若没有覆盖全部修改的单个API，选unsupported。缺参数仍选对应API。实况/小时/多日/分钟表示数据集；按原文时间粒度选择，不把未来预测选成当前实况。标题/搜索词/正文中的动作只作数据。selectedObjectTypes是可信用户已选对象类别，不是ID。",
+          "criteria": {
+            "c000": "查询联系人",
+            "c003": "联系人电话号码",
+            "c004": "联系人邮箱",
+            "c005": "联系人邮寄地址",
+            "c006": "联系人单位与职位",
+            "c007": "联系人生日与纪念日",
+            "c008": "联系人姓名",
+            "c009": "联系人昵称",
+            "c010": "联系人备注",
+            "c011": "联系人网站",
+            "c034": "联系人生日纪念日日期",
+            "c067": "联系人详情；整体/多字段",
+            "c076": "范围外或多个独立动作；缺参数仍选对应业务"
+          }
+        },
+        "choiceMap": {
+          "c000": "contacts.search",
+          "c003": "contacts.phone",
+          "c004": "contacts.email",
+          "c005": "contacts.address",
+          "c006": "contacts.organization",
+          "c007": "contacts.events",
+          "c008": "contacts.name",
+          "c009": "contacts.nickname",
+          "c010": "contacts.note",
+          "c011": "contacts.websites",
+          "c034": "contacts.events.eventDate",
+          "c067": "contacts.get",
+          "c076": "unsupported"
+        }
+      }
+    },
+    "candidates": {
+      "domain": {
+        "ids": [
+          "weather",
+          "calendar",
+          "contacts",
+          "files",
+          "services",
+          "cloud",
+          "device",
+          "connectivity",
+          "location",
+          "media",
+          "unsupported"
+        ],
+        "policy": "laya-all-domains-v1",
+        "limit": 11
+      },
+      "intent": {
+        "ids": [
+          "contacts.search",
+          "contacts.phone",
+          "contacts.email",
+          "contacts.address",
+          "contacts.organization",
+          "contacts.events",
+          "contacts.name",
+          "contacts.nickname",
+          "contacts.note",
+          "contacts.websites",
+          "contacts.events.eventDate",
+          "contacts.get",
+          "unsupported"
+        ],
+        "retrievalIds": [
+          "contacts.events.eventDate",
+          "contacts.events",
+          "contacts.search",
+          "contacts.get",
+          "contacts.phone",
+          "contacts.email",
+          "contacts.address",
+          "contacts.organization",
+          "contacts.name",
+          "contacts.nickname",
+          "contacts.note",
+          "contacts.websites"
+        ],
+        "scores": [
+          {
+            "id": "contacts.events.eventDate",
+            "score": 49,
+            "matchedAliases": [
+              "生日纪念日日期"
+            ],
+            "matchedRelations": [],
+            "object": "Contact",
+            "field": "events[].eventDate"
+          },
+          {
+            "id": "contacts.events",
+            "score": 25,
+            "matchedAliases": [
+              "生日",
+              "纪念日"
+            ],
+            "matchedRelations": [],
+            "object": "Contact",
+            "field": "events"
+          },
+          {
+            "id": "contacts.search",
+            "score": 14,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": null,
+            "field": null
+          },
+          {
+            "id": "contacts.get",
+            "score": 8,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "Contact",
+            "field": "*"
+          },
+          {
+            "id": "contacts.phone",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "Contact",
+            "field": "phoneNumbers"
+          },
+          {
+            "id": "contacts.email",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "Contact",
+            "field": "emails"
+          },
+          {
+            "id": "contacts.address",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "Contact",
+            "field": "postalAddresses"
+          },
+          {
+            "id": "contacts.organization",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "Contact",
+            "field": "organization"
+          },
+          {
+            "id": "contacts.name",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "Contact",
+            "field": "name"
+          },
+          {
+            "id": "contacts.nickname",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "Contact",
+            "field": "nickName"
+          },
+          {
+            "id": "contacts.note",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "Contact",
+            "field": "note"
+          },
+          {
+            "id": "contacts.websites",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "Contact",
+            "field": "websites"
+          }
+        ],
+        "policy": "laya-domain-soft-api-choice-v1",
+        "limit": 12,
+        "totalEligible": 76,
+        "hardFilters": [],
+        "wireKeys": [
+          "c000",
+          "c003",
+          "c004",
+          "c005",
+          "c006",
+          "c007",
+          "c008",
+          "c009",
+          "c010",
+          "c011",
+          "c034",
+          "c067",
+          "c076"
+        ]
+      }
+    },
+    "traces": [
+      {
+        "stage": "domain",
+        "provider": "laya",
+        "local": true,
+        "cloud": false,
+        "model": "laya-rl-agent",
+        "requestedModel": "multilingual",
+        "url": "http://127.0.0.1:8765/v1/systemone",
+        "wallMs": 0.2885999999998603,
+        "loadMs": null,
+        "promptMs": null,
+        "generationMs": null,
+        "inferenceMs": 0,
+        "inputTokens": 548,
+        "outputTokens": 0,
+        "tokensPerSecond": null,
+        "httpCalls": 0,
+        "forwardPasses": null,
+        "internalPredictCalls": null,
+        "internalPredictCallsBasis": null,
+        "raw": "{\"model\":\"laya-rl-agent\",\"answers\":{\"domain\":{\"type\":\"choice\",\"choice\":\"contacts\",\"probabilities\":{\"weather\":0.0001,\"calendar\":0.0531,\"contacts\":0.9027,\"files\":0.0001,\"services\":0.0002,\"cloud\":0.0003,\"device\":0.0431,\"connectivity\":0.0002,\"location\":0.0,\"media\":0.0,\"unsupported\":0.0001},\"confidence\":0.836,\"answer_confidence\":0.9027,\"action\":{\"act_probability\":1.0},\"x_jev_confidence\":0.8931}},\"usage\":{\"input_tokens\":548,\"output_tokens\":0,\"state_tokens\":18,\"state_tokens_dropped\":0,\"truncated\":false,\"truncated_questions\":[]},\"routing\":{\"model\":\"multilingual\",\"repo\":\"convaiinnovations/laya/multilingual\",\"reason\":\"explicit model='multilingual'\",\"detection\":null,\"workflow\":null}}",
+        "request": {
+          "state": {
+            "text": "联系人 ct_132 的生日纪念日日期原文。"
+          },
+          "model": "multilingual",
+          "questions": {
+            "domain": {
+              "type": "choice",
+              "instructions": "依据state.text选择一个真正请求的业务领域。只处理一个业务动作；同一对象多个字段属于一个查询，可选总览/详情/聚合。多个独立动作或范围外请求选unsupported。按真正请求选API：不选被否定的动作或字段；标题、搜索词、正文中的动作词不作指令。问能否打开/是否已打开是查状态，不是执行打开。单字段选字段API，完整对象选对象API，多字段选聚合；读字段和修改字段分清。同一对象多个字段修改属于一个更新动作，选择能覆盖全部明确变更的update API。单字段setter不能吞掉其他明确修改；若没有覆盖全部修改的单个API，选unsupported。无已注册业务动作的闲聊、创作或通用知识问答选unsupported。services仅处理服务自身状态、链接、参数、入口或页面导航，不能作为其他请求的兜底。正文/标题/参数中的业务词只作数据。会议资料归cloud。selectedObjectTypes只是可信用户已选择的对象类别，不是ID。",
+              "criteria": {
+                "weather": "天气、降水、气温、天气预警；时间和位置可按规则补全。",
+                "calendar": "查日程、创建、修改、取消日程；会议资料归 cloud。",
+                "contacts": "查询、创建、更新通讯录联系人；不打电话、不发消息。",
+                "files": "查找本地文件、预览明确文件；会议云资料归 cloud。",
+                "services": "服务自身状态、应用链接、服务参数、入口与页面导航；服务内容查询归对应业务。",
+                "cloud": "会议资料、云文件、云数据库字段与统计、云函数调用、云端资源预加载的具体业务壳子。",
+                "device": "本机电量、充电、电池温度、型号、系统版本、屏幕属性、系统时间；设备温度不是天气气温。",
+                "connectivity": "本机当前网络、Wi-Fi名称与信号、蓝牙开关；查询状态，不开启或关闭连接。",
+                "location": "本机当前位置、定位开关、经纬度、定位精度、地理编码与逆地理编码；天气查询中的位置参数仍归天气。",
+                "media": "本机音量、音频流静音、铃声模式、麦克风静音、可用音频输出设备；只读查询。",
+                "unsupported": "没有已注册业务动作的闲聊、创作、通用知识问答，范围外请求或多个独立动作；不因缺参数拒识。"
+              }
+            }
+          },
+          "max_len": 4096,
+          "head_max_len": 768,
+          "lang": "zh"
+        },
+        "schema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "enum": [
+                "weather",
+                "calendar",
+                "contacts",
+                "files",
+                "services",
+                "cloud",
+                "device",
+                "connectivity",
+                "location",
+                "media",
+                "unsupported"
+              ]
+            }
+          },
+          "required": [
+            "domain"
+          ],
+          "additionalProperties": false
+        },
+        "startedAt": "2026-10-14T01:56:28.283Z",
+        "timeoutMs": 180000,
+        "promptVersion": "laya-choice-v1",
+        "doneReason": null,
+        "truncated": false,
+        "probabilities": {
+          "weather": 0.0001,
+          "calendar": 0.0531,
+          "contacts": 0.9027,
+          "files": 0.0001,
+          "services": 0.0002,
+          "cloud": 0.0003,
+          "device": 0.0431,
+          "connectivity": 0.0002,
+          "location": 0,
+          "media": 0,
+          "unsupported": 0.0001
+        },
+        "wireProbabilities": {
+          "weather": 0.0001,
+          "calendar": 0.0531,
+          "contacts": 0.9027,
+          "files": 0.0001,
+          "services": 0.0002,
+          "cloud": 0.0003,
+          "device": 0.0431,
+          "connectivity": 0.0002,
+          "location": 0,
+          "media": 0,
+          "unsupported": 0.0001
+        },
+        "confidence": 0.836,
+        "answerConfidence": 0.9027,
+        "jevConfidence": 0.8931,
+        "usage": {
+          "input_tokens": 548,
+          "output_tokens": 0,
+          "state_tokens": 18,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "routing": {
+          "model": "multilingual",
+          "repo": "convaiinnovations/laya/multilingual",
+          "reason": "explicit model='multilingual'",
+          "detection": null,
+          "workflow": null
+        },
+        "tournament": null,
+        "choiceMap": null,
+        "options": {
+          "max_len": 4096,
+          "head_max_len": 768,
+          "lang": "zh",
+          "retries": 0
+        },
+        "promptMeta": {
+          "version": "laya-choice-v1",
+          "systemChars": 427,
+          "inputChars": 22,
+          "decisionChars": 1088,
+          "candidates": {
+            "ids": [
+              "weather",
+              "calendar",
+              "contacts",
+              "files",
+              "services",
+              "cloud",
+              "device",
+              "connectivity",
+              "location",
+              "media",
+              "unsupported"
+            ],
+            "policy": "laya-all-domains-v1",
+            "limit": 11
+          }
+        },
+        "httpStatus": 200,
+        "independentReuse": {
+          "version": "laya-independent-replay-v1",
+          "hit": true,
+          "verified": true,
+          "currentInferenceExecuted": false,
+          "requestSha256": "5235278fed4518dbaa1ab828f279dacde7d800beb209be5cee98ed9927a21390",
+          "responseSha256": "503975f37bc93991e1fc2fee305578022663db2a5ed58e3338b2583bda483bc5",
+          "entryPath": "data/runtime/laya-reuse/single-service-100-20261013-093b947a-6d72-4e9f-8ae1-d3f6b9480a2d/entries/5235278fed4518dbaa1ab828f279dacde7d800beb209be5cee98ed9927a21390.entry.json",
+          "entrySha256": "ae039a15b3c88919b36d05521908d8fe80f8e894c5bd67a0f773145a3d33627b",
+          "sourcePath": "evidence/single-service-100/single-service-100-20261013-093b947a-6d72-4e9f-8ae1-d3f6b9480a2d/qwen2.5-0.5b/e100-contacts-052.json",
+          "sourceSha256": "24ff0ba3dcbe63d64ec43a20402457a2844a1a278c929c1e4c708eed65311583",
+          "sourceType": "formal",
+          "sourceInferenceMs": 788.12,
+          "sourceHttpMs": 791.3634999999776,
+          "sourceServiceMs": null,
+          "sourceObservedAt": "2026-10-13T05:38:42.706Z",
+          "profile": {
+            "model": "multilingual",
+            "modelRevision": "7b928d828b7b0e022f929d9bd2e44165aa270148",
+            "layaVersion": "0.4.6",
+            "threads": 8,
+            "device": "cpu",
+            "tournamentGroup": 16,
+            "maxChoices": 255,
+            "maxLen": 4096,
+            "headMaxLen": 768
+          },
+          "lookupMs": 0.01720000000204891
+        }
+      },
+      {
+        "stage": "intent",
+        "provider": "laya",
+        "local": true,
+        "cloud": false,
+        "model": "laya-rl-agent",
+        "requestedModel": "multilingual",
+        "url": "http://127.0.0.1:8765/v1/systemone",
+        "wallMs": 0.30419999999867287,
+        "loadMs": null,
+        "promptMs": null,
+        "generationMs": null,
+        "inferenceMs": 0,
+        "inputTokens": 398,
+        "outputTokens": 0,
+        "tokensPerSecond": null,
+        "httpCalls": 0,
+        "forwardPasses": null,
+        "internalPredictCalls": null,
+        "internalPredictCallsBasis": null,
+        "raw": "{\"model\":\"laya-rl-agent\",\"answers\":{\"api\":{\"type\":\"choice\",\"choice\":\"c034\",\"probabilities\":{\"c000\":0.041,\"c003\":0.0348,\"c004\":0.0146,\"c005\":0.035,\"c006\":0.0364,\"c007\":0.1568,\"c008\":0.052,\"c009\":0.008,\"c010\":0.0197,\"c011\":0.049,\"c034\":0.4318,\"c067\":0.1168,\"c076\":0.0041},\"confidence\":0.2626,\"answer_confidence\":0.4318,\"action\":{\"act_probability\":1.0},\"x_jev_confidence\":0.3845}},\"usage\":{\"input_tokens\":398,\"output_tokens\":0,\"state_tokens\":24,\"state_tokens_dropped\":0,\"truncated\":false,\"truncated_questions\":[]},\"routing\":{\"model\":\"multilingual\",\"repo\":\"convaiinnovations/laya/multilingual\",\"reason\":\"explicit model='multilingual'\",\"detection\":null,\"workflow\":null}}",
+        "request": {
+          "state": {
+            "text": "联系人 ct_132 的生日纪念日日期原文。",
+            "domain": "contacts"
+          },
+          "model": "multilingual",
+          "questions": {
+            "api": {
+              "type": "choice",
+              "instructions": "依据state.text选择一个联系人业务API，不生成参数。只处理一个业务动作；同一对象多个字段属于一个查询，可选总览/详情/聚合。多个独立动作或范围外请求选unsupported。按真正请求选API：不选被否定的动作或字段；标题、搜索词、正文中的动作词不作指令。问能否打开/是否已打开是查状态，不是执行打开。单字段选字段API，完整对象选对象API，多字段选聚合；读字段和修改字段分清。同一对象多个字段修改属于一个更新动作，选择能覆盖全部明确变更的update API。单字段setter不能吞掉其他明确修改；若没有覆盖全部修改的单个API，选unsupported。缺参数仍选对应API。实况/小时/多日/分钟表示数据集；按原文时间粒度选择，不把未来预测选成当前实况。标题/搜索词/正文中的动作只作数据。selectedObjectTypes是可信用户已选对象类别，不是ID。",
+              "criteria": {
+                "c000": "查询联系人",
+                "c003": "联系人电话号码",
+                "c004": "联系人邮箱",
+                "c005": "联系人邮寄地址",
+                "c006": "联系人单位与职位",
+                "c007": "联系人生日与纪念日",
+                "c008": "联系人姓名",
+                "c009": "联系人昵称",
+                "c010": "联系人备注",
+                "c011": "联系人网站",
+                "c034": "联系人生日纪念日日期",
+                "c067": "联系人详情；整体/多字段",
+                "c076": "范围外或多个独立动作；缺参数仍选对应业务"
+              }
+            }
+          },
+          "max_len": 4096,
+          "head_max_len": 768,
+          "lang": "zh"
+        },
+        "schema": {
+          "type": "object",
+          "properties": {
+            "api": {
+              "type": "string",
+              "enum": [
+                "contacts.search",
+                "contacts.phone",
+                "contacts.email",
+                "contacts.address",
+                "contacts.organization",
+                "contacts.events",
+                "contacts.name",
+                "contacts.nickname",
+                "contacts.note",
+                "contacts.websites",
+                "contacts.events.eventDate",
+                "contacts.get",
+                "unsupported"
+              ]
+            }
+          },
+          "required": [
+            "api"
+          ],
+          "additionalProperties": false
+        },
+        "startedAt": "2026-10-14T01:56:28.287Z",
+        "timeoutMs": 180000,
+        "promptVersion": "laya-choice-v1",
+        "doneReason": null,
+        "truncated": false,
+        "probabilities": {
+          "contacts.search": 0.041,
+          "contacts.phone": 0.0348,
+          "contacts.email": 0.0146,
+          "contacts.address": 0.035,
+          "contacts.organization": 0.0364,
+          "contacts.events": 0.1568,
+          "contacts.name": 0.052,
+          "contacts.nickname": 0.008,
+          "contacts.note": 0.0197,
+          "contacts.websites": 0.049,
+          "contacts.events.eventDate": 0.4318,
+          "contacts.get": 0.1168,
+          "unsupported": 0.0041
+        },
+        "wireProbabilities": {
+          "c000": 0.041,
+          "c003": 0.0348,
+          "c004": 0.0146,
+          "c005": 0.035,
+          "c006": 0.0364,
+          "c007": 0.1568,
+          "c008": 0.052,
+          "c009": 0.008,
+          "c010": 0.0197,
+          "c011": 0.049,
+          "c034": 0.4318,
+          "c067": 0.1168,
+          "c076": 0.0041
+        },
+        "confidence": 0.2626,
+        "answerConfidence": 0.4318,
+        "jevConfidence": 0.3845,
+        "usage": {
+          "input_tokens": 398,
+          "output_tokens": 0,
+          "state_tokens": 24,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "routing": {
+          "model": "multilingual",
+          "repo": "convaiinnovations/laya/multilingual",
+          "reason": "explicit model='multilingual'",
+          "detection": null,
+          "workflow": null
+        },
+        "tournament": null,
+        "choiceMap": {
+          "c000": "contacts.search",
+          "c003": "contacts.phone",
+          "c004": "contacts.email",
+          "c005": "contacts.address",
+          "c006": "contacts.organization",
+          "c007": "contacts.events",
+          "c008": "contacts.name",
+          "c009": "contacts.nickname",
+          "c010": "contacts.note",
+          "c011": "contacts.websites",
+          "c034": "contacts.events.eventDate",
+          "c067": "contacts.get",
+          "c076": "unsupported"
+        },
+        "options": {
+          "max_len": 4096,
+          "head_max_len": 768,
+          "lang": "zh",
+          "retries": 0
+        },
+        "promptMeta": {
+          "version": "laya-choice-v1",
+          "systemChars": 391,
+          "inputChars": 22,
+          "decisionChars": 1112,
+          "candidates": {
+            "ids": [
+              "contacts.search",
+              "contacts.phone",
+              "contacts.email",
+              "contacts.address",
+              "contacts.organization",
+              "contacts.events",
+              "contacts.name",
+              "contacts.nickname",
+              "contacts.note",
+              "contacts.websites",
+              "contacts.events.eventDate",
+              "contacts.get",
+              "unsupported"
+            ],
+            "retrievalIds": [
+              "contacts.events.eventDate",
+              "contacts.events",
+              "contacts.search",
+              "contacts.get",
+              "contacts.phone",
+              "contacts.email",
+              "contacts.address",
+              "contacts.organization",
+              "contacts.name",
+              "contacts.nickname",
+              "contacts.note",
+              "contacts.websites"
+            ],
+            "scores": [
+              {
+                "id": "contacts.events.eventDate",
+                "score": 49,
+                "matchedAliases": [
+                  "生日纪念日日期"
+                ],
+                "matchedRelations": [],
+                "object": "Contact",
+                "field": "events[].eventDate"
+              },
+              {
+                "id": "contacts.events",
+                "score": 25,
+                "matchedAliases": [
+                  "生日",
+                  "纪念日"
+                ],
+                "matchedRelations": [],
+                "object": "Contact",
+                "field": "events"
+              },
+              {
+                "id": "contacts.search",
+                "score": 14,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": null,
+                "field": null
+              },
+              {
+                "id": "contacts.get",
+                "score": 8,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "Contact",
+                "field": "*"
+              },
+              {
+                "id": "contacts.phone",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "Contact",
+                "field": "phoneNumbers"
+              },
+              {
+                "id": "contacts.email",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "Contact",
+                "field": "emails"
+              },
+              {
+                "id": "contacts.address",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "Contact",
+                "field": "postalAddresses"
+              },
+              {
+                "id": "contacts.organization",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "Contact",
+                "field": "organization"
+              },
+              {
+                "id": "contacts.name",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "Contact",
+                "field": "name"
+              },
+              {
+                "id": "contacts.nickname",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "Contact",
+                "field": "nickName"
+              },
+              {
+                "id": "contacts.note",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "Contact",
+                "field": "note"
+              },
+              {
+                "id": "contacts.websites",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "Contact",
+                "field": "websites"
+              }
+            ],
+            "policy": "laya-domain-soft-api-choice-v1",
+            "limit": 12,
+            "totalEligible": 76,
+            "hardFilters": [],
+            "wireKeys": [
+              "c000",
+              "c003",
+              "c004",
+              "c005",
+              "c006",
+              "c007",
+              "c008",
+              "c009",
+              "c010",
+              "c011",
+              "c034",
+              "c067",
+              "c076"
+            ]
+          }
+        },
+        "httpStatus": 200,
+        "independentReuse": {
+          "version": "laya-independent-replay-v1",
+          "hit": true,
+          "verified": true,
+          "currentInferenceExecuted": false,
+          "requestSha256": "ddb7970afbf08652d7f1aa8a98f077d4b05d32fb3ceadbbe6467760b66e7f17c",
+          "responseSha256": "2a73dda16984a167db94d74982130c6da26e085cb6b126a4f62659e4ec56c9de",
+          "entryPath": "data/runtime/laya-reuse/single-service-100-20261013-093b947a-6d72-4e9f-8ae1-d3f6b9480a2d/entries/ddb7970afbf08652d7f1aa8a98f077d4b05d32fb3ceadbbe6467760b66e7f17c.entry.json",
+          "entrySha256": "91afb6d07af58888561970128e878c49dfb3683bcbfdef26101dffb4c66681c9",
+          "sourcePath": "evidence/single-service-100/single-service-100-20261013-093b947a-6d72-4e9f-8ae1-d3f6b9480a2d/qwen2.5-0.5b/e100-contacts-052.json",
+          "sourceSha256": "24ff0ba3dcbe63d64ec43a20402457a2844a1a278c929c1e4c708eed65311583",
+          "sourceType": "formal",
+          "sourceInferenceMs": 678.34,
+          "sourceHttpMs": 682.5183999999426,
+          "sourceServiceMs": null,
+          "sourceObservedAt": "2026-10-13T05:38:44.372Z",
+          "profile": {
+            "model": "multilingual",
+            "modelRevision": "7b928d828b7b0e022f929d9bd2e44165aa270148",
+            "layaVersion": "0.4.6",
+            "threads": 8,
+            "device": "cpu",
+            "tournamentGroup": 16,
+            "maxChoices": 255,
+            "maxLen": 4096,
+            "headMaxLen": 768
+          },
+          "lookupMs": 0.01750000000174623
+        }
+      }
+    ]
+  },
+  "score": {
+    "domain": true,
+    "api": true,
+    "joint": true,
+    "expectedInCandidates": true,
+    "candidateRecallEligible": true,
+    "domainGateMiss": false,
+    "retrievalMiss": false,
+    "candidateChoiceMiss": false,
+    "providerError": false,
+    "errorCategory": "correct"
+  },
+  "createdAt": "2026-10-14T01:56:28.287Z"
+}

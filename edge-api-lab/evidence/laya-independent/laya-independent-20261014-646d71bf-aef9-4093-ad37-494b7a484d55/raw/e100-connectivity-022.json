@@ -1,0 +1,863 @@
+{
+  "version": "laya-independent-record-v1",
+  "manifestId": "laya-independent-20261014-646d71bf-aef9-4093-ad37-494b7a484d55",
+  "caseId": "e100-connectivity-022",
+  "testDomain": "connectivity",
+  "scenario": "negative_distractor",
+  "text": "不要网络ID 23的能力，查网络ID 52的网络能力信息",
+  "context": {
+    "geocodes": {
+      "上海": {
+        "label": "上海市（地理编码夹具）",
+        "latitude": 31.2304,
+        "longitude": 121.4737,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "北京": {
+        "label": "北京市（地理编码夹具）",
+        "latitude": 39.9042,
+        "longitude": 116.4074,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "杭州": {
+        "label": "杭州市（地理编码夹具）",
+        "latitude": 30.2741,
+        "longitude": 120.1551,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "深圳": {
+        "label": "深圳市（地理编码夹具）",
+        "latitude": 22.5431,
+        "longitude": 114.0579,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "广州": {
+        "label": "广州市（地理编码夹具）",
+        "latitude": 23.1291,
+        "longitude": 113.2644,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "成都": {
+        "label": "成都市（地理编码夹具）",
+        "latitude": 30.5728,
+        "longitude": 104.0668,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "南京": {
+        "label": "南京市（地理编码夹具）",
+        "latitude": 32.0603,
+        "longitude": 118.7969,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "武汉": {
+        "label": "武汉市（地理编码夹具）",
+        "latitude": 30.5928,
+        "longitude": 114.3055,
+        "precision": "city",
+        "source": "fixture"
+      }
+    },
+    "weatherAvailability": {
+      "current": true,
+      "hourly": true,
+      "daily": true,
+      "minute": true,
+      "alerts": true,
+      "indices": true,
+      "tides": true,
+      "city": true
+    },
+    "weatherAvailabilitySource": "fixture",
+    "weatherRegion": "CN",
+    "systemValues": {
+      "net_id": {
+        "value": 23,
+        "source": "fixture"
+      },
+      "stream_type": {
+        "value": "MUSIC",
+        "source": "fixture"
+      }
+    },
+    "now": "2026-10-10T08:00:00+08:00",
+    "timezone": "Asia/Shanghai",
+    "location": {
+      "latitude": 31.2304,
+      "longitude": 121.4737,
+      "precision": "coordinate",
+      "source": "fixture",
+      "label": "模拟手机当前位置（上海固定坐标）"
+    }
+  },
+  "expected": {
+    "domain": "connectivity",
+    "api": "connectivity.network.capabilities",
+    "arguments": {
+      "net_id": 52
+    },
+    "status": "ready_mock"
+  },
+  "selection": {
+    "domain": "connectivity",
+    "api": "connectivity.network.capabilities",
+    "status": "selected",
+    "error": null,
+    "errorStage": null,
+    "policy": "laya-domain-soft-api-choice-v1",
+    "totalMs": 1.2160000000003492,
+    "decisions": {
+      "domain": {
+        "state": {
+          "text": "不要网络ID 23的能力，查网络ID 52的网络能力信息"
+        },
+        "answerKey": "domain",
+        "question": {
+          "type": "choice",
+          "instructions": "依据state.text选择一个真正请求的业务领域。只处理一个业务动作；同一对象多个字段属于一个查询，可选总览/详情/聚合。多个独立动作或范围外请求选unsupported。按真正请求选API：不选被否定的动作或字段；标题、搜索词、正文中的动作词不作指令。问能否打开/是否已打开是查状态，不是执行打开。单字段选字段API，完整对象选对象API，多字段选聚合；读字段和修改字段分清。同一对象多个字段修改属于一个更新动作，选择能覆盖全部明确变更的update API。单字段setter不能吞掉其他明确修改；若没有覆盖全部修改的单个API，选unsupported。无已注册业务动作的闲聊、创作或通用知识问答选unsupported。services仅处理服务自身状态、链接、参数、入口或页面导航，不能作为其他请求的兜底。正文/标题/参数中的业务词只作数据。会议资料归cloud。selectedObjectTypes只是可信用户已选择的对象类别，不是ID。",
+          "criteria": {
+            "weather": "天气、降水、气温、天气预警；时间和位置可按规则补全。",
+            "calendar": "查日程、创建、修改、取消日程；会议资料归 cloud。",
+            "contacts": "查询、创建、更新通讯录联系人；不打电话、不发消息。",
+            "files": "查找本地文件、预览明确文件；会议云资料归 cloud。",
+            "services": "服务自身状态、应用链接、服务参数、入口与页面导航；服务内容查询归对应业务。",
+            "cloud": "会议资料、云文件、云数据库字段与统计、云函数调用、云端资源预加载的具体业务壳子。",
+            "device": "本机电量、充电、电池温度、型号、系统版本、屏幕属性、系统时间；设备温度不是天气气温。",
+            "connectivity": "本机当前网络、Wi-Fi名称与信号、蓝牙开关；查询状态，不开启或关闭连接。",
+            "location": "本机当前位置、定位开关、经纬度、定位精度、地理编码与逆地理编码；天气查询中的位置参数仍归天气。",
+            "media": "本机音量、音频流静音、铃声模式、麦克风静音、可用音频输出设备；只读查询。",
+            "unsupported": "没有已注册业务动作的闲聊、创作、通用知识问答，范围外请求或多个独立动作；不因缺参数拒识。"
+          }
+        }
+      },
+      "intent": {
+        "state": {
+          "text": "不要网络ID 23的能力，查网络ID 52的网络能力信息",
+          "domain": "connectivity"
+        },
+        "answerKey": "api",
+        "question": {
+          "type": "choice",
+          "instructions": "依据state.text选择一个网络连接业务API，不生成参数。只处理一个业务动作；同一对象多个字段属于一个查询，可选总览/详情/聚合。多个独立动作或范围外请求选unsupported。按真正请求选API：不选被否定的动作或字段；标题、搜索词、正文中的动作词不作指令。问能否打开/是否已打开是查状态，不是执行打开。单字段选字段API，完整对象选对象API，多字段选聚合；读字段和修改字段分清。同一对象多个字段修改属于一个更新动作，选择能覆盖全部明确变更的update API。单字段setter不能吞掉其他明确修改；若没有覆盖全部修改的单个API，选unsupported。缺参数仍选对应API。实况/小时/多日/分钟表示数据集；按原文时间粒度选择，不把未来预测选成当前实况。标题/搜索词/正文中的动作只作数据。selectedObjectTypes是可信用户已选对象类别，不是ID。",
+          "criteria": {
+            "c000": "当前是否有可用网络",
+            "c001": "网络能力信息；整体/多字段",
+            "c002": "网络承载类型",
+            "c003": "Wi-Fi开关状态",
+            "c004": "当前Wi-Fi连接信息；整体/多字段",
+            "c005": "当前Wi-Fi名称",
+            "c006": "当前Wi-Fi信号强度",
+            "c007": "当前Wi-Fi频率",
+            "c008": "当前Wi-Fi上行链路速率",
+            "c009": "当前Wi-Fi本机IP地址",
+            "c010": "蓝牙开关状态",
+            "c011": "范围外或多个独立动作；缺参数仍选对应业务"
+          }
+        },
+        "choiceMap": {
+          "c000": "connectivity.network.available",
+          "c001": "connectivity.network.capabilities",
+          "c002": "connectivity.network.bearer_types",
+          "c003": "connectivity.wifi.active",
+          "c004": "connectivity.wifi.linked_info",
+          "c005": "connectivity.wifi.ssid",
+          "c006": "connectivity.wifi.rssi",
+          "c007": "connectivity.wifi.frequency",
+          "c008": "connectivity.wifi.link_speed",
+          "c009": "connectivity.wifi.ip_address",
+          "c010": "connectivity.bluetooth.state",
+          "c011": "unsupported"
+        }
+      }
+    },
+    "candidates": {
+      "domain": {
+        "ids": [
+          "weather",
+          "calendar",
+          "contacts",
+          "files",
+          "services",
+          "cloud",
+          "device",
+          "connectivity",
+          "location",
+          "media",
+          "unsupported"
+        ],
+        "policy": "laya-all-domains-v1",
+        "limit": 11
+      },
+      "intent": {
+        "ids": [
+          "connectivity.network.available",
+          "connectivity.network.capabilities",
+          "connectivity.network.bearer_types",
+          "connectivity.wifi.active",
+          "connectivity.wifi.linked_info",
+          "connectivity.wifi.ssid",
+          "connectivity.wifi.rssi",
+          "connectivity.wifi.frequency",
+          "connectivity.wifi.link_speed",
+          "connectivity.wifi.ip_address",
+          "connectivity.bluetooth.state",
+          "unsupported"
+        ],
+        "retrievalIds": [
+          "connectivity.network.capabilities",
+          "connectivity.wifi.linked_info",
+          "connectivity.network.available",
+          "connectivity.network.bearer_types",
+          "connectivity.wifi.active",
+          "connectivity.wifi.ssid",
+          "connectivity.wifi.rssi",
+          "connectivity.wifi.frequency",
+          "connectivity.wifi.link_speed",
+          "connectivity.wifi.ip_address",
+          "connectivity.bluetooth.state"
+        ],
+        "scores": [
+          {
+            "id": "connectivity.network.capabilities",
+            "score": 32,
+            "matchedAliases": [
+              "网络能力信息"
+            ],
+            "matchedRelations": [],
+            "object": "NetCapabilities",
+            "field": "*"
+          },
+          {
+            "id": "connectivity.wifi.linked_info",
+            "score": 8,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "WifiLinkedInfo",
+            "field": "*"
+          },
+          {
+            "id": "connectivity.network.available",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "connection",
+            "field": "hasDefaultNet"
+          },
+          {
+            "id": "connectivity.network.bearer_types",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "NetCapabilities",
+            "field": "bearerTypes"
+          },
+          {
+            "id": "connectivity.wifi.active",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "wifiManager",
+            "field": "isWifiActive"
+          },
+          {
+            "id": "connectivity.wifi.ssid",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "WifiLinkedInfo",
+            "field": "ssid"
+          },
+          {
+            "id": "connectivity.wifi.rssi",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "WifiLinkedInfo",
+            "field": "rssi"
+          },
+          {
+            "id": "connectivity.wifi.frequency",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "WifiLinkedInfo",
+            "field": "frequency"
+          },
+          {
+            "id": "connectivity.wifi.link_speed",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "WifiLinkedInfo",
+            "field": "linkSpeed"
+          },
+          {
+            "id": "connectivity.wifi.ip_address",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "WifiLinkedInfo",
+            "field": "ipAddress"
+          },
+          {
+            "id": "connectivity.bluetooth.state",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "access",
+            "field": "getState"
+          }
+        ],
+        "policy": "laya-domain-soft-api-choice-v1",
+        "limit": 12,
+        "totalEligible": 11,
+        "hardFilters": [],
+        "wireKeys": [
+          "c000",
+          "c001",
+          "c002",
+          "c003",
+          "c004",
+          "c005",
+          "c006",
+          "c007",
+          "c008",
+          "c009",
+          "c010",
+          "c011"
+        ]
+      }
+    },
+    "traces": [
+      {
+        "stage": "domain",
+        "provider": "laya",
+        "local": true,
+        "cloud": false,
+        "model": "laya-rl-agent",
+        "requestedModel": "multilingual",
+        "url": "http://127.0.0.1:8765/v1/systemone",
+        "wallMs": 0.38440000000264263,
+        "loadMs": null,
+        "promptMs": null,
+        "generationMs": null,
+        "inferenceMs": 0,
+        "inputTokens": 553,
+        "outputTokens": 0,
+        "tokensPerSecond": null,
+        "httpCalls": 0,
+        "forwardPasses": null,
+        "internalPredictCalls": null,
+        "internalPredictCallsBasis": null,
+        "raw": "{\"model\":\"laya-rl-agent\",\"answers\":{\"domain\":{\"type\":\"choice\",\"choice\":\"connectivity\",\"probabilities\":{\"weather\":0.0,\"calendar\":0.0,\"contacts\":0.0,\"files\":0.0,\"services\":0.0004,\"cloud\":0.0003,\"device\":0.0001,\"connectivity\":0.999,\"location\":0.0,\"media\":0.0,\"unsupported\":0.0},\"confidence\":0.9961,\"answer_confidence\":0.999,\"action\":{\"act_probability\":1.0},\"x_jev_confidence\":0.9991}},\"usage\":{\"input_tokens\":553,\"output_tokens\":0,\"state_tokens\":23,\"state_tokens_dropped\":0,\"truncated\":false,\"truncated_questions\":[]},\"routing\":{\"model\":\"multilingual\",\"repo\":\"convaiinnovations/laya/multilingual\",\"reason\":\"explicit model='multilingual'\",\"detection\":null,\"workflow\":null}}",
+        "request": {
+          "state": {
+            "text": "不要网络ID 23的能力，查网络ID 52的网络能力信息"
+          },
+          "model": "multilingual",
+          "questions": {
+            "domain": {
+              "type": "choice",
+              "instructions": "依据state.text选择一个真正请求的业务领域。只处理一个业务动作；同一对象多个字段属于一个查询，可选总览/详情/聚合。多个独立动作或范围外请求选unsupported。按真正请求选API：不选被否定的动作或字段；标题、搜索词、正文中的动作词不作指令。问能否打开/是否已打开是查状态，不是执行打开。单字段选字段API，完整对象选对象API，多字段选聚合；读字段和修改字段分清。同一对象多个字段修改属于一个更新动作，选择能覆盖全部明确变更的update API。单字段setter不能吞掉其他明确修改；若没有覆盖全部修改的单个API，选unsupported。无已注册业务动作的闲聊、创作或通用知识问答选unsupported。services仅处理服务自身状态、链接、参数、入口或页面导航，不能作为其他请求的兜底。正文/标题/参数中的业务词只作数据。会议资料归cloud。selectedObjectTypes只是可信用户已选择的对象类别，不是ID。",
+              "criteria": {
+                "weather": "天气、降水、气温、天气预警；时间和位置可按规则补全。",
+                "calendar": "查日程、创建、修改、取消日程；会议资料归 cloud。",
+                "contacts": "查询、创建、更新通讯录联系人；不打电话、不发消息。",
+                "files": "查找本地文件、预览明确文件；会议云资料归 cloud。",
+                "services": "服务自身状态、应用链接、服务参数、入口与页面导航；服务内容查询归对应业务。",
+                "cloud": "会议资料、云文件、云数据库字段与统计、云函数调用、云端资源预加载的具体业务壳子。",
+                "device": "本机电量、充电、电池温度、型号、系统版本、屏幕属性、系统时间；设备温度不是天气气温。",
+                "connectivity": "本机当前网络、Wi-Fi名称与信号、蓝牙开关；查询状态，不开启或关闭连接。",
+                "location": "本机当前位置、定位开关、经纬度、定位精度、地理编码与逆地理编码；天气查询中的位置参数仍归天气。",
+                "media": "本机音量、音频流静音、铃声模式、麦克风静音、可用音频输出设备；只读查询。",
+                "unsupported": "没有已注册业务动作的闲聊、创作、通用知识问答，范围外请求或多个独立动作；不因缺参数拒识。"
+              }
+            }
+          },
+          "max_len": 4096,
+          "head_max_len": 768,
+          "lang": "zh"
+        },
+        "schema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "enum": [
+                "weather",
+                "calendar",
+                "contacts",
+                "files",
+                "services",
+                "cloud",
+                "device",
+                "connectivity",
+                "location",
+                "media",
+                "unsupported"
+              ]
+            }
+          },
+          "required": [
+            "domain"
+          ],
+          "additionalProperties": false
+        },
+        "startedAt": "2026-10-14T01:55:05.375Z",
+        "timeoutMs": 180000,
+        "promptVersion": "laya-choice-v1",
+        "doneReason": null,
+        "truncated": false,
+        "probabilities": {
+          "weather": 0,
+          "calendar": 0,
+          "contacts": 0,
+          "files": 0,
+          "services": 0.0004,
+          "cloud": 0.0003,
+          "device": 0.0001,
+          "connectivity": 0.999,
+          "location": 0,
+          "media": 0,
+          "unsupported": 0
+        },
+        "wireProbabilities": {
+          "weather": 0,
+          "calendar": 0,
+          "contacts": 0,
+          "files": 0,
+          "services": 0.0004,
+          "cloud": 0.0003,
+          "device": 0.0001,
+          "connectivity": 0.999,
+          "location": 0,
+          "media": 0,
+          "unsupported": 0
+        },
+        "confidence": 0.9961,
+        "answerConfidence": 0.999,
+        "jevConfidence": 0.9991,
+        "usage": {
+          "input_tokens": 553,
+          "output_tokens": 0,
+          "state_tokens": 23,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "routing": {
+          "model": "multilingual",
+          "repo": "convaiinnovations/laya/multilingual",
+          "reason": "explicit model='multilingual'",
+          "detection": null,
+          "workflow": null
+        },
+        "tournament": null,
+        "choiceMap": null,
+        "options": {
+          "max_len": 4096,
+          "head_max_len": 768,
+          "lang": "zh",
+          "retries": 0
+        },
+        "promptMeta": {
+          "version": "laya-choice-v1",
+          "systemChars": 427,
+          "inputChars": 28,
+          "decisionChars": 1094,
+          "candidates": {
+            "ids": [
+              "weather",
+              "calendar",
+              "contacts",
+              "files",
+              "services",
+              "cloud",
+              "device",
+              "connectivity",
+              "location",
+              "media",
+              "unsupported"
+            ],
+            "policy": "laya-all-domains-v1",
+            "limit": 11
+          }
+        },
+        "httpStatus": 200,
+        "independentReuse": {
+          "version": "laya-independent-replay-v1",
+          "hit": true,
+          "verified": true,
+          "currentInferenceExecuted": false,
+          "requestSha256": "a4d4a0d10f0e51758d2ee1151c6dc95b593a0f33d93fe7c9a34433f235be87a9",
+          "responseSha256": "70a6f1223a4f7fce2e9912522fb46a3856b55bf3f0f1a837f21f19f3ca3e0961",
+          "entryPath": "data/runtime/laya-reuse/single-service-100-20261013-093b947a-6d72-4e9f-8ae1-d3f6b9480a2d/entries/a4d4a0d10f0e51758d2ee1151c6dc95b593a0f33d93fe7c9a34433f235be87a9.entry.json",
+          "entrySha256": "c0dc7304c0d7018b006c131ea53bb54ef3da165f4fff53cc5feee3753b9e72c8",
+          "sourcePath": "evidence/single-service-100/single-service-100-20261013-093b947a-6d72-4e9f-8ae1-d3f6b9480a2d/qwen2.5-0.5b/e100-connectivity-022.json",
+          "sourceSha256": "34b04d5db547cd3b1c050419499afa565d8cbda62dc8dd8ebc2fb4feeba50c06",
+          "sourceType": "formal",
+          "sourceInferenceMs": 1132.47,
+          "sourceHttpMs": 1135.7361000000965,
+          "sourceServiceMs": null,
+          "sourceObservedAt": "2026-10-13T05:00:31.821Z",
+          "profile": {
+            "model": "multilingual",
+            "modelRevision": "7b928d828b7b0e022f929d9bd2e44165aa270148",
+            "layaVersion": "0.4.6",
+            "threads": 8,
+            "device": "cpu",
+            "tournamentGroup": 16,
+            "maxChoices": 255,
+            "maxLen": 4096,
+            "headMaxLen": 768
+          },
+          "lookupMs": 0.021999999997206032
+        }
+      },
+      {
+        "stage": "intent",
+        "provider": "laya",
+        "local": true,
+        "cloud": false,
+        "model": "laya-rl-agent",
+        "requestedModel": "multilingual",
+        "url": "http://127.0.0.1:8765/v1/systemone",
+        "wallMs": 0.2776000000012573,
+        "loadMs": null,
+        "promptMs": null,
+        "generationMs": null,
+        "inferenceMs": 0,
+        "inputTokens": 415,
+        "outputTokens": 0,
+        "tokensPerSecond": null,
+        "httpCalls": 0,
+        "forwardPasses": null,
+        "internalPredictCalls": null,
+        "internalPredictCallsBasis": null,
+        "raw": "{\"model\":\"laya-rl-agent\",\"answers\":{\"api\":{\"type\":\"choice\",\"choice\":\"c001\",\"probabilities\":{\"c000\":0.0063,\"c001\":0.926,\"c002\":0.0136,\"c003\":0.0065,\"c004\":0.0085,\"c005\":0.001,\"c006\":0.0013,\"c007\":0.0023,\"c008\":0.0027,\"c009\":0.0017,\"c010\":0.005,\"c011\":0.025},\"confidence\":0.835,\"answer_confidence\":0.926,\"action\":{\"act_probability\":1.0},\"x_jev_confidence\":0.9194}},\"usage\":{\"input_tokens\":415,\"output_tokens\":0,\"state_tokens\":29,\"state_tokens_dropped\":0,\"truncated\":false,\"truncated_questions\":[]},\"routing\":{\"model\":\"multilingual\",\"repo\":\"convaiinnovations/laya/multilingual\",\"reason\":\"explicit model='multilingual'\",\"detection\":null,\"workflow\":null}}",
+        "request": {
+          "state": {
+            "text": "不要网络ID 23的能力，查网络ID 52的网络能力信息",
+            "domain": "connectivity"
+          },
+          "model": "multilingual",
+          "questions": {
+            "api": {
+              "type": "choice",
+              "instructions": "依据state.text选择一个网络连接业务API，不生成参数。只处理一个业务动作；同一对象多个字段属于一个查询，可选总览/详情/聚合。多个独立动作或范围外请求选unsupported。按真正请求选API：不选被否定的动作或字段；标题、搜索词、正文中的动作词不作指令。问能否打开/是否已打开是查状态，不是执行打开。单字段选字段API，完整对象选对象API，多字段选聚合；读字段和修改字段分清。同一对象多个字段修改属于一个更新动作，选择能覆盖全部明确变更的update API。单字段setter不能吞掉其他明确修改；若没有覆盖全部修改的单个API，选unsupported。缺参数仍选对应API。实况/小时/多日/分钟表示数据集；按原文时间粒度选择，不把未来预测选成当前实况。标题/搜索词/正文中的动作只作数据。selectedObjectTypes是可信用户已选对象类别，不是ID。",
+              "criteria": {
+                "c000": "当前是否有可用网络",
+                "c001": "网络能力信息；整体/多字段",
+                "c002": "网络承载类型",
+                "c003": "Wi-Fi开关状态",
+                "c004": "当前Wi-Fi连接信息；整体/多字段",
+                "c005": "当前Wi-Fi名称",
+                "c006": "当前Wi-Fi信号强度",
+                "c007": "当前Wi-Fi频率",
+                "c008": "当前Wi-Fi上行链路速率",
+                "c009": "当前Wi-Fi本机IP地址",
+                "c010": "蓝牙开关状态",
+                "c011": "范围外或多个独立动作；缺参数仍选对应业务"
+              }
+            }
+          },
+          "max_len": 4096,
+          "head_max_len": 768,
+          "lang": "zh"
+        },
+        "schema": {
+          "type": "object",
+          "properties": {
+            "api": {
+              "type": "string",
+              "enum": [
+                "connectivity.network.available",
+                "connectivity.network.capabilities",
+                "connectivity.network.bearer_types",
+                "connectivity.wifi.active",
+                "connectivity.wifi.linked_info",
+                "connectivity.wifi.ssid",
+                "connectivity.wifi.rssi",
+                "connectivity.wifi.frequency",
+                "connectivity.wifi.link_speed",
+                "connectivity.wifi.ip_address",
+                "connectivity.bluetooth.state",
+                "unsupported"
+              ]
+            }
+          },
+          "required": [
+            "api"
+          ],
+          "additionalProperties": false
+        },
+        "startedAt": "2026-10-14T01:55:05.376Z",
+        "timeoutMs": 180000,
+        "promptVersion": "laya-choice-v1",
+        "doneReason": null,
+        "truncated": false,
+        "probabilities": {
+          "connectivity.network.available": 0.0063,
+          "connectivity.network.capabilities": 0.926,
+          "connectivity.network.bearer_types": 0.0136,
+          "connectivity.wifi.active": 0.0065,
+          "connectivity.wifi.linked_info": 0.0085,
+          "connectivity.wifi.ssid": 0.001,
+          "connectivity.wifi.rssi": 0.0013,
+          "connectivity.wifi.frequency": 0.0023,
+          "connectivity.wifi.link_speed": 0.0027,
+          "connectivity.wifi.ip_address": 0.0017,
+          "connectivity.bluetooth.state": 0.005,
+          "unsupported": 0.025
+        },
+        "wireProbabilities": {
+          "c000": 0.0063,
+          "c001": 0.926,
+          "c002": 0.0136,
+          "c003": 0.0065,
+          "c004": 0.0085,
+          "c005": 0.001,
+          "c006": 0.0013,
+          "c007": 0.0023,
+          "c008": 0.0027,
+          "c009": 0.0017,
+          "c010": 0.005,
+          "c011": 0.025
+        },
+        "confidence": 0.835,
+        "answerConfidence": 0.926,
+        "jevConfidence": 0.9194,
+        "usage": {
+          "input_tokens": 415,
+          "output_tokens": 0,
+          "state_tokens": 29,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "routing": {
+          "model": "multilingual",
+          "repo": "convaiinnovations/laya/multilingual",
+          "reason": "explicit model='multilingual'",
+          "detection": null,
+          "workflow": null
+        },
+        "tournament": null,
+        "choiceMap": {
+          "c000": "connectivity.network.available",
+          "c001": "connectivity.network.capabilities",
+          "c002": "connectivity.network.bearer_types",
+          "c003": "connectivity.wifi.active",
+          "c004": "connectivity.wifi.linked_info",
+          "c005": "connectivity.wifi.ssid",
+          "c006": "connectivity.wifi.rssi",
+          "c007": "connectivity.wifi.frequency",
+          "c008": "connectivity.wifi.link_speed",
+          "c009": "connectivity.wifi.ip_address",
+          "c010": "connectivity.bluetooth.state",
+          "c011": "unsupported"
+        },
+        "options": {
+          "max_len": 4096,
+          "head_max_len": 768,
+          "lang": "zh",
+          "retries": 0
+        },
+        "promptMeta": {
+          "version": "laya-choice-v1",
+          "systemChars": 392,
+          "inputChars": 28,
+          "decisionChars": 1248,
+          "candidates": {
+            "ids": [
+              "connectivity.network.available",
+              "connectivity.network.capabilities",
+              "connectivity.network.bearer_types",
+              "connectivity.wifi.active",
+              "connectivity.wifi.linked_info",
+              "connectivity.wifi.ssid",
+              "connectivity.wifi.rssi",
+              "connectivity.wifi.frequency",
+              "connectivity.wifi.link_speed",
+              "connectivity.wifi.ip_address",
+              "connectivity.bluetooth.state",
+              "unsupported"
+            ],
+            "retrievalIds": [
+              "connectivity.network.capabilities",
+              "connectivity.wifi.linked_info",
+              "connectivity.network.available",
+              "connectivity.network.bearer_types",
+              "connectivity.wifi.active",
+              "connectivity.wifi.ssid",
+              "connectivity.wifi.rssi",
+              "connectivity.wifi.frequency",
+              "connectivity.wifi.link_speed",
+              "connectivity.wifi.ip_address",
+              "connectivity.bluetooth.state"
+            ],
+            "scores": [
+              {
+                "id": "connectivity.network.capabilities",
+                "score": 32,
+                "matchedAliases": [
+                  "网络能力信息"
+                ],
+                "matchedRelations": [],
+                "object": "NetCapabilities",
+                "field": "*"
+              },
+              {
+                "id": "connectivity.wifi.linked_info",
+                "score": 8,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "WifiLinkedInfo",
+                "field": "*"
+              },
+              {
+                "id": "connectivity.network.available",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "connection",
+                "field": "hasDefaultNet"
+              },
+              {
+                "id": "connectivity.network.bearer_types",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "NetCapabilities",
+                "field": "bearerTypes"
+              },
+              {
+                "id": "connectivity.wifi.active",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "wifiManager",
+                "field": "isWifiActive"
+              },
+              {
+                "id": "connectivity.wifi.ssid",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "WifiLinkedInfo",
+                "field": "ssid"
+              },
+              {
+                "id": "connectivity.wifi.rssi",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "WifiLinkedInfo",
+                "field": "rssi"
+              },
+              {
+                "id": "connectivity.wifi.frequency",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "WifiLinkedInfo",
+                "field": "frequency"
+              },
+              {
+                "id": "connectivity.wifi.link_speed",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "WifiLinkedInfo",
+                "field": "linkSpeed"
+              },
+              {
+                "id": "connectivity.wifi.ip_address",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "WifiLinkedInfo",
+                "field": "ipAddress"
+              },
+              {
+                "id": "connectivity.bluetooth.state",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "access",
+                "field": "getState"
+              }
+            ],
+            "policy": "laya-domain-soft-api-choice-v1",
+            "limit": 12,
+            "totalEligible": 11,
+            "hardFilters": [],
+            "wireKeys": [
+              "c000",
+              "c001",
+              "c002",
+              "c003",
+              "c004",
+              "c005",
+              "c006",
+              "c007",
+              "c008",
+              "c009",
+              "c010",
+              "c011"
+            ]
+          }
+        },
+        "httpStatus": 200,
+        "independentReuse": {
+          "version": "laya-independent-replay-v1",
+          "hit": true,
+          "verified": true,
+          "currentInferenceExecuted": false,
+          "requestSha256": "f4b6eb2d009726f6a7a52ca734bb301144a6a3c816a08cd070a75011d3f8ad90",
+          "responseSha256": "25c9d7469f597accae5367e0d853271025288530aeceb0308644d4e9573f3a57",
+          "entryPath": "data/runtime/laya-reuse/single-service-100-20261013-093b947a-6d72-4e9f-8ae1-d3f6b9480a2d/entries/f4b6eb2d009726f6a7a52ca734bb301144a6a3c816a08cd070a75011d3f8ad90.entry.json",
+          "entrySha256": "12a32af94b1cc30e811ca26c07aafbc6bccd681a46ba32bb4b55a09a22c7fca3",
+          "sourcePath": "evidence/single-service-100/single-service-100-20261013-093b947a-6d72-4e9f-8ae1-d3f6b9480a2d/qwen2.5-1.5b/e100-connectivity-022.json",
+          "sourceSha256": "209ca4f6433a8808931d69075bee4b7aeff564629deab139bb6971ca179e23da",
+          "sourceType": "formal",
+          "sourceInferenceMs": 958.66,
+          "sourceHttpMs": 963.359999999404,
+          "sourceServiceMs": null,
+          "sourceObservedAt": "2026-10-13T06:17:26.392Z",
+          "profile": {
+            "model": "multilingual",
+            "modelRevision": "7b928d828b7b0e022f929d9bd2e44165aa270148",
+            "layaVersion": "0.4.6",
+            "threads": 8,
+            "device": "cpu",
+            "tournamentGroup": 16,
+            "maxChoices": 255,
+            "maxLen": 4096,
+            "headMaxLen": 768
+          },
+          "lookupMs": 0.01579999999376014
+        }
+      }
+    ]
+  },
+  "score": {
+    "domain": true,
+    "api": true,
+    "joint": true,
+    "expectedInCandidates": true,
+    "candidateRecallEligible": true,
+    "domainGateMiss": false,
+    "retrievalMiss": false,
+    "candidateChoiceMiss": false,
+    "providerError": false,
+    "errorCategory": "correct"
+  },
+  "createdAt": "2026-10-14T01:55:05.376Z"
+}

@@ -1,0 +1,882 @@
+{
+  "version": "laya-independent-record-v1",
+  "manifestId": "laya-independent-20261014-646d71bf-aef9-4093-ad37-494b7a484d55",
+  "caseId": "e100-location-025",
+  "testDomain": "location",
+  "scenario": "natural",
+  "text": "查询手机当前位置的纬度值",
+  "context": {
+    "geocodes": {
+      "上海": {
+        "label": "上海市（地理编码夹具）",
+        "latitude": 31.2304,
+        "longitude": 121.4737,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "北京": {
+        "label": "北京市（地理编码夹具）",
+        "latitude": 39.9042,
+        "longitude": 116.4074,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "杭州": {
+        "label": "杭州市（地理编码夹具）",
+        "latitude": 30.2741,
+        "longitude": 120.1551,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "深圳": {
+        "label": "深圳市（地理编码夹具）",
+        "latitude": 22.5431,
+        "longitude": 114.0579,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "广州": {
+        "label": "广州市（地理编码夹具）",
+        "latitude": 23.1291,
+        "longitude": 113.2644,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "成都": {
+        "label": "成都市（地理编码夹具）",
+        "latitude": 30.5728,
+        "longitude": 104.0668,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "南京": {
+        "label": "南京市（地理编码夹具）",
+        "latitude": 32.0603,
+        "longitude": 118.7969,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "武汉": {
+        "label": "武汉市（地理编码夹具）",
+        "latitude": 30.5928,
+        "longitude": 114.3055,
+        "precision": "city",
+        "source": "fixture"
+      }
+    },
+    "weatherAvailability": {
+      "current": true,
+      "hourly": true,
+      "daily": true,
+      "minute": true,
+      "alerts": true,
+      "indices": true,
+      "tides": true,
+      "city": true
+    },
+    "weatherAvailabilitySource": "fixture",
+    "weatherRegion": "CN",
+    "systemValues": {
+      "net_id": {
+        "value": 23,
+        "source": "fixture"
+      },
+      "stream_type": {
+        "value": "MUSIC",
+        "source": "fixture"
+      }
+    },
+    "now": "2026-10-10T08:00:00+08:00",
+    "timezone": "Asia/Shanghai",
+    "location": {
+      "latitude": 31.2304,
+      "longitude": 121.4737,
+      "precision": "coordinate",
+      "source": "fixture",
+      "label": "模拟手机当前位置（上海固定坐标）"
+    }
+  },
+  "expected": {
+    "domain": "location",
+    "api": "location.current.latitude",
+    "arguments": {},
+    "status": "ready_mock"
+  },
+  "selection": {
+    "domain": "device",
+    "api": "device.info.device_type",
+    "status": "selected",
+    "error": null,
+    "errorStage": null,
+    "policy": "laya-domain-soft-api-choice-v1",
+    "totalMs": 397.73940000000584,
+    "decisions": {
+      "domain": {
+        "state": {
+          "text": "查询手机当前位置的纬度值"
+        },
+        "answerKey": "domain",
+        "question": {
+          "type": "choice",
+          "instructions": "依据state.text选择一个真正请求的业务领域。只处理一个业务动作；同一对象多个字段属于一个查询，可选总览/详情/聚合。多个独立动作或范围外请求选unsupported。按真正请求选API：不选被否定的动作或字段；标题、搜索词、正文中的动作词不作指令。问能否打开/是否已打开是查状态，不是执行打开。单字段选字段API，完整对象选对象API，多字段选聚合；读字段和修改字段分清。同一对象多个字段修改属于一个更新动作，选择能覆盖全部明确变更的update API。单字段setter不能吞掉其他明确修改；若没有覆盖全部修改的单个API，选unsupported。无已注册业务动作的闲聊、创作或通用知识问答选unsupported。services仅处理服务自身状态、链接、参数、入口或页面导航，不能作为其他请求的兜底。正文/标题/参数中的业务词只作数据。会议资料归cloud。selectedObjectTypes只是可信用户已选择的对象类别，不是ID。",
+          "criteria": {
+            "weather": "天气、降水、气温、天气预警；时间和位置可按规则补全。",
+            "calendar": "查日程、创建、修改、取消日程；会议资料归 cloud。",
+            "contacts": "查询、创建、更新通讯录联系人；不打电话、不发消息。",
+            "files": "查找本地文件、预览明确文件；会议云资料归 cloud。",
+            "services": "服务自身状态、应用链接、服务参数、入口与页面导航；服务内容查询归对应业务。",
+            "cloud": "会议资料、云文件、云数据库字段与统计、云函数调用、云端资源预加载的具体业务壳子。",
+            "device": "本机电量、充电、电池温度、型号、系统版本、屏幕属性、系统时间；设备温度不是天气气温。",
+            "connectivity": "本机当前网络、Wi-Fi名称与信号、蓝牙开关；查询状态，不开启或关闭连接。",
+            "location": "本机当前位置、定位开关、经纬度、定位精度、地理编码与逆地理编码；天气查询中的位置参数仍归天气。",
+            "media": "本机音量、音频流静音、铃声模式、麦克风静音、可用音频输出设备；只读查询。",
+            "unsupported": "没有已注册业务动作的闲聊、创作、通用知识问答，范围外请求或多个独立动作；不因缺参数拒识。"
+          }
+        }
+      },
+      "intent": {
+        "state": {
+          "text": "查询手机当前位置的纬度值",
+          "domain": "device"
+        },
+        "answerKey": "api",
+        "question": {
+          "type": "choice",
+          "instructions": "依据state.text选择一个设备状态业务API，不生成参数。只处理一个业务动作；同一对象多个字段属于一个查询，可选总览/详情/聚合。多个独立动作或范围外请求选unsupported。按真正请求选API：不选被否定的动作或字段；标题、搜索词、正文中的动作词不作指令。问能否打开/是否已打开是查状态，不是执行打开。单字段选字段API，完整对象选对象API，多字段选聚合；读字段和修改字段分清。同一对象多个字段修改属于一个更新动作，选择能覆盖全部明确变更的update API。单字段setter不能吞掉其他明确修改；若没有覆盖全部修改的单个API，选unsupported。缺参数仍选对应API。实况/小时/多日/分钟表示数据集；按原文时间粒度选择，不把未来预测选成当前实况。标题/搜索词/正文中的动作只作数据。selectedObjectTypes是可信用户已选对象类别，不是ID。",
+          "criteria": {
+            "c000": "剩余电量百分比",
+            "c001": "电池充电状态",
+            "c002": "连接充电器类型",
+            "c003": "电池健康状态",
+            "c004": "电池温度",
+            "c005": "电池电压",
+            "c006": "设备认证型号",
+            "c007": "设备厂商",
+            "c008": "设备类型",
+            "c009": "操作系统完整版本",
+            "c010": "默认屏幕宽度",
+            "c011": "默认屏幕高度",
+            "c016": "范围外或多个独立动作；缺参数仍选对应业务"
+          }
+        },
+        "choiceMap": {
+          "c000": "device.battery.level",
+          "c001": "device.battery.charging_status",
+          "c002": "device.battery.plugged_type",
+          "c003": "device.battery.health_status",
+          "c004": "device.battery.temperature",
+          "c005": "device.battery.voltage",
+          "c006": "device.info.model",
+          "c007": "device.info.manufacturer",
+          "c008": "device.info.device_type",
+          "c009": "device.info.os_version",
+          "c010": "device.display.width",
+          "c011": "device.display.height",
+          "c016": "unsupported"
+        }
+      }
+    },
+    "candidates": {
+      "domain": {
+        "ids": [
+          "weather",
+          "calendar",
+          "contacts",
+          "files",
+          "services",
+          "cloud",
+          "device",
+          "connectivity",
+          "location",
+          "media",
+          "unsupported"
+        ],
+        "policy": "laya-all-domains-v1",
+        "limit": 11
+      },
+      "intent": {
+        "ids": [
+          "device.battery.level",
+          "device.battery.charging_status",
+          "device.battery.plugged_type",
+          "device.battery.health_status",
+          "device.battery.temperature",
+          "device.battery.voltage",
+          "device.info.model",
+          "device.info.manufacturer",
+          "device.info.device_type",
+          "device.info.os_version",
+          "device.display.width",
+          "device.display.height",
+          "unsupported"
+        ],
+        "retrievalIds": [
+          "device.battery.level",
+          "device.battery.charging_status",
+          "device.battery.plugged_type",
+          "device.battery.health_status",
+          "device.battery.temperature",
+          "device.battery.voltage",
+          "device.info.model",
+          "device.info.manufacturer",
+          "device.info.device_type",
+          "device.info.os_version",
+          "device.display.width",
+          "device.display.height"
+        ],
+        "scores": [
+          {
+            "id": "device.battery.level",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "batteryInfo",
+            "field": "batterySOC"
+          },
+          {
+            "id": "device.battery.charging_status",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "batteryInfo",
+            "field": "chargingStatus"
+          },
+          {
+            "id": "device.battery.plugged_type",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "batteryInfo",
+            "field": "pluggedType"
+          },
+          {
+            "id": "device.battery.health_status",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "batteryInfo",
+            "field": "healthStatus"
+          },
+          {
+            "id": "device.battery.temperature",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "batteryInfo",
+            "field": "batteryTemperature"
+          },
+          {
+            "id": "device.battery.voltage",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "batteryInfo",
+            "field": "voltage"
+          },
+          {
+            "id": "device.info.model",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "deviceInfo",
+            "field": "productModel"
+          },
+          {
+            "id": "device.info.manufacturer",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "deviceInfo",
+            "field": "manufacture"
+          },
+          {
+            "id": "device.info.device_type",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "deviceInfo",
+            "field": "deviceType"
+          },
+          {
+            "id": "device.info.os_version",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "deviceInfo",
+            "field": "osFullName"
+          },
+          {
+            "id": "device.display.width",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "Display",
+            "field": "width"
+          },
+          {
+            "id": "device.display.height",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "Display",
+            "field": "height"
+          }
+        ],
+        "policy": "laya-domain-soft-api-choice-v1",
+        "limit": 12,
+        "totalEligible": 16,
+        "hardFilters": [],
+        "wireKeys": [
+          "c000",
+          "c001",
+          "c002",
+          "c003",
+          "c004",
+          "c005",
+          "c006",
+          "c007",
+          "c008",
+          "c009",
+          "c010",
+          "c011",
+          "c016"
+        ]
+      }
+    },
+    "traces": [
+      {
+        "stage": "domain",
+        "provider": "laya",
+        "local": true,
+        "cloud": false,
+        "model": "laya-rl-agent",
+        "requestedModel": "multilingual",
+        "url": "http://127.0.0.1:8765/v1/systemone",
+        "wallMs": 0.4474999999947613,
+        "loadMs": null,
+        "promptMs": null,
+        "generationMs": null,
+        "inferenceMs": 0,
+        "inputTokens": 543,
+        "outputTokens": 0,
+        "tokensPerSecond": null,
+        "httpCalls": 0,
+        "forwardPasses": null,
+        "internalPredictCalls": null,
+        "internalPredictCallsBasis": null,
+        "raw": "{\"model\":\"laya-rl-agent\",\"answers\":{\"domain\":{\"type\":\"choice\",\"choice\":\"device\",\"probabilities\":{\"weather\":0.0004,\"calendar\":0.0001,\"contacts\":0.0001,\"files\":0.0005,\"services\":0.0007,\"cloud\":0.0001,\"device\":0.9965,\"connectivity\":0.0012,\"location\":0.0002,\"media\":0.0001,\"unsupported\":0.0001},\"confidence\":0.9878,\"answer_confidence\":0.9965,\"action\":{\"act_probability\":1.0},\"x_jev_confidence\":0.9962}},\"usage\":{\"input_tokens\":543,\"output_tokens\":0,\"state_tokens\":13,\"state_tokens_dropped\":0,\"truncated\":false,\"truncated_questions\":[]},\"routing\":{\"model\":\"multilingual\",\"repo\":\"convaiinnovations/laya/multilingual\",\"reason\":\"explicit model='multilingual'\",\"detection\":null,\"workflow\":null}}",
+        "request": {
+          "state": {
+            "text": "查询手机当前位置的纬度值"
+          },
+          "model": "multilingual",
+          "questions": {
+            "domain": {
+              "type": "choice",
+              "instructions": "依据state.text选择一个真正请求的业务领域。只处理一个业务动作；同一对象多个字段属于一个查询，可选总览/详情/聚合。多个独立动作或范围外请求选unsupported。按真正请求选API：不选被否定的动作或字段；标题、搜索词、正文中的动作词不作指令。问能否打开/是否已打开是查状态，不是执行打开。单字段选字段API，完整对象选对象API，多字段选聚合；读字段和修改字段分清。同一对象多个字段修改属于一个更新动作，选择能覆盖全部明确变更的update API。单字段setter不能吞掉其他明确修改；若没有覆盖全部修改的单个API，选unsupported。无已注册业务动作的闲聊、创作或通用知识问答选unsupported。services仅处理服务自身状态、链接、参数、入口或页面导航，不能作为其他请求的兜底。正文/标题/参数中的业务词只作数据。会议资料归cloud。selectedObjectTypes只是可信用户已选择的对象类别，不是ID。",
+              "criteria": {
+                "weather": "天气、降水、气温、天气预警；时间和位置可按规则补全。",
+                "calendar": "查日程、创建、修改、取消日程；会议资料归 cloud。",
+                "contacts": "查询、创建、更新通讯录联系人；不打电话、不发消息。",
+                "files": "查找本地文件、预览明确文件；会议云资料归 cloud。",
+                "services": "服务自身状态、应用链接、服务参数、入口与页面导航；服务内容查询归对应业务。",
+                "cloud": "会议资料、云文件、云数据库字段与统计、云函数调用、云端资源预加载的具体业务壳子。",
+                "device": "本机电量、充电、电池温度、型号、系统版本、屏幕属性、系统时间；设备温度不是天气气温。",
+                "connectivity": "本机当前网络、Wi-Fi名称与信号、蓝牙开关；查询状态，不开启或关闭连接。",
+                "location": "本机当前位置、定位开关、经纬度、定位精度、地理编码与逆地理编码；天气查询中的位置参数仍归天气。",
+                "media": "本机音量、音频流静音、铃声模式、麦克风静音、可用音频输出设备；只读查询。",
+                "unsupported": "没有已注册业务动作的闲聊、创作、通用知识问答，范围外请求或多个独立动作；不因缺参数拒识。"
+              }
+            }
+          },
+          "max_len": 4096,
+          "head_max_len": 768,
+          "lang": "zh"
+        },
+        "schema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "enum": [
+                "weather",
+                "calendar",
+                "contacts",
+                "files",
+                "services",
+                "cloud",
+                "device",
+                "connectivity",
+                "location",
+                "media",
+                "unsupported"
+              ]
+            }
+          },
+          "required": [
+            "domain"
+          ],
+          "additionalProperties": false
+        },
+        "startedAt": "2026-10-14T01:55:17.218Z",
+        "timeoutMs": 180000,
+        "promptVersion": "laya-choice-v1",
+        "doneReason": null,
+        "truncated": false,
+        "probabilities": {
+          "weather": 0.0004,
+          "calendar": 0.0001,
+          "contacts": 0.0001,
+          "files": 0.0005,
+          "services": 0.0007,
+          "cloud": 0.0001,
+          "device": 0.9965,
+          "connectivity": 0.0012,
+          "location": 0.0002,
+          "media": 0.0001,
+          "unsupported": 0.0001
+        },
+        "wireProbabilities": {
+          "weather": 0.0004,
+          "calendar": 0.0001,
+          "contacts": 0.0001,
+          "files": 0.0005,
+          "services": 0.0007,
+          "cloud": 0.0001,
+          "device": 0.9965,
+          "connectivity": 0.0012,
+          "location": 0.0002,
+          "media": 0.0001,
+          "unsupported": 0.0001
+        },
+        "confidence": 0.9878,
+        "answerConfidence": 0.9965,
+        "jevConfidence": 0.9962,
+        "usage": {
+          "input_tokens": 543,
+          "output_tokens": 0,
+          "state_tokens": 13,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "routing": {
+          "model": "multilingual",
+          "repo": "convaiinnovations/laya/multilingual",
+          "reason": "explicit model='multilingual'",
+          "detection": null,
+          "workflow": null
+        },
+        "tournament": null,
+        "choiceMap": null,
+        "options": {
+          "max_len": 4096,
+          "head_max_len": 768,
+          "lang": "zh",
+          "retries": 0
+        },
+        "promptMeta": {
+          "version": "laya-choice-v1",
+          "systemChars": 427,
+          "inputChars": 12,
+          "decisionChars": 1078,
+          "candidates": {
+            "ids": [
+              "weather",
+              "calendar",
+              "contacts",
+              "files",
+              "services",
+              "cloud",
+              "device",
+              "connectivity",
+              "location",
+              "media",
+              "unsupported"
+            ],
+            "policy": "laya-all-domains-v1",
+            "limit": 11
+          }
+        },
+        "httpStatus": 200,
+        "independentReuse": {
+          "version": "laya-independent-replay-v1",
+          "hit": true,
+          "verified": true,
+          "currentInferenceExecuted": false,
+          "requestSha256": "e6526367defba818ef00c17a896a7c8960bcdafcb5ea73cffbc80d5a471da48d",
+          "responseSha256": "eaef3113650a2cfa9f193bd6976cb19e90f7d0a2ab906df7657305edf5386355",
+          "entryPath": "data/runtime/laya-reuse/single-service-100-20261013-093b947a-6d72-4e9f-8ae1-d3f6b9480a2d/entries/e6526367defba818ef00c17a896a7c8960bcdafcb5ea73cffbc80d5a471da48d.entry.json",
+          "entrySha256": "293aa00ad3a26c14e8488bab43cff841c5bf1e9013e2ea47595edc3fa2e1e765",
+          "sourcePath": "evidence/single-service-100/single-service-100-20261013-093b947a-6d72-4e9f-8ae1-d3f6b9480a2d/qwen2.5-0.5b/e100-location-025.json",
+          "sourceSha256": "4f285970ff5099215ae02ffdb5d4a2a68a047f6926988e2491ad811ea1bab8fa",
+          "sourceType": "formal",
+          "sourceInferenceMs": 842.39,
+          "sourceHttpMs": 847.1958000001032,
+          "sourceServiceMs": null,
+          "sourceObservedAt": "2026-10-13T05:07:01.594Z",
+          "profile": {
+            "model": "multilingual",
+            "modelRevision": "7b928d828b7b0e022f929d9bd2e44165aa270148",
+            "layaVersion": "0.4.6",
+            "threads": 8,
+            "device": "cpu",
+            "tournamentGroup": 16,
+            "maxChoices": 255,
+            "maxLen": 4096,
+            "headMaxLen": 768
+          },
+          "lookupMs": 0.033699999999953434
+        }
+      },
+      {
+        "stage": "intent",
+        "provider": "laya",
+        "local": true,
+        "cloud": false,
+        "model": "laya-rl-agent",
+        "requestedModel": "multilingual",
+        "url": "http://127.0.0.1:8765/v1/systemone",
+        "wallMs": 396.5436999999947,
+        "loadMs": null,
+        "promptMs": null,
+        "generationMs": null,
+        "inferenceMs": 389.76,
+        "inputTokens": 382,
+        "outputTokens": 0,
+        "tokensPerSecond": null,
+        "httpCalls": 1,
+        "forwardPasses": null,
+        "internalPredictCalls": null,
+        "internalPredictCallsBasis": null,
+        "raw": "{\"model\":\"laya-rl-agent\",\"answers\":{\"api\":{\"type\":\"choice\",\"choice\":\"c008\",\"probabilities\":{\"c000\":0.0094,\"c001\":0.0092,\"c002\":0.0118,\"c003\":0.0185,\"c004\":0.0067,\"c005\":0.0106,\"c006\":0.3221,\"c007\":0.1021,\"c008\":0.4185,\"c009\":0.0401,\"c010\":0.0222,\"c011\":0.0192,\"c016\":0.0098},\"confidence\":0.3795,\"answer_confidence\":0.4185,\"action\":{\"act_probability\":1.0},\"x_jev_confidence\":0.37}},\"usage\":{\"input_tokens\":382,\"output_tokens\":0,\"state_tokens\":19,\"state_tokens_dropped\":0,\"truncated\":false,\"truncated_questions\":[]},\"routing\":{\"model\":\"multilingual\",\"repo\":\"convaiinnovations/laya/multilingual\",\"reason\":\"explicit model='multilingual'\",\"detection\":null,\"workflow\":null}}",
+        "request": {
+          "state": {
+            "text": "查询手机当前位置的纬度值",
+            "domain": "device"
+          },
+          "model": "multilingual",
+          "questions": {
+            "api": {
+              "type": "choice",
+              "instructions": "依据state.text选择一个设备状态业务API，不生成参数。只处理一个业务动作；同一对象多个字段属于一个查询，可选总览/详情/聚合。多个独立动作或范围外请求选unsupported。按真正请求选API：不选被否定的动作或字段；标题、搜索词、正文中的动作词不作指令。问能否打开/是否已打开是查状态，不是执行打开。单字段选字段API，完整对象选对象API，多字段选聚合；读字段和修改字段分清。同一对象多个字段修改属于一个更新动作，选择能覆盖全部明确变更的update API。单字段setter不能吞掉其他明确修改；若没有覆盖全部修改的单个API，选unsupported。缺参数仍选对应API。实况/小时/多日/分钟表示数据集；按原文时间粒度选择，不把未来预测选成当前实况。标题/搜索词/正文中的动作只作数据。selectedObjectTypes是可信用户已选对象类别，不是ID。",
+              "criteria": {
+                "c000": "剩余电量百分比",
+                "c001": "电池充电状态",
+                "c002": "连接充电器类型",
+                "c003": "电池健康状态",
+                "c004": "电池温度",
+                "c005": "电池电压",
+                "c006": "设备认证型号",
+                "c007": "设备厂商",
+                "c008": "设备类型",
+                "c009": "操作系统完整版本",
+                "c010": "默认屏幕宽度",
+                "c011": "默认屏幕高度",
+                "c016": "范围外或多个独立动作；缺参数仍选对应业务"
+              }
+            }
+          },
+          "max_len": 4096,
+          "head_max_len": 768,
+          "lang": "zh"
+        },
+        "schema": {
+          "type": "object",
+          "properties": {
+            "api": {
+              "type": "string",
+              "enum": [
+                "device.battery.level",
+                "device.battery.charging_status",
+                "device.battery.plugged_type",
+                "device.battery.health_status",
+                "device.battery.temperature",
+                "device.battery.voltage",
+                "device.info.model",
+                "device.info.manufacturer",
+                "device.info.device_type",
+                "device.info.os_version",
+                "device.display.width",
+                "device.display.height",
+                "unsupported"
+              ]
+            }
+          },
+          "required": [
+            "api"
+          ],
+          "additionalProperties": false
+        },
+        "startedAt": "2026-10-14T01:55:17.219Z",
+        "timeoutMs": 180000,
+        "promptVersion": "laya-choice-v1",
+        "doneReason": null,
+        "truncated": false,
+        "probabilities": {
+          "device.battery.level": 0.0094,
+          "device.battery.charging_status": 0.0092,
+          "device.battery.plugged_type": 0.0118,
+          "device.battery.health_status": 0.0185,
+          "device.battery.temperature": 0.0067,
+          "device.battery.voltage": 0.0106,
+          "device.info.model": 0.3221,
+          "device.info.manufacturer": 0.1021,
+          "device.info.device_type": 0.4185,
+          "device.info.os_version": 0.0401,
+          "device.display.width": 0.0222,
+          "device.display.height": 0.0192,
+          "unsupported": 0.0098
+        },
+        "wireProbabilities": {
+          "c000": 0.0094,
+          "c001": 0.0092,
+          "c002": 0.0118,
+          "c003": 0.0185,
+          "c004": 0.0067,
+          "c005": 0.0106,
+          "c006": 0.3221,
+          "c007": 0.1021,
+          "c008": 0.4185,
+          "c009": 0.0401,
+          "c010": 0.0222,
+          "c011": 0.0192,
+          "c016": 0.0098
+        },
+        "confidence": 0.3795,
+        "answerConfidence": 0.4185,
+        "jevConfidence": 0.37,
+        "usage": {
+          "input_tokens": 382,
+          "output_tokens": 0,
+          "state_tokens": 19,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "routing": {
+          "model": "multilingual",
+          "repo": "convaiinnovations/laya/multilingual",
+          "reason": "explicit model='multilingual'",
+          "detection": null,
+          "workflow": null
+        },
+        "tournament": null,
+        "choiceMap": {
+          "c000": "device.battery.level",
+          "c001": "device.battery.charging_status",
+          "c002": "device.battery.plugged_type",
+          "c003": "device.battery.health_status",
+          "c004": "device.battery.temperature",
+          "c005": "device.battery.voltage",
+          "c006": "device.info.model",
+          "c007": "device.info.manufacturer",
+          "c008": "device.info.device_type",
+          "c009": "device.info.os_version",
+          "c010": "device.display.width",
+          "c011": "device.display.height",
+          "c016": "unsupported"
+        },
+        "options": {
+          "max_len": 4096,
+          "head_max_len": 768,
+          "lang": "zh",
+          "retries": 0
+        },
+        "promptMeta": {
+          "version": "laya-choice-v1",
+          "systemChars": 392,
+          "inputChars": 12,
+          "decisionChars": 1174,
+          "candidates": {
+            "ids": [
+              "device.battery.level",
+              "device.battery.charging_status",
+              "device.battery.plugged_type",
+              "device.battery.health_status",
+              "device.battery.temperature",
+              "device.battery.voltage",
+              "device.info.model",
+              "device.info.manufacturer",
+              "device.info.device_type",
+              "device.info.os_version",
+              "device.display.width",
+              "device.display.height",
+              "unsupported"
+            ],
+            "retrievalIds": [
+              "device.battery.level",
+              "device.battery.charging_status",
+              "device.battery.plugged_type",
+              "device.battery.health_status",
+              "device.battery.temperature",
+              "device.battery.voltage",
+              "device.info.model",
+              "device.info.manufacturer",
+              "device.info.device_type",
+              "device.info.os_version",
+              "device.display.width",
+              "device.display.height"
+            ],
+            "scores": [
+              {
+                "id": "device.battery.level",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "batteryInfo",
+                "field": "batterySOC"
+              },
+              {
+                "id": "device.battery.charging_status",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "batteryInfo",
+                "field": "chargingStatus"
+              },
+              {
+                "id": "device.battery.plugged_type",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "batteryInfo",
+                "field": "pluggedType"
+              },
+              {
+                "id": "device.battery.health_status",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "batteryInfo",
+                "field": "healthStatus"
+              },
+              {
+                "id": "device.battery.temperature",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "batteryInfo",
+                "field": "batteryTemperature"
+              },
+              {
+                "id": "device.battery.voltage",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "batteryInfo",
+                "field": "voltage"
+              },
+              {
+                "id": "device.info.model",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "deviceInfo",
+                "field": "productModel"
+              },
+              {
+                "id": "device.info.manufacturer",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "deviceInfo",
+                "field": "manufacture"
+              },
+              {
+                "id": "device.info.device_type",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "deviceInfo",
+                "field": "deviceType"
+              },
+              {
+                "id": "device.info.os_version",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "deviceInfo",
+                "field": "osFullName"
+              },
+              {
+                "id": "device.display.width",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "Display",
+                "field": "width"
+              },
+              {
+                "id": "device.display.height",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "Display",
+                "field": "height"
+              }
+            ],
+            "policy": "laya-domain-soft-api-choice-v1",
+            "limit": 12,
+            "totalEligible": 16,
+            "hardFilters": [],
+            "wireKeys": [
+              "c000",
+              "c001",
+              "c002",
+              "c003",
+              "c004",
+              "c005",
+              "c006",
+              "c007",
+              "c008",
+              "c009",
+              "c010",
+              "c011",
+              "c016"
+            ]
+          }
+        },
+        "httpStatus": 200,
+        "independentReuse": {
+          "version": "laya-independent-replay-v1",
+          "hit": false,
+          "verified": true,
+          "currentInferenceExecuted": true,
+          "requestSha256": "b4f886c65bdd355bc13ae252f599d1b6981f36ea85766d74035bb89e67020f0c",
+          "responseSha256": "90b34ea4b3534c9269dbffc55ce3adf2ce37d789909530436b0c47416f154fbd",
+          "sourceType": "current_inference",
+          "sourceInferenceMs": 389.76,
+          "sourceHttpMs": 396.5436999999947,
+          "sourceServiceMs": null,
+          "sourceObservedAt": "2026-10-14T01:55:17.219Z",
+          "profile": {
+            "model": "multilingual",
+            "modelRevision": "7b928d828b7b0e022f929d9bd2e44165aa270148",
+            "layaVersion": "0.4.6",
+            "threads": 8,
+            "device": "cpu",
+            "tournamentGroup": 16,
+            "maxChoices": 255,
+            "maxLen": 4096,
+            "headMaxLen": 768
+          },
+          "lookupMs": 0.018900000002759043
+        }
+      }
+    ]
+  },
+  "score": {
+    "domain": false,
+    "api": false,
+    "joint": false,
+    "expectedInCandidates": false,
+    "candidateRecallEligible": false,
+    "domainGateMiss": true,
+    "retrievalMiss": false,
+    "candidateChoiceMiss": false,
+    "providerError": false,
+    "errorCategory": "domain_gate"
+  },
+  "createdAt": "2026-10-14T01:55:17.616Z"
+}

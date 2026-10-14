@@ -1,0 +1,844 @@
+{
+  "version": "laya-independent-record-v1",
+  "manifestId": "laya-independent-20261014-646d71bf-aef9-4093-ad37-494b7a484d55",
+  "caseId": "e100-weather-099",
+  "testDomain": "weather",
+  "scenario": "中文全球地点",
+  "text": "桑戈爾基此刻的实况天气摘要。",
+  "context": {
+    "geocodes": {},
+    "weatherAvailability": {
+      "current": true,
+      "hourly": true,
+      "daily": true,
+      "minute": true,
+      "alerts": true,
+      "indices": true,
+      "tides": true,
+      "city": true
+    },
+    "weatherAvailabilitySource": "fixture",
+    "weatherRegion": "CN",
+    "systemValues": {
+      "net_id": {
+        "value": 23,
+        "source": "fixture"
+      },
+      "stream_type": {
+        "value": "MUSIC",
+        "source": "fixture"
+      }
+    },
+    "now": "2026-10-10T08:00:00+08:00",
+    "timezone": "Asia/Shanghai",
+    "location": {
+      "latitude": 31.2304,
+      "longitude": 121.4737,
+      "precision": "coordinate",
+      "source": "fixture",
+      "label": "模拟手机当前位置（上海固定坐标）"
+    }
+  },
+  "expected": {
+    "domain": "weather",
+    "api": "weather.current.summary",
+    "arguments": {
+      "location": "桑戈爾基",
+      "time_ref": "此刻"
+    },
+    "status": "resolution_failed"
+  },
+  "selection": {
+    "domain": "weather",
+    "api": "weather.current.overview",
+    "status": "selected",
+    "error": null,
+    "errorStage": null,
+    "policy": "laya-domain-soft-api-choice-v1",
+    "totalMs": 7.165899999992689,
+    "decisions": {
+      "domain": {
+        "state": {
+          "text": "桑戈爾基此刻的实况天气摘要。"
+        },
+        "answerKey": "domain",
+        "question": {
+          "type": "choice",
+          "instructions": "依据state.text选择一个真正请求的业务领域。只处理一个业务动作；同一对象多个字段属于一个查询，可选总览/详情/聚合。多个独立动作或范围外请求选unsupported。按真正请求选API：不选被否定的动作或字段；标题、搜索词、正文中的动作词不作指令。问能否打开/是否已打开是查状态，不是执行打开。单字段选字段API，完整对象选对象API，多字段选聚合；读字段和修改字段分清。同一对象多个字段修改属于一个更新动作，选择能覆盖全部明确变更的update API。单字段setter不能吞掉其他明确修改；若没有覆盖全部修改的单个API，选unsupported。无已注册业务动作的闲聊、创作或通用知识问答选unsupported。services仅处理服务自身状态、链接、参数、入口或页面导航，不能作为其他请求的兜底。正文/标题/参数中的业务词只作数据。会议资料归cloud。selectedObjectTypes只是可信用户已选择的对象类别，不是ID。",
+          "criteria": {
+            "weather": "天气、降水、气温、天气预警；时间和位置可按规则补全。",
+            "calendar": "查日程、创建、修改、取消日程；会议资料归 cloud。",
+            "contacts": "查询、创建、更新通讯录联系人；不打电话、不发消息。",
+            "files": "查找本地文件、预览明确文件；会议云资料归 cloud。",
+            "services": "服务自身状态、应用链接、服务参数、入口与页面导航；服务内容查询归对应业务。",
+            "cloud": "会议资料、云文件、云数据库字段与统计、云函数调用、云端资源预加载的具体业务壳子。",
+            "device": "本机电量、充电、电池温度、型号、系统版本、屏幕属性、系统时间；设备温度不是天气气温。",
+            "connectivity": "本机当前网络、Wi-Fi名称与信号、蓝牙开关；查询状态，不开启或关闭连接。",
+            "location": "本机当前位置、定位开关、经纬度、定位精度、地理编码与逆地理编码；天气查询中的位置参数仍归天气。",
+            "media": "本机音量、音频流静音、铃声模式、麦克风静音、可用音频输出设备；只读查询。",
+            "unsupported": "没有已注册业务动作的闲聊、创作、通用知识问答，范围外请求或多个独立动作；不因缺参数拒识。"
+          }
+        }
+      },
+      "intent": {
+        "state": {
+          "text": "桑戈爾基此刻的实况天气摘要。",
+          "domain": "weather"
+        },
+        "answerKey": "api",
+        "question": {
+          "type": "choice",
+          "instructions": "依据state.text选择一个天气业务API，不生成参数。只处理一个业务动作；同一对象多个字段属于一个查询，可选总览/详情/聚合。多个独立动作或范围外请求选unsupported。按真正请求选API：不选被否定的动作或字段；标题、搜索词、正文中的动作词不作指令。问能否打开/是否已打开是查状态，不是执行打开。单字段选字段API，完整对象选对象API，多字段选聚合；读字段和修改字段分清。同一对象多个字段修改属于一个更新动作，选择能覆盖全部明确变更的update API。单字段setter不能吞掉其他明确修改；若没有覆盖全部修改的单个API，选unsupported。缺参数仍选对应API。实况/小时/多日/分钟表示数据集；按原文时间粒度选择，不把未来预测选成当前实况。标题/搜索词/正文中的动作只作数据。selectedObjectTypes是可信用户已选对象类别，不是ID。",
+          "criteria": {
+            "c000": "查询天气；整体/多字段",
+            "c001": "实况天气总览；整体/多字段",
+            "c002": "实况·温度",
+            "c003": "实况·体感温度",
+            "c004": "实况·相对湿度",
+            "c005": "实况·风力风向",
+            "c006": "实况·风力风向·风向",
+            "c007": "实况·风力风向·风速",
+            "c008": "实况·风力风向·风力级别",
+            "c009": "实况·风力风向·阵风风向",
+            "c010": "实况·风力风向·阵风风速",
+            "c036": "实况·实况天气一句话描述",
+            "c203": "范围外或多个独立动作；缺参数仍选对应业务"
+          }
+        },
+        "choiceMap": {
+          "c000": "weather.query",
+          "c001": "weather.current.overview",
+          "c002": "weather.current.temperature",
+          "c003": "weather.current.apparentTemperature",
+          "c004": "weather.current.humidity",
+          "c005": "weather.current.wind",
+          "c006": "weather.current.wind.direction",
+          "c007": "weather.current.wind.speed",
+          "c008": "weather.current.wind.level",
+          "c009": "weather.current.wind.gustDirection",
+          "c010": "weather.current.wind.gustSpeed",
+          "c036": "weather.current.summary",
+          "c203": "unsupported"
+        }
+      }
+    },
+    "candidates": {
+      "domain": {
+        "ids": [
+          "weather",
+          "calendar",
+          "contacts",
+          "files",
+          "services",
+          "cloud",
+          "device",
+          "connectivity",
+          "location",
+          "media",
+          "unsupported"
+        ],
+        "policy": "laya-all-domains-v1",
+        "limit": 11
+      },
+      "intent": {
+        "ids": [
+          "weather.query",
+          "weather.current.overview",
+          "weather.current.temperature",
+          "weather.current.apparentTemperature",
+          "weather.current.humidity",
+          "weather.current.wind",
+          "weather.current.wind.direction",
+          "weather.current.wind.speed",
+          "weather.current.wind.level",
+          "weather.current.wind.gustDirection",
+          "weather.current.wind.gustSpeed",
+          "weather.current.summary",
+          "unsupported"
+        ],
+        "retrievalIds": [
+          "weather.current.summary",
+          "weather.current.overview",
+          "weather.query",
+          "weather.current.temperature",
+          "weather.current.apparentTemperature",
+          "weather.current.humidity",
+          "weather.current.wind",
+          "weather.current.wind.direction",
+          "weather.current.wind.speed",
+          "weather.current.wind.level",
+          "weather.current.wind.gustDirection",
+          "weather.current.wind.gustSpeed"
+        ],
+        "scores": [
+          {
+            "id": "weather.current.summary",
+            "score": 59,
+            "matchedAliases": [
+              "天气摘要"
+            ],
+            "matchedRelations": [],
+            "object": "current",
+            "field": "summary"
+          },
+          {
+            "id": "weather.current.overview",
+            "score": 42,
+            "matchedAliases": [
+              "实况天气"
+            ],
+            "matchedRelations": [],
+            "object": "current",
+            "field": "*"
+          },
+          {
+            "id": "weather.query",
+            "score": 25,
+            "matchedAliases": [
+              "天气"
+            ],
+            "matchedRelations": [],
+            "object": "weather",
+            "field": "*"
+          },
+          {
+            "id": "weather.current.temperature",
+            "score": 23,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "current",
+            "field": "temperature"
+          },
+          {
+            "id": "weather.current.apparentTemperature",
+            "score": 23,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "current",
+            "field": "apparentTemperature"
+          },
+          {
+            "id": "weather.current.humidity",
+            "score": 23,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "current",
+            "field": "humidity"
+          },
+          {
+            "id": "weather.current.wind",
+            "score": 23,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "current",
+            "field": "wind"
+          },
+          {
+            "id": "weather.current.wind.direction",
+            "score": 23,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "current",
+            "field": "wind.direction"
+          },
+          {
+            "id": "weather.current.wind.speed",
+            "score": 23,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "current",
+            "field": "wind.speed"
+          },
+          {
+            "id": "weather.current.wind.level",
+            "score": 23,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "current",
+            "field": "wind.level"
+          },
+          {
+            "id": "weather.current.wind.gustDirection",
+            "score": 23,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "current",
+            "field": "wind.gustDirection"
+          },
+          {
+            "id": "weather.current.wind.gustSpeed",
+            "score": 23,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "current",
+            "field": "wind.gustSpeed"
+          }
+        ],
+        "policy": "laya-domain-soft-api-choice-v1",
+        "limit": 12,
+        "totalEligible": 203,
+        "hardFilters": [],
+        "wireKeys": [
+          "c000",
+          "c001",
+          "c002",
+          "c003",
+          "c004",
+          "c005",
+          "c006",
+          "c007",
+          "c008",
+          "c009",
+          "c010",
+          "c036",
+          "c203"
+        ]
+      }
+    },
+    "traces": [
+      {
+        "stage": "domain",
+        "provider": "laya",
+        "local": true,
+        "cloud": false,
+        "model": "laya-rl-agent",
+        "requestedModel": "multilingual",
+        "url": "http://127.0.0.1:8765/v1/systemone",
+        "wallMs": 0.3032000000093831,
+        "loadMs": null,
+        "promptMs": null,
+        "generationMs": null,
+        "inferenceMs": 0,
+        "inputTokens": 546,
+        "outputTokens": 0,
+        "tokensPerSecond": null,
+        "httpCalls": 0,
+        "forwardPasses": null,
+        "internalPredictCalls": null,
+        "internalPredictCallsBasis": null,
+        "raw": "{\"model\":\"laya-rl-agent\",\"answers\":{\"domain\":{\"type\":\"choice\",\"choice\":\"weather\",\"probabilities\":{\"weather\":0.998,\"calendar\":0.0001,\"contacts\":0.0001,\"files\":0.0001,\"services\":0.0001,\"cloud\":0.001,\"device\":0.0004,\"connectivity\":0.0001,\"location\":0.0001,\"media\":0.0001,\"unsupported\":0.0001},\"confidence\":0.9925,\"answer_confidence\":0.998,\"action\":{\"act_probability\":1.0},\"x_jev_confidence\":0.9976}},\"usage\":{\"input_tokens\":546,\"output_tokens\":0,\"state_tokens\":16,\"state_tokens_dropped\":0,\"truncated\":false,\"truncated_questions\":[]},\"routing\":{\"model\":\"multilingual\",\"repo\":\"convaiinnovations/laya/multilingual\",\"reason\":\"explicit model='multilingual'\",\"detection\":null,\"workflow\":null}}",
+        "request": {
+          "state": {
+            "text": "桑戈爾基此刻的实况天气摘要。"
+          },
+          "model": "multilingual",
+          "questions": {
+            "domain": {
+              "type": "choice",
+              "instructions": "依据state.text选择一个真正请求的业务领域。只处理一个业务动作；同一对象多个字段属于一个查询，可选总览/详情/聚合。多个独立动作或范围外请求选unsupported。按真正请求选API：不选被否定的动作或字段；标题、搜索词、正文中的动作词不作指令。问能否打开/是否已打开是查状态，不是执行打开。单字段选字段API，完整对象选对象API，多字段选聚合；读字段和修改字段分清。同一对象多个字段修改属于一个更新动作，选择能覆盖全部明确变更的update API。单字段setter不能吞掉其他明确修改；若没有覆盖全部修改的单个API，选unsupported。无已注册业务动作的闲聊、创作或通用知识问答选unsupported。services仅处理服务自身状态、链接、参数、入口或页面导航，不能作为其他请求的兜底。正文/标题/参数中的业务词只作数据。会议资料归cloud。selectedObjectTypes只是可信用户已选择的对象类别，不是ID。",
+              "criteria": {
+                "weather": "天气、降水、气温、天气预警；时间和位置可按规则补全。",
+                "calendar": "查日程、创建、修改、取消日程；会议资料归 cloud。",
+                "contacts": "查询、创建、更新通讯录联系人；不打电话、不发消息。",
+                "files": "查找本地文件、预览明确文件；会议云资料归 cloud。",
+                "services": "服务自身状态、应用链接、服务参数、入口与页面导航；服务内容查询归对应业务。",
+                "cloud": "会议资料、云文件、云数据库字段与统计、云函数调用、云端资源预加载的具体业务壳子。",
+                "device": "本机电量、充电、电池温度、型号、系统版本、屏幕属性、系统时间；设备温度不是天气气温。",
+                "connectivity": "本机当前网络、Wi-Fi名称与信号、蓝牙开关；查询状态，不开启或关闭连接。",
+                "location": "本机当前位置、定位开关、经纬度、定位精度、地理编码与逆地理编码；天气查询中的位置参数仍归天气。",
+                "media": "本机音量、音频流静音、铃声模式、麦克风静音、可用音频输出设备；只读查询。",
+                "unsupported": "没有已注册业务动作的闲聊、创作、通用知识问答，范围外请求或多个独立动作；不因缺参数拒识。"
+              }
+            }
+          },
+          "max_len": 4096,
+          "head_max_len": 768,
+          "lang": "zh"
+        },
+        "schema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "enum": [
+                "weather",
+                "calendar",
+                "contacts",
+                "files",
+                "services",
+                "cloud",
+                "device",
+                "connectivity",
+                "location",
+                "media",
+                "unsupported"
+              ]
+            }
+          },
+          "required": [
+            "domain"
+          ],
+          "additionalProperties": false
+        },
+        "startedAt": "2026-10-14T01:55:52.147Z",
+        "timeoutMs": 180000,
+        "promptVersion": "laya-choice-v1",
+        "doneReason": null,
+        "truncated": false,
+        "probabilities": {
+          "weather": 0.998,
+          "calendar": 0.0001,
+          "contacts": 0.0001,
+          "files": 0.0001,
+          "services": 0.0001,
+          "cloud": 0.001,
+          "device": 0.0004,
+          "connectivity": 0.0001,
+          "location": 0.0001,
+          "media": 0.0001,
+          "unsupported": 0.0001
+        },
+        "wireProbabilities": {
+          "weather": 0.998,
+          "calendar": 0.0001,
+          "contacts": 0.0001,
+          "files": 0.0001,
+          "services": 0.0001,
+          "cloud": 0.001,
+          "device": 0.0004,
+          "connectivity": 0.0001,
+          "location": 0.0001,
+          "media": 0.0001,
+          "unsupported": 0.0001
+        },
+        "confidence": 0.9925,
+        "answerConfidence": 0.998,
+        "jevConfidence": 0.9976,
+        "usage": {
+          "input_tokens": 546,
+          "output_tokens": 0,
+          "state_tokens": 16,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "routing": {
+          "model": "multilingual",
+          "repo": "convaiinnovations/laya/multilingual",
+          "reason": "explicit model='multilingual'",
+          "detection": null,
+          "workflow": null
+        },
+        "tournament": null,
+        "choiceMap": null,
+        "options": {
+          "max_len": 4096,
+          "head_max_len": 768,
+          "lang": "zh",
+          "retries": 0
+        },
+        "promptMeta": {
+          "version": "laya-choice-v1",
+          "systemChars": 427,
+          "inputChars": 14,
+          "decisionChars": 1080,
+          "candidates": {
+            "ids": [
+              "weather",
+              "calendar",
+              "contacts",
+              "files",
+              "services",
+              "cloud",
+              "device",
+              "connectivity",
+              "location",
+              "media",
+              "unsupported"
+            ],
+            "policy": "laya-all-domains-v1",
+            "limit": 11
+          }
+        },
+        "httpStatus": 200,
+        "independentReuse": {
+          "version": "laya-independent-replay-v1",
+          "hit": true,
+          "verified": true,
+          "currentInferenceExecuted": false,
+          "requestSha256": "a7b1ebd85fb7529e13392ffd9830354f1dd3d26bc62bbb9449dfda40f2ebd5db",
+          "responseSha256": "f5cc2415a8b98bae5ca1a2d6fc6c4d8875e2764260b9897d1debb2f403ebeb21",
+          "entryPath": "data/runtime/laya-reuse/single-service-100-20261013-093b947a-6d72-4e9f-8ae1-d3f6b9480a2d/entries/a7b1ebd85fb7529e13392ffd9830354f1dd3d26bc62bbb9449dfda40f2ebd5db.entry.json",
+          "entrySha256": "dde9b8f7a84773400ee7a05d4f0b64f5fe16f0c071ae97033b5b48313f9b053c",
+          "sourcePath": "evidence/single-service-100/single-service-100-20261013-093b947a-6d72-4e9f-8ae1-d3f6b9480a2d/qwen2.5-0.5b/e100-weather-099.json",
+          "sourceSha256": "a6e27a3688b8e0294f48ce095d5d2bd6b0e9e2c352cb4f388d770743102bad3b",
+          "sourceType": "formal",
+          "sourceInferenceMs": 772.15,
+          "sourceHttpMs": 775.5508999996819,
+          "sourceServiceMs": null,
+          "sourceObservedAt": "2026-10-13T05:22:38.355Z",
+          "profile": {
+            "model": "multilingual",
+            "modelRevision": "7b928d828b7b0e022f929d9bd2e44165aa270148",
+            "layaVersion": "0.4.6",
+            "threads": 8,
+            "device": "cpu",
+            "tournamentGroup": 16,
+            "maxChoices": 255,
+            "maxLen": 4096,
+            "headMaxLen": 768
+          },
+          "lookupMs": 0.016199999998207204
+        }
+      },
+      {
+        "stage": "intent",
+        "provider": "laya",
+        "local": true,
+        "cloud": false,
+        "model": "laya-rl-agent",
+        "requestedModel": "multilingual",
+        "url": "http://127.0.0.1:8765/v1/systemone",
+        "wallMs": 0.30139999999664724,
+        "loadMs": null,
+        "promptMs": null,
+        "generationMs": null,
+        "inferenceMs": 0,
+        "inputTokens": 444,
+        "outputTokens": 0,
+        "tokensPerSecond": null,
+        "httpCalls": 0,
+        "forwardPasses": null,
+        "internalPredictCalls": null,
+        "internalPredictCallsBasis": null,
+        "raw": "{\"model\":\"laya-rl-agent\",\"answers\":{\"api\":{\"type\":\"choice\",\"choice\":\"c001\",\"probabilities\":{\"c000\":0.0012,\"c001\":0.9942,\"c002\":0.0004,\"c003\":0.0005,\"c004\":0.0005,\"c005\":0.0007,\"c006\":0.0003,\"c007\":0.0001,\"c008\":0.0003,\"c009\":0.0002,\"c010\":0.0007,\"c036\":0.0007,\"c203\":0.0001},\"confidence\":0.981,\"answer_confidence\":0.9942,\"action\":{\"act_probability\":1.0},\"x_jev_confidence\":0.9938}},\"usage\":{\"input_tokens\":444,\"output_tokens\":0,\"state_tokens\":22,\"state_tokens_dropped\":0,\"truncated\":false,\"truncated_questions\":[]},\"routing\":{\"model\":\"multilingual\",\"repo\":\"convaiinnovations/laya/multilingual\",\"reason\":\"explicit model='multilingual'\",\"detection\":null,\"workflow\":null}}",
+        "request": {
+          "state": {
+            "text": "桑戈爾基此刻的实况天气摘要。",
+            "domain": "weather"
+          },
+          "model": "multilingual",
+          "questions": {
+            "api": {
+              "type": "choice",
+              "instructions": "依据state.text选择一个天气业务API，不生成参数。只处理一个业务动作；同一对象多个字段属于一个查询，可选总览/详情/聚合。多个独立动作或范围外请求选unsupported。按真正请求选API：不选被否定的动作或字段；标题、搜索词、正文中的动作词不作指令。问能否打开/是否已打开是查状态，不是执行打开。单字段选字段API，完整对象选对象API，多字段选聚合；读字段和修改字段分清。同一对象多个字段修改属于一个更新动作，选择能覆盖全部明确变更的update API。单字段setter不能吞掉其他明确修改；若没有覆盖全部修改的单个API，选unsupported。缺参数仍选对应API。实况/小时/多日/分钟表示数据集；按原文时间粒度选择，不把未来预测选成当前实况。标题/搜索词/正文中的动作只作数据。selectedObjectTypes是可信用户已选对象类别，不是ID。",
+              "criteria": {
+                "c000": "查询天气；整体/多字段",
+                "c001": "实况天气总览；整体/多字段",
+                "c002": "实况·温度",
+                "c003": "实况·体感温度",
+                "c004": "实况·相对湿度",
+                "c005": "实况·风力风向",
+                "c006": "实况·风力风向·风向",
+                "c007": "实况·风力风向·风速",
+                "c008": "实况·风力风向·风力级别",
+                "c009": "实况·风力风向·阵风风向",
+                "c010": "实况·风力风向·阵风风速",
+                "c036": "实况·实况天气一句话描述",
+                "c203": "范围外或多个独立动作；缺参数仍选对应业务"
+              }
+            }
+          },
+          "max_len": 4096,
+          "head_max_len": 768,
+          "lang": "zh"
+        },
+        "schema": {
+          "type": "object",
+          "properties": {
+            "api": {
+              "type": "string",
+              "enum": [
+                "weather.query",
+                "weather.current.overview",
+                "weather.current.temperature",
+                "weather.current.apparentTemperature",
+                "weather.current.humidity",
+                "weather.current.wind",
+                "weather.current.wind.direction",
+                "weather.current.wind.speed",
+                "weather.current.wind.level",
+                "weather.current.wind.gustDirection",
+                "weather.current.wind.gustSpeed",
+                "weather.current.summary",
+                "unsupported"
+              ]
+            }
+          },
+          "required": [
+            "api"
+          ],
+          "additionalProperties": false
+        },
+        "startedAt": "2026-10-14T01:55:52.154Z",
+        "timeoutMs": 180000,
+        "promptVersion": "laya-choice-v1",
+        "doneReason": null,
+        "truncated": false,
+        "probabilities": {
+          "weather.query": 0.0012,
+          "weather.current.overview": 0.9942,
+          "weather.current.temperature": 0.0004,
+          "weather.current.apparentTemperature": 0.0005,
+          "weather.current.humidity": 0.0005,
+          "weather.current.wind": 0.0007,
+          "weather.current.wind.direction": 0.0003,
+          "weather.current.wind.speed": 0.0001,
+          "weather.current.wind.level": 0.0003,
+          "weather.current.wind.gustDirection": 0.0002,
+          "weather.current.wind.gustSpeed": 0.0007,
+          "weather.current.summary": 0.0007,
+          "unsupported": 0.0001
+        },
+        "wireProbabilities": {
+          "c000": 0.0012,
+          "c001": 0.9942,
+          "c002": 0.0004,
+          "c003": 0.0005,
+          "c004": 0.0005,
+          "c005": 0.0007,
+          "c006": 0.0003,
+          "c007": 0.0001,
+          "c008": 0.0003,
+          "c009": 0.0002,
+          "c010": 0.0007,
+          "c036": 0.0007,
+          "c203": 0.0001
+        },
+        "confidence": 0.981,
+        "answerConfidence": 0.9942,
+        "jevConfidence": 0.9938,
+        "usage": {
+          "input_tokens": 444,
+          "output_tokens": 0,
+          "state_tokens": 22,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "routing": {
+          "model": "multilingual",
+          "repo": "convaiinnovations/laya/multilingual",
+          "reason": "explicit model='multilingual'",
+          "detection": null,
+          "workflow": null
+        },
+        "tournament": null,
+        "choiceMap": {
+          "c000": "weather.query",
+          "c001": "weather.current.overview",
+          "c002": "weather.current.temperature",
+          "c003": "weather.current.apparentTemperature",
+          "c004": "weather.current.humidity",
+          "c005": "weather.current.wind",
+          "c006": "weather.current.wind.direction",
+          "c007": "weather.current.wind.speed",
+          "c008": "weather.current.wind.level",
+          "c009": "weather.current.wind.gustDirection",
+          "c010": "weather.current.wind.gustSpeed",
+          "c036": "weather.current.summary",
+          "c203": "unsupported"
+        },
+        "options": {
+          "max_len": 4096,
+          "head_max_len": 768,
+          "lang": "zh",
+          "retries": 0
+        },
+        "promptMeta": {
+          "version": "laya-choice-v1",
+          "systemChars": 390,
+          "inputChars": 14,
+          "decisionChars": 1257,
+          "candidates": {
+            "ids": [
+              "weather.query",
+              "weather.current.overview",
+              "weather.current.temperature",
+              "weather.current.apparentTemperature",
+              "weather.current.humidity",
+              "weather.current.wind",
+              "weather.current.wind.direction",
+              "weather.current.wind.speed",
+              "weather.current.wind.level",
+              "weather.current.wind.gustDirection",
+              "weather.current.wind.gustSpeed",
+              "weather.current.summary",
+              "unsupported"
+            ],
+            "retrievalIds": [
+              "weather.current.summary",
+              "weather.current.overview",
+              "weather.query",
+              "weather.current.temperature",
+              "weather.current.apparentTemperature",
+              "weather.current.humidity",
+              "weather.current.wind",
+              "weather.current.wind.direction",
+              "weather.current.wind.speed",
+              "weather.current.wind.level",
+              "weather.current.wind.gustDirection",
+              "weather.current.wind.gustSpeed"
+            ],
+            "scores": [
+              {
+                "id": "weather.current.summary",
+                "score": 59,
+                "matchedAliases": [
+                  "天气摘要"
+                ],
+                "matchedRelations": [],
+                "object": "current",
+                "field": "summary"
+              },
+              {
+                "id": "weather.current.overview",
+                "score": 42,
+                "matchedAliases": [
+                  "实况天气"
+                ],
+                "matchedRelations": [],
+                "object": "current",
+                "field": "*"
+              },
+              {
+                "id": "weather.query",
+                "score": 25,
+                "matchedAliases": [
+                  "天气"
+                ],
+                "matchedRelations": [],
+                "object": "weather",
+                "field": "*"
+              },
+              {
+                "id": "weather.current.temperature",
+                "score": 23,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "current",
+                "field": "temperature"
+              },
+              {
+                "id": "weather.current.apparentTemperature",
+                "score": 23,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "current",
+                "field": "apparentTemperature"
+              },
+              {
+                "id": "weather.current.humidity",
+                "score": 23,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "current",
+                "field": "humidity"
+              },
+              {
+                "id": "weather.current.wind",
+                "score": 23,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "current",
+                "field": "wind"
+              },
+              {
+                "id": "weather.current.wind.direction",
+                "score": 23,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "current",
+                "field": "wind.direction"
+              },
+              {
+                "id": "weather.current.wind.speed",
+                "score": 23,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "current",
+                "field": "wind.speed"
+              },
+              {
+                "id": "weather.current.wind.level",
+                "score": 23,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "current",
+                "field": "wind.level"
+              },
+              {
+                "id": "weather.current.wind.gustDirection",
+                "score": 23,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "current",
+                "field": "wind.gustDirection"
+              },
+              {
+                "id": "weather.current.wind.gustSpeed",
+                "score": 23,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "current",
+                "field": "wind.gustSpeed"
+              }
+            ],
+            "policy": "laya-domain-soft-api-choice-v1",
+            "limit": 12,
+            "totalEligible": 203,
+            "hardFilters": [],
+            "wireKeys": [
+              "c000",
+              "c001",
+              "c002",
+              "c003",
+              "c004",
+              "c005",
+              "c006",
+              "c007",
+              "c008",
+              "c009",
+              "c010",
+              "c036",
+              "c203"
+            ]
+          }
+        },
+        "httpStatus": 200,
+        "independentReuse": {
+          "version": "laya-independent-replay-v1",
+          "hit": true,
+          "verified": true,
+          "currentInferenceExecuted": false,
+          "requestSha256": "efffdc6dbfee899f3cd86f9fb08b68ca687a2e3fdabca8c2a6d0ae3ce4d1f314",
+          "responseSha256": "2c8dd0055d1cb50a9ded196a619195d02a37e3729efc693988d2a21244a5349d",
+          "entryPath": "data/runtime/laya-reuse/single-service-100-20261013-093b947a-6d72-4e9f-8ae1-d3f6b9480a2d/entries/efffdc6dbfee899f3cd86f9fb08b68ca687a2e3fdabca8c2a6d0ae3ce4d1f314.entry.json",
+          "entrySha256": "13af387957218e4fc25c34e080fe1ee479d5760ed1e7bfd6dd266d7521b107e2",
+          "sourcePath": "evidence/single-service-100/single-service-100-20261013-093b947a-6d72-4e9f-8ae1-d3f6b9480a2d/qwen2.5-0.5b/e100-weather-099.json",
+          "sourceSha256": "a6e27a3688b8e0294f48ce095d5d2bd6b0e9e2c352cb4f388d770743102bad3b",
+          "sourceType": "formal",
+          "sourceInferenceMs": 596.05,
+          "sourceHttpMs": 600.1280000000261,
+          "sourceServiceMs": null,
+          "sourceObservedAt": "2026-10-13T05:22:40.001Z",
+          "profile": {
+            "model": "multilingual",
+            "modelRevision": "7b928d828b7b0e022f929d9bd2e44165aa270148",
+            "layaVersion": "0.4.6",
+            "threads": 8,
+            "device": "cpu",
+            "tournamentGroup": 16,
+            "maxChoices": 255,
+            "maxLen": 4096,
+            "headMaxLen": 768
+          },
+          "lookupMs": 0.01759999999194406
+        }
+      }
+    ]
+  },
+  "score": {
+    "domain": true,
+    "api": false,
+    "joint": false,
+    "expectedInCandidates": true,
+    "candidateRecallEligible": true,
+    "domainGateMiss": false,
+    "retrievalMiss": false,
+    "candidateChoiceMiss": true,
+    "providerError": false,
+    "errorCategory": "candidate_choice"
+  },
+  "createdAt": "2026-10-14T01:55:52.154Z"
+}

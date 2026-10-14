@@ -1,0 +1,736 @@
+{
+  "version": "laya-independent-record-v1",
+  "manifestId": "laya-independent-20261014-646d71bf-aef9-4093-ad37-494b7a484d55",
+  "caseId": "e100-media-100",
+  "testDomain": "media",
+  "scenario": "missing_environment",
+  "text": "最大音量能到多少",
+  "context": {
+    "geocodes": {
+      "上海": {
+        "label": "上海市（地理编码夹具）",
+        "latitude": 31.2304,
+        "longitude": 121.4737,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "北京": {
+        "label": "北京市（地理编码夹具）",
+        "latitude": 39.9042,
+        "longitude": 116.4074,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "杭州": {
+        "label": "杭州市（地理编码夹具）",
+        "latitude": 30.2741,
+        "longitude": 120.1551,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "深圳": {
+        "label": "深圳市（地理编码夹具）",
+        "latitude": 22.5431,
+        "longitude": 114.0579,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "广州": {
+        "label": "广州市（地理编码夹具）",
+        "latitude": 23.1291,
+        "longitude": 113.2644,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "成都": {
+        "label": "成都市（地理编码夹具）",
+        "latitude": 30.5728,
+        "longitude": 104.0668,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "南京": {
+        "label": "南京市（地理编码夹具）",
+        "latitude": 32.0603,
+        "longitude": 118.7969,
+        "precision": "city",
+        "source": "fixture"
+      },
+      "武汉": {
+        "label": "武汉市（地理编码夹具）",
+        "latitude": 30.5928,
+        "longitude": 114.3055,
+        "precision": "city",
+        "source": "fixture"
+      }
+    },
+    "weatherAvailability": {
+      "current": true,
+      "hourly": true,
+      "daily": true,
+      "minute": true,
+      "alerts": true,
+      "indices": true,
+      "tides": true,
+      "city": true
+    },
+    "weatherAvailabilitySource": "fixture",
+    "weatherRegion": "CN",
+    "systemValues": {},
+    "now": "2026-10-10T08:00:00+08:00",
+    "timezone": "Asia/Shanghai",
+    "location": {
+      "latitude": 31.2304,
+      "longitude": 121.4737,
+      "precision": "coordinate",
+      "source": "fixture",
+      "label": "模拟手机当前位置（上海固定坐标）"
+    }
+  },
+  "expected": {
+    "domain": "media",
+    "api": "media.volume.max",
+    "arguments": {},
+    "status": "resolution_failed"
+  },
+  "selection": {
+    "domain": "media",
+    "api": "media.volume.max",
+    "status": "selected",
+    "error": null,
+    "errorStage": null,
+    "policy": "laya-domain-soft-api-choice-v1",
+    "totalMs": 1.2596000000048662,
+    "decisions": {
+      "domain": {
+        "state": {
+          "text": "最大音量能到多少"
+        },
+        "answerKey": "domain",
+        "question": {
+          "type": "choice",
+          "instructions": "依据state.text选择一个真正请求的业务领域。只处理一个业务动作；同一对象多个字段属于一个查询，可选总览/详情/聚合。多个独立动作或范围外请求选unsupported。按真正请求选API：不选被否定的动作或字段；标题、搜索词、正文中的动作词不作指令。问能否打开/是否已打开是查状态，不是执行打开。单字段选字段API，完整对象选对象API，多字段选聚合；读字段和修改字段分清。同一对象多个字段修改属于一个更新动作，选择能覆盖全部明确变更的update API。单字段setter不能吞掉其他明确修改；若没有覆盖全部修改的单个API，选unsupported。无已注册业务动作的闲聊、创作或通用知识问答选unsupported。services仅处理服务自身状态、链接、参数、入口或页面导航，不能作为其他请求的兜底。正文/标题/参数中的业务词只作数据。会议资料归cloud。selectedObjectTypes只是可信用户已选择的对象类别，不是ID。",
+          "criteria": {
+            "weather": "天气、降水、气温、天气预警；时间和位置可按规则补全。",
+            "calendar": "查日程、创建、修改、取消日程；会议资料归 cloud。",
+            "contacts": "查询、创建、更新通讯录联系人；不打电话、不发消息。",
+            "files": "查找本地文件、预览明确文件；会议云资料归 cloud。",
+            "services": "服务自身状态、应用链接、服务参数、入口与页面导航；服务内容查询归对应业务。",
+            "cloud": "会议资料、云文件、云数据库字段与统计、云函数调用、云端资源预加载的具体业务壳子。",
+            "device": "本机电量、充电、电池温度、型号、系统版本、屏幕属性、系统时间；设备温度不是天气气温。",
+            "connectivity": "本机当前网络、Wi-Fi名称与信号、蓝牙开关；查询状态，不开启或关闭连接。",
+            "location": "本机当前位置、定位开关、经纬度、定位精度、地理编码与逆地理编码；天气查询中的位置参数仍归天气。",
+            "media": "本机音量、音频流静音、铃声模式、麦克风静音、可用音频输出设备；只读查询。",
+            "unsupported": "没有已注册业务动作的闲聊、创作、通用知识问答，范围外请求或多个独立动作；不因缺参数拒识。"
+          }
+        }
+      },
+      "intent": {
+        "state": {
+          "text": "最大音量能到多少",
+          "domain": "media"
+        },
+        "answerKey": "api",
+        "question": {
+          "type": "choice",
+          "instructions": "依据state.text选择一个音频媒体业务API，不生成参数。只处理一个业务动作；同一对象多个字段属于一个查询，可选总览/详情/聚合。多个独立动作或范围外请求选unsupported。按真正请求选API：不选被否定的动作或字段；标题、搜索词、正文中的动作词不作指令。问能否打开/是否已打开是查状态，不是执行打开。单字段选字段API，完整对象选对象API，多字段选聚合；读字段和修改字段分清。同一对象多个字段修改属于一个更新动作，选择能覆盖全部明确变更的update API。单字段setter不能吞掉其他明确修改；若没有覆盖全部修改的单个API，选unsupported。缺参数仍选对应API。实况/小时/多日/分钟表示数据集；按原文时间粒度选择，不把未来预测选成当前实况。标题/搜索词/正文中的动作只作数据。selectedObjectTypes是可信用户已选对象类别，不是ID。",
+          "criteria": {
+            "c000": "音频流当前音量",
+            "c001": "音频流最小音量",
+            "c002": "音频流最大音量",
+            "c003": "音频流静音状态",
+            "c004": "系统铃声模式",
+            "c005": "系统麦克风静音状态",
+            "c006": "当前可用音频输出设备列表",
+            "c007": "范围外或多个独立动作；缺参数仍选对应业务"
+          }
+        },
+        "choiceMap": {
+          "c000": "media.volume.level",
+          "c001": "media.volume.min",
+          "c002": "media.volume.max",
+          "c003": "media.volume.muted",
+          "c004": "media.ringer_mode",
+          "c005": "media.microphone.muted",
+          "c006": "media.output_devices",
+          "c007": "unsupported"
+        }
+      }
+    },
+    "candidates": {
+      "domain": {
+        "ids": [
+          "weather",
+          "calendar",
+          "contacts",
+          "files",
+          "services",
+          "cloud",
+          "device",
+          "connectivity",
+          "location",
+          "media",
+          "unsupported"
+        ],
+        "policy": "laya-all-domains-v1",
+        "limit": 11
+      },
+      "intent": {
+        "ids": [
+          "media.volume.level",
+          "media.volume.min",
+          "media.volume.max",
+          "media.volume.muted",
+          "media.ringer_mode",
+          "media.microphone.muted",
+          "media.output_devices",
+          "unsupported"
+        ],
+        "retrievalIds": [
+          "media.volume.max",
+          "media.volume.level",
+          "media.volume.min",
+          "media.volume.muted",
+          "media.ringer_mode",
+          "media.microphone.muted",
+          "media.output_devices"
+        ],
+        "scores": [
+          {
+            "id": "media.volume.max",
+            "score": 41,
+            "matchedAliases": [
+              "最大音量"
+            ],
+            "matchedRelations": [],
+            "object": "AudioVolumeManager",
+            "field": "getMaxVolumeByStream"
+          },
+          {
+            "id": "media.volume.level",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "AudioVolumeManager",
+            "field": "getVolumeByStream"
+          },
+          {
+            "id": "media.volume.min",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "AudioVolumeManager",
+            "field": "getMinVolumeByStream"
+          },
+          {
+            "id": "media.volume.muted",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "AudioVolumeManager",
+            "field": "isSystemMutedForStream"
+          },
+          {
+            "id": "media.ringer_mode",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "AudioVolumeGroupManager",
+            "field": "getRingerModeSync"
+          },
+          {
+            "id": "media.microphone.muted",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "AudioVolumeGroupManager",
+            "field": "isMicrophoneMuteSync"
+          },
+          {
+            "id": "media.output_devices",
+            "score": 5,
+            "matchedAliases": [],
+            "matchedRelations": [],
+            "object": "AudioRoutingManager",
+            "field": "getDevices"
+          }
+        ],
+        "policy": "laya-domain-soft-api-choice-v1",
+        "limit": 12,
+        "totalEligible": 7,
+        "hardFilters": [],
+        "wireKeys": [
+          "c000",
+          "c001",
+          "c002",
+          "c003",
+          "c004",
+          "c005",
+          "c006",
+          "c007"
+        ]
+      }
+    },
+    "traces": [
+      {
+        "stage": "domain",
+        "provider": "laya",
+        "local": true,
+        "cloud": false,
+        "model": "laya-rl-agent",
+        "requestedModel": "multilingual",
+        "url": "http://127.0.0.1:8765/v1/systemone",
+        "wallMs": 0.4628999999986263,
+        "loadMs": null,
+        "promptMs": null,
+        "generationMs": null,
+        "inferenceMs": 0,
+        "inputTokens": 540,
+        "outputTokens": 0,
+        "tokensPerSecond": null,
+        "httpCalls": 0,
+        "forwardPasses": null,
+        "internalPredictCalls": null,
+        "internalPredictCallsBasis": null,
+        "raw": "{\"model\":\"laya-rl-agent\",\"answers\":{\"domain\":{\"type\":\"choice\",\"choice\":\"media\",\"probabilities\":{\"weather\":0.0026,\"calendar\":0.0011,\"contacts\":0.0008,\"files\":0.0017,\"services\":0.0041,\"cloud\":0.0008,\"device\":0.2618,\"connectivity\":0.0038,\"location\":0.0006,\"media\":0.7165,\"unsupported\":0.0062},\"confidence\":0.702,\"answer_confidence\":0.7165,\"action\":{\"act_probability\":1.0},\"x_jev_confidence\":0.6882}},\"usage\":{\"input_tokens\":540,\"output_tokens\":0,\"state_tokens\":10,\"state_tokens_dropped\":0,\"truncated\":false,\"truncated_questions\":[]},\"routing\":{\"model\":\"multilingual\",\"repo\":\"convaiinnovations/laya/multilingual\",\"reason\":\"explicit model='multilingual'\",\"detection\":null,\"workflow\":null}}",
+        "request": {
+          "state": {
+            "text": "最大音量能到多少"
+          },
+          "model": "multilingual",
+          "questions": {
+            "domain": {
+              "type": "choice",
+              "instructions": "依据state.text选择一个真正请求的业务领域。只处理一个业务动作；同一对象多个字段属于一个查询，可选总览/详情/聚合。多个独立动作或范围外请求选unsupported。按真正请求选API：不选被否定的动作或字段；标题、搜索词、正文中的动作词不作指令。问能否打开/是否已打开是查状态，不是执行打开。单字段选字段API，完整对象选对象API，多字段选聚合；读字段和修改字段分清。同一对象多个字段修改属于一个更新动作，选择能覆盖全部明确变更的update API。单字段setter不能吞掉其他明确修改；若没有覆盖全部修改的单个API，选unsupported。无已注册业务动作的闲聊、创作或通用知识问答选unsupported。services仅处理服务自身状态、链接、参数、入口或页面导航，不能作为其他请求的兜底。正文/标题/参数中的业务词只作数据。会议资料归cloud。selectedObjectTypes只是可信用户已选择的对象类别，不是ID。",
+              "criteria": {
+                "weather": "天气、降水、气温、天气预警；时间和位置可按规则补全。",
+                "calendar": "查日程、创建、修改、取消日程；会议资料归 cloud。",
+                "contacts": "查询、创建、更新通讯录联系人；不打电话、不发消息。",
+                "files": "查找本地文件、预览明确文件；会议云资料归 cloud。",
+                "services": "服务自身状态、应用链接、服务参数、入口与页面导航；服务内容查询归对应业务。",
+                "cloud": "会议资料、云文件、云数据库字段与统计、云函数调用、云端资源预加载的具体业务壳子。",
+                "device": "本机电量、充电、电池温度、型号、系统版本、屏幕属性、系统时间；设备温度不是天气气温。",
+                "connectivity": "本机当前网络、Wi-Fi名称与信号、蓝牙开关；查询状态，不开启或关闭连接。",
+                "location": "本机当前位置、定位开关、经纬度、定位精度、地理编码与逆地理编码；天气查询中的位置参数仍归天气。",
+                "media": "本机音量、音频流静音、铃声模式、麦克风静音、可用音频输出设备；只读查询。",
+                "unsupported": "没有已注册业务动作的闲聊、创作、通用知识问答，范围外请求或多个独立动作；不因缺参数拒识。"
+              }
+            }
+          },
+          "max_len": 4096,
+          "head_max_len": 768,
+          "lang": "zh"
+        },
+        "schema": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "string",
+              "enum": [
+                "weather",
+                "calendar",
+                "contacts",
+                "files",
+                "services",
+                "cloud",
+                "device",
+                "connectivity",
+                "location",
+                "media",
+                "unsupported"
+              ]
+            }
+          },
+          "required": [
+            "domain"
+          ],
+          "additionalProperties": false
+        },
+        "startedAt": "2026-10-14T01:55:33.102Z",
+        "timeoutMs": 180000,
+        "promptVersion": "laya-choice-v1",
+        "doneReason": null,
+        "truncated": false,
+        "probabilities": {
+          "weather": 0.0026,
+          "calendar": 0.0011,
+          "contacts": 0.0008,
+          "files": 0.0017,
+          "services": 0.0041,
+          "cloud": 0.0008,
+          "device": 0.2618,
+          "connectivity": 0.0038,
+          "location": 0.0006,
+          "media": 0.7165,
+          "unsupported": 0.0062
+        },
+        "wireProbabilities": {
+          "weather": 0.0026,
+          "calendar": 0.0011,
+          "contacts": 0.0008,
+          "files": 0.0017,
+          "services": 0.0041,
+          "cloud": 0.0008,
+          "device": 0.2618,
+          "connectivity": 0.0038,
+          "location": 0.0006,
+          "media": 0.7165,
+          "unsupported": 0.0062
+        },
+        "confidence": 0.702,
+        "answerConfidence": 0.7165,
+        "jevConfidence": 0.6882,
+        "usage": {
+          "input_tokens": 540,
+          "output_tokens": 0,
+          "state_tokens": 10,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "routing": {
+          "model": "multilingual",
+          "repo": "convaiinnovations/laya/multilingual",
+          "reason": "explicit model='multilingual'",
+          "detection": null,
+          "workflow": null
+        },
+        "tournament": null,
+        "choiceMap": null,
+        "options": {
+          "max_len": 4096,
+          "head_max_len": 768,
+          "lang": "zh",
+          "retries": 0
+        },
+        "promptMeta": {
+          "version": "laya-choice-v1",
+          "systemChars": 427,
+          "inputChars": 8,
+          "decisionChars": 1074,
+          "candidates": {
+            "ids": [
+              "weather",
+              "calendar",
+              "contacts",
+              "files",
+              "services",
+              "cloud",
+              "device",
+              "connectivity",
+              "location",
+              "media",
+              "unsupported"
+            ],
+            "policy": "laya-all-domains-v1",
+            "limit": 11
+          }
+        },
+        "httpStatus": 200,
+        "independentReuse": {
+          "version": "laya-independent-replay-v1",
+          "hit": true,
+          "verified": true,
+          "currentInferenceExecuted": false,
+          "requestSha256": "ecbd2af4e2e654e9729baf161e3a33903afc70f4e306ee92ebd28a50e9a57c8a",
+          "responseSha256": "cf8342b1295f5c7e5a43681f08dca995592cdc81de221b0070d834abff7aa0cc",
+          "entryPath": "data/runtime/laya-reuse/single-service-100-20261013-093b947a-6d72-4e9f-8ae1-d3f6b9480a2d/entries/ecbd2af4e2e654e9729baf161e3a33903afc70f4e306ee92ebd28a50e9a57c8a.entry.json",
+          "entrySha256": "b64e43589136aeaa004a613091f8bf86cd2f7221f8b6345ecd3de78ac7c0ce3c",
+          "sourcePath": "evidence/single-service-100/single-service-100-20261013-093b947a-6d72-4e9f-8ae1-d3f6b9480a2d/qwen2.5-0.5b/e100-media-100.json",
+          "sourceSha256": "22513097337ae3decfce00d6c307c8d1334ce9fe82aef18c4d4c81da2340ec7c",
+          "sourceType": "formal",
+          "sourceInferenceMs": 791.88,
+          "sourceHttpMs": 797.5474000000395,
+          "sourceServiceMs": null,
+          "sourceObservedAt": "2026-10-13T05:14:27.439Z",
+          "profile": {
+            "model": "multilingual",
+            "modelRevision": "7b928d828b7b0e022f929d9bd2e44165aa270148",
+            "layaVersion": "0.4.6",
+            "threads": 8,
+            "device": "cpu",
+            "tournamentGroup": 16,
+            "maxChoices": 255,
+            "maxLen": 4096,
+            "headMaxLen": 768
+          },
+          "lookupMs": 0.026199999992968515
+        }
+      },
+      {
+        "stage": "intent",
+        "provider": "laya",
+        "local": true,
+        "cloud": false,
+        "model": "laya-rl-agent",
+        "requestedModel": "multilingual",
+        "url": "http://127.0.0.1:8765/v1/systemone",
+        "wallMs": 0.294000000008964,
+        "loadMs": null,
+        "promptMs": null,
+        "generationMs": null,
+        "inferenceMs": 0,
+        "inputTokens": 345,
+        "outputTokens": 0,
+        "tokensPerSecond": null,
+        "httpCalls": 0,
+        "forwardPasses": null,
+        "internalPredictCalls": null,
+        "internalPredictCallsBasis": null,
+        "raw": "{\"model\":\"laya-rl-agent\",\"answers\":{\"api\":{\"type\":\"choice\",\"choice\":\"c002\",\"probabilities\":{\"c000\":0.0019,\"c001\":0.0186,\"c002\":0.9502,\"c003\":0.0261,\"c004\":0.0003,\"c005\":0.0006,\"c006\":0.0018,\"c007\":0.0005},\"confidence\":0.8787,\"answer_confidence\":0.9502,\"action\":{\"act_probability\":1.0},\"x_jev_confidence\":0.9431}},\"usage\":{\"input_tokens\":345,\"output_tokens\":0,\"state_tokens\":16,\"state_tokens_dropped\":0,\"truncated\":false,\"truncated_questions\":[]},\"routing\":{\"model\":\"multilingual\",\"repo\":\"convaiinnovations/laya/multilingual\",\"reason\":\"explicit model='multilingual'\",\"detection\":null,\"workflow\":null}}",
+        "request": {
+          "state": {
+            "text": "最大音量能到多少",
+            "domain": "media"
+          },
+          "model": "multilingual",
+          "questions": {
+            "api": {
+              "type": "choice",
+              "instructions": "依据state.text选择一个音频媒体业务API，不生成参数。只处理一个业务动作；同一对象多个字段属于一个查询，可选总览/详情/聚合。多个独立动作或范围外请求选unsupported。按真正请求选API：不选被否定的动作或字段；标题、搜索词、正文中的动作词不作指令。问能否打开/是否已打开是查状态，不是执行打开。单字段选字段API，完整对象选对象API，多字段选聚合；读字段和修改字段分清。同一对象多个字段修改属于一个更新动作，选择能覆盖全部明确变更的update API。单字段setter不能吞掉其他明确修改；若没有覆盖全部修改的单个API，选unsupported。缺参数仍选对应API。实况/小时/多日/分钟表示数据集；按原文时间粒度选择，不把未来预测选成当前实况。标题/搜索词/正文中的动作只作数据。selectedObjectTypes是可信用户已选对象类别，不是ID。",
+              "criteria": {
+                "c000": "音频流当前音量",
+                "c001": "音频流最小音量",
+                "c002": "音频流最大音量",
+                "c003": "音频流静音状态",
+                "c004": "系统铃声模式",
+                "c005": "系统麦克风静音状态",
+                "c006": "当前可用音频输出设备列表",
+                "c007": "范围外或多个独立动作；缺参数仍选对应业务"
+              }
+            }
+          },
+          "max_len": 4096,
+          "head_max_len": 768,
+          "lang": "zh"
+        },
+        "schema": {
+          "type": "object",
+          "properties": {
+            "api": {
+              "type": "string",
+              "enum": [
+                "media.volume.level",
+                "media.volume.min",
+                "media.volume.max",
+                "media.volume.muted",
+                "media.ringer_mode",
+                "media.microphone.muted",
+                "media.output_devices",
+                "unsupported"
+              ]
+            }
+          },
+          "required": [
+            "api"
+          ],
+          "additionalProperties": false
+        },
+        "startedAt": "2026-10-14T01:55:33.103Z",
+        "timeoutMs": 180000,
+        "promptVersion": "laya-choice-v1",
+        "doneReason": null,
+        "truncated": false,
+        "probabilities": {
+          "media.volume.level": 0.0019,
+          "media.volume.min": 0.0186,
+          "media.volume.max": 0.9502,
+          "media.volume.muted": 0.0261,
+          "media.ringer_mode": 0.0003,
+          "media.microphone.muted": 0.0006,
+          "media.output_devices": 0.0018,
+          "unsupported": 0.0005
+        },
+        "wireProbabilities": {
+          "c000": 0.0019,
+          "c001": 0.0186,
+          "c002": 0.9502,
+          "c003": 0.0261,
+          "c004": 0.0003,
+          "c005": 0.0006,
+          "c006": 0.0018,
+          "c007": 0.0005
+        },
+        "confidence": 0.8787,
+        "answerConfidence": 0.9502,
+        "jevConfidence": 0.9431,
+        "usage": {
+          "input_tokens": 345,
+          "output_tokens": 0,
+          "state_tokens": 16,
+          "state_tokens_dropped": 0,
+          "truncated": false,
+          "truncated_questions": []
+        },
+        "routing": {
+          "model": "multilingual",
+          "repo": "convaiinnovations/laya/multilingual",
+          "reason": "explicit model='multilingual'",
+          "detection": null,
+          "workflow": null
+        },
+        "tournament": null,
+        "choiceMap": {
+          "c000": "media.volume.level",
+          "c001": "media.volume.min",
+          "c002": "media.volume.max",
+          "c003": "media.volume.muted",
+          "c004": "media.ringer_mode",
+          "c005": "media.microphone.muted",
+          "c006": "media.output_devices",
+          "c007": "unsupported"
+        },
+        "options": {
+          "max_len": 4096,
+          "head_max_len": 768,
+          "lang": "zh",
+          "retries": 0
+        },
+        "promptMeta": {
+          "version": "laya-choice-v1",
+          "systemChars": 392,
+          "inputChars": 8,
+          "decisionChars": 903,
+          "candidates": {
+            "ids": [
+              "media.volume.level",
+              "media.volume.min",
+              "media.volume.max",
+              "media.volume.muted",
+              "media.ringer_mode",
+              "media.microphone.muted",
+              "media.output_devices",
+              "unsupported"
+            ],
+            "retrievalIds": [
+              "media.volume.max",
+              "media.volume.level",
+              "media.volume.min",
+              "media.volume.muted",
+              "media.ringer_mode",
+              "media.microphone.muted",
+              "media.output_devices"
+            ],
+            "scores": [
+              {
+                "id": "media.volume.max",
+                "score": 41,
+                "matchedAliases": [
+                  "最大音量"
+                ],
+                "matchedRelations": [],
+                "object": "AudioVolumeManager",
+                "field": "getMaxVolumeByStream"
+              },
+              {
+                "id": "media.volume.level",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "AudioVolumeManager",
+                "field": "getVolumeByStream"
+              },
+              {
+                "id": "media.volume.min",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "AudioVolumeManager",
+                "field": "getMinVolumeByStream"
+              },
+              {
+                "id": "media.volume.muted",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "AudioVolumeManager",
+                "field": "isSystemMutedForStream"
+              },
+              {
+                "id": "media.ringer_mode",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "AudioVolumeGroupManager",
+                "field": "getRingerModeSync"
+              },
+              {
+                "id": "media.microphone.muted",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "AudioVolumeGroupManager",
+                "field": "isMicrophoneMuteSync"
+              },
+              {
+                "id": "media.output_devices",
+                "score": 5,
+                "matchedAliases": [],
+                "matchedRelations": [],
+                "object": "AudioRoutingManager",
+                "field": "getDevices"
+              }
+            ],
+            "policy": "laya-domain-soft-api-choice-v1",
+            "limit": 12,
+            "totalEligible": 7,
+            "hardFilters": [],
+            "wireKeys": [
+              "c000",
+              "c001",
+              "c002",
+              "c003",
+              "c004",
+              "c005",
+              "c006",
+              "c007"
+            ]
+          }
+        },
+        "httpStatus": 200,
+        "independentReuse": {
+          "version": "laya-independent-replay-v1",
+          "hit": true,
+          "verified": true,
+          "currentInferenceExecuted": false,
+          "requestSha256": "6a036f7da1718152ae53b3016ffd598d40d4bf6c3502d33d5bdd1974f34a4e37",
+          "responseSha256": "b899f0140313832b3dcf000c52d85c9eb353f7ef5e754c23fcc8770656017862",
+          "entryPath": "data/runtime/laya-reuse/single-service-100-20261013-093b947a-6d72-4e9f-8ae1-d3f6b9480a2d/entries/6a036f7da1718152ae53b3016ffd598d40d4bf6c3502d33d5bdd1974f34a4e37.entry.json",
+          "entrySha256": "8dda8e6985a5296a0af257a8e1d2cc6043f045be65f248c8e31a41dececb8dba",
+          "sourcePath": "data/runtime/laya-reuse/single-service-100-20261013-093b947a-6d72-4e9f-8ae1-d3f6b9480a2d/entries/6a036f7da1718152ae53b3016ffd598d40d4bf6c3502d33d5bdd1974f34a4e37.service.json",
+          "sourceSha256": "79b4b8661b9a53ab0062f31778ef7226fa00cd6c249e89ced40c103d044064d3",
+          "sourceType": "service_inference",
+          "sourceInferenceMs": 644.98,
+          "sourceHttpMs": null,
+          "sourceServiceMs": 646.4271000004373,
+          "sourceObservedAt": "2026-10-13T06:43:17.912730+00:00",
+          "profile": {
+            "model": "multilingual",
+            "modelRevision": "7b928d828b7b0e022f929d9bd2e44165aa270148",
+            "layaVersion": "0.4.6",
+            "threads": 8,
+            "device": "cpu",
+            "tournamentGroup": 16,
+            "maxChoices": 255,
+            "maxLen": 4096,
+            "headMaxLen": 768
+          },
+          "lookupMs": 0.01840000000083819
+        }
+      }
+    ]
+  },
+  "score": {
+    "domain": true,
+    "api": true,
+    "joint": true,
+    "expectedInCandidates": true,
+    "candidateRecallEligible": true,
+    "domainGateMiss": false,
+    "retrievalMiss": false,
+    "candidateChoiceMiss": false,
+    "providerError": false,
+    "errorCategory": "correct"
+  },
+  "createdAt": "2026-10-14T01:55:33.103Z"
+}
