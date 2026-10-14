@@ -65,14 +65,30 @@ test('standalone page explains scope, safely embeds raw inputs and has discovera
  assert.match(html,/纯选择/);assert.match(html,/不是本轮完整冷推理实测/);assert.match(html,/历史来源/);assert.match(html,/环境/);
  assert.match(html,/index\.html#evaluation/);assert.match(html,/laya-independent\.json/);assert.match(html,/上一页/);assert.match(html,/下一页/);
  assert.doesNotMatch(html,/<img src=x onerror=/);assert.match(html,/\\u003c\/script/);
- assert.match(html,/候选/);assert.match(html,/原始/);assert.match(html,/sourceSha256/);
+ assert.match(html,/候选/);assert.match(html,/原文/);assert.match(html,/sourceSha256/);
 });
-test('page filters reset paging and do not render a thousand disclosures at once',()=>{
+test('self-only script policy permits the external page controller without executable inline code',()=>{
+ const html=renderLayaIndependentHtml(buildLayaIndependentReport(manifest(),[]));
+ const scripts=[...html.matchAll(/<script([^>]*)>([\s\S]*?)<\/script>/g)];
+ const executable=scripts.filter(([,attributes])=>!attributes.includes('type="application/json"'));
+ assert.equal(executable.length,1);
+ assert.match(executable[0][1],/src="laya-independent-page\.mjs"/);
+ assert.equal(executable[0][2].trim(),'');
+ assert.match(html,/<script id="report-data" type="application\/json">/);
+});
+test('external controller is inert in Node and discoverable by the relative-import source closure',async()=>{
+ await assert.doesNotReject(import('../public/laya-independent-page.mjs'));
+ const view=await readFile(new URL('../public/laya-independent-view.mjs',import.meta.url),'utf8');
+ assert.match(view,/import ['"]\.\/laya-independent-page\.mjs['"]/);
+});
+test('page filters reset paging and do not render a thousand disclosures at once',async()=>{
  const records=Array.from({length:45},(_,i)=>record(`${i<23?'weather':'calendar'}-${i}`,correct,[trace('domain'),trace('intent')]));
  const report=buildLayaIndependentReport(manifest('completed',45),records),html=renderLayaIndependentHtml(report);
  const elements=Object.fromEntries(['report-data','domain-filter','case-search','result-filter','case-list','previous','next','page-info'].map(id=>[id,{value:'',textContent:id==='report-data'?JSON.stringify(report):'',innerHTML:'',listeners:{},addEventListener(type,fn){this.listeners[type]=fn;}}]));
- const script=[...html.matchAll(/<script(?: [^>]*)?>([\s\S]*?)<\/script>/g)].at(-1)[1];
+ const scriptPath=html.match(/<script type="module" src="([^"]+)"/)[1];
+ const script=await readFile(new URL('../public/'+scriptPath,import.meta.url),'utf8');
  runInNewContext(script,{document:{getElementById:id=>elements[id]}});
+ assert.match(elements['case-list'].innerHTML,/期待与原始选择评分/);
  assert.equal((elements['case-list'].innerHTML.match(/<article/g)??[]).length,20);assert.match(elements['page-info'].textContent,/1 \/ 3/);
  elements.next.listeners.click();assert.match(elements['page-info'].textContent,/2 \/ 3/);
  elements['domain-filter'].value='calendar';elements['domain-filter'].listeners.input();assert.match(elements['page-info'].textContent,/1 \/ 2/);
